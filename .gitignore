@@ -1,0 +1,13 @@
+.workflow.env
+.workflow.env.*
+!.workflow.env.example
+.env
+.env.*
+!.env.example
+*.token
+*token*.json
+!*token*.example.json
+*credentials*.json
+!*credentials*.example.json
+*.local.json
+.DS_Store
