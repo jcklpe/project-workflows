@@ -20,7 +20,7 @@ pinned_issues = "docs/pinned-issues.md"
 [adoption]
 upstream_url = "https://github.com/jcklpe/project-workflows.git"
 upstream_branch = "main"
-project_branch = "codex/project-agent-hands"
+project_branch = "project/agent-hands"
 
 # Optional documented checks; inspect them and project instructions before running commands.
 [validation]
