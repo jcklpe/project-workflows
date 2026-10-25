@@ -4,6 +4,8 @@ Describe this project's purpose, implementation boundaries, and local rules here
 ## Workflow source
 This project adopts `project-workflows/`. Read its `workflow.toml` for configured document locations, then use its `skills/<skill-name>/SKILL.md` procedures. The project-specific copy is authoritative over global seeds. Project instructions override seed defaults. General skills and external-service tooling are optional unless explicitly adopted.
 
+The workflow adaptation branch lives inside that submodule; it is separate from this repository's branch. Record the actual platform-neutral branch name during adoption. Use the adopted update procedure for shared improvements, project reconciliation, branch-name metadata, and exact consumer pins. Publication scope and remote availability must be verified separately.
+
 ## Documentation
 README explains the project and how to start. TODO indexes active work. Current policies define standing guidance; spike pairs hold scoped reasoning and work state; scratch is provisional; archives preserve history. Actual project documents live in this repository, outside the workflow submodule.
 

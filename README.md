@@ -16,11 +16,11 @@ Point your agent at [setup-project-workflows](skills/setup-project-workflows/SKI
 
 For an existing project, the setup procedure reviews its current instructions and copied skills before adding the submodule or adapting templates. It establishes the project branch, fills in `workflow.toml`, and adds routing in the parent's instructions. It does not assume an empty repository or overwrite existing documents.
 
-If you prefer to start the Git setup yourself, run this from the adopting repository's root, using your project's branch name in place of `codex/project-example`:
+If you prefer to start the Git setup yourself, run this from the adopting repository's root, using your platform-neutral project branch name in place of `project/example`:
 
 ```sh
-git submodule add https://github.com/jcklpe/project-workflows.git project-workflows
-git -C project-workflows switch -c codex/project-example
+git submodule add -b main https://github.com/jcklpe/project-workflows.git project-workflows
+git -C project-workflows switch --no-track -c project/example main
 ```
 
 Then follow the setup skill to configure and review the adoption. These two commands alone do not configure the workflow or publish the project branch. For project-specific changes, choose a remote you can publish to and collaborators can access, such as your own fork. The public upstream URL does not grant permission to push branches here. Keep private project information out of public branches.
@@ -75,9 +75,11 @@ The [setup templates](skills/setup-project-workflows/assets/templates/) provide 
 ## Project branches and updates
 Shared `main` is the reusable baseline. Create a project-specific branch at adoption even if it initially points at the same commit; no artificial localization commit is necessary. Commit tracked project choices and procedural adaptations on that branch. Configuration supports routine variation, but projects can also change the procedures themselves.
 
-Use [update-project-workflows](skills/update-project-workflows/SKILL.md) when adopting upstream changes. Compare both lines of development with their shared ancestor, preserve intentional local behavior, and validate the combined result. Reusable improvements can be proposed upstream as focused commits; project-only changes stay on the project's branch. The parent records each adopted result by updating its submodule pin.
+Use [update-project-workflows](skills/update-project-workflows/SKILL.md) for the full contribution and adoption cycle. Separate reusable improvements onto the shared `main` baseline without project-only configuration, integrate them through the authorized upstream route, then merge accepted `main` into each project branch while preserving its customization. Review complete outgoing commit ranges before publication and update exact consumer pins from the deepest child outward. The update procedure also covers branch renames, tracking metadata, blocked publication, and fresh recursive-clone verification.
 
-Ordinary submodule checkout restores the parent's recorded commit and may leave a detached HEAD. Select the intended project branch before editing. A branch name in `.gitmodules` does not replace the exact commit pin, and configuring `origin` does not publish local commits. Before publishing a parent pin, make the required child commit available from the submodule URL collaborators will use. The `codex/project-configs` branch in this repository is one project's adoption, not the default for unrelated projects.
+Ordinary submodule checkout restores the parent's recorded commit and may leave a detached HEAD. Select the intended project branch before editing. A branch name in `.gitmodules` does not replace the exact commit pin, and configuring `origin` does not publish local commits. Before publishing a parent pin, make the required child commit available from the submodule URL collaborators will use. Project branches such as `project/configs` belong to their own adoptions, not to unrelated projects. An outer repository may remain on `main` or `master` while its workflow submodule uses `project/<project-slug>`.
+
+Use platform-neutral branch names. Renaming a local project branch requires reconciling `workflow.toml`, consumer metadata, current routing, and its remote upstream; it does not require renaming the `project-workflows/` folder or deleting the old remote branch. Keep historical references identifiable as history.
 
 For a project that already includes the submodule, clone with submodules or initialize them after cloning:
 
