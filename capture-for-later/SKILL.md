@@ -40,3 +40,6 @@ Keep the content as small as the thought warrants. Add a parking rationale, rele
 Capture does not start active work. When the user actually resumes a bounded workstream, use [run-project-spike](../run-project-spike/SKILL.md), which covers design, implementation, validation, and delivery as well as investigation. Its promotion procedure preserves the useful context without leaving an outdated competing copy. Raw misc-inbox triage remains with [triage-project-misc](../triage-project-misc/SKILL.md); a direct request to save something for later does not need an inbox pass first.
 
 Keep private material in its authorized context. Permission to capture a thought is not permission to copy private sources into a public repository or publish the note. Follow the project's commit policy separately.
+
+## Open Austin ownership
+Capture this repository’s organization/tooling/process subjects here; material owned by another community project stays with that project. This is an ownership boundary, not an infrastructure-only restriction on ideas. Preserve related existing list entries without duplication. Neither capture nor parking creates a GitHub backlog item or authorizes external writes. Follow the parent privacy, governance, and reviewed-plan rules.

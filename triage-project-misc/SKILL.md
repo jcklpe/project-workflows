@@ -154,3 +154,6 @@ Reviewed YYYY-MM-DD.
 ```
 
 The `Latest Routing Session` section should be replaced on each review. It is only the latest handoff.
+
+## Open Austin routing
+Preserve board/process friction, contributor context, concrete wording, and governance or notification concerns when routing notes. Existing pins and future-idea records remain valid; no bulk migration is implied. Triage does not authorize GitHub comments, issue edits, board moves, Slack posts, or shared-Doc writes. Follow the parent reviewed-plan rules. Keep private contributor details, tokens, and webhook URLs out of public notes.

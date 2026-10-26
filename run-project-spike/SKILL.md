@@ -279,3 +279,6 @@ Ask:
 - Do durable docs still describe the repo's real shape?
 
 The archive keeps the texture. Durable docs keep the rule.
+
+## Open Austin project constraints
+Read the parent AGENTS authority ladder and write-safety rules. Never edit contributor-policy.md through agent work. Spikes involving shared organization state must address dry-run behavior, reviewed bulk plans, destructive-action limits, API/rate-limit behavior, auth/permission boundaries, rollback, and notification impact as relevant. These are validation concerns, not permission to run live operations. Human QA may include public copy tone, proposed dry-run output, and board/issue state after an authorized write; name the command or surface and expected result. Keep confirmed API behavior with the owning tool or durable docs, and update auth examples only without secrets.

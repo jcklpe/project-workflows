@@ -2,7 +2,7 @@ schema_version = 1
 
 # Read this only for the collection adopted by the current project, never to infer a project from a global skill install.
 [project]
-name = ""
+name = "org"
 root = ".."
 
 # Resolve document locations against the project root. Existing project instructions can override these seed defaults.
@@ -17,9 +17,9 @@ policies = "docs/policies"
 
 # Adoption fills these with public-safe source metadata. The parent gitlink, not these fields, records the adopted commit.
 [adoption]
-upstream_url = ""
-upstream_branch = ""
-project_branch = ""
+upstream_url = "https://github.com/jcklpe/project-workflows.git"
+upstream_branch = "main"
+project_branch = "project/org"
 
 # Optional documented checks; inspect them and project instructions before running commands.
 [validation]
