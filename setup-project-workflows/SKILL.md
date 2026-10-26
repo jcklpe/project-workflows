@@ -4,11 +4,16 @@ description: "Set up or retrofit a project's documentation and reusable operatin
 ---
 
 # Setup Project Workflows
-Resolve the actual requested target using [target resolution](../README.md#resolve-the-target) before selecting configuration or document paths. Global invocation does not target the installation checkout. Plain folders use global skills without adding a local collection or initializing Git.
+Resolve the actual requested target using [target resolution](../README.md#resolve-the-target). Read its declared policies, local adapters and configuration before applying defaults, and follow its chosen global-only or pinned workflow source. Global invocation never selects the installation checkout or its config as the target. Plain folders use global skills without adding a collection or initializing Git.
 ## Scope and authority
 Read the target project's instructions, current documents, commit policy, and existing skill sources first. A setup request authorizes its stated local scope, not external repository creation, publication, a push, or an unrelated reorganization. Honor review holds; do not add another approval ritual for already-authorized setup. Preserve existing human content and deliberate local conventions.
 
 This combines documentation setup with workflow distribution. If the request is documentation-only, adapt the bundled templates without forcing a submodule adoption. If a collection already exists, use `update-project-workflows`; do not overwrite it. Dependencies are Git for versioned adoption and ordinary filesystem/document access, not global general skills or service tools.
+
+## Choose the workflow source
+Honor the user's or target's declared mode. For a pinned adoption, follow the branch/submodule procedure below. A Git project may instead explicitly choose global-only use; plain folders use global workflows without creating repositories. Global-only setup reads installed procedures, preserves project policies/adapters, declares the target's optional root `workflow.toml` with `project.root = "."`, and adds only the required documentation/routing. Omit adoption branch metadata and skip submodule, branch and pin steps. Do not run an installer or create a config merely because one is absent; report a missing required global skill.
+
+An existing pinned adoption is not retired by a generic setup request. An authorized switch uses [update-project-workflows](../update-project-workflows/SKILL.md#move-an-adoption-to-global-only-use), including unique-content and reference checks. Global-only use trades a project-pinned version for the installed global version; report that limit without changing other projects' chosen modes.
 
 ## Inspect and select
 1. Resolve the actual parent repository from the request and its instructions, never from the location of a global skill. Inspect working-tree/index changes, current docs, local skills, existing submodules, and tracked/ignored configuration. Preserve concurrent work; do not stash, reset, or force checkout to make adoption easier.
@@ -33,7 +38,7 @@ For an existing adoption's branch rename, canonical-checkout migration, metadata
 
 Keep public-safe project configuration in `workflow.toml` on the adaptation branch; the canonical installation retains the shared defaults. No workflow env file is required. Preserve any existing project-declared private-context mechanism and its access rules instead of adding an unused example or a speculative setting. Verify ignores before creating any real private configuration and parse it as data, not executable shell. Keep actual project documents in the parent, not on a shared skill branch.
 
-For an existing copied-skills project, use the [copied-skill reconciliation](../update-project-workflows/SKILL.md#existing-copied-skills) before cutover, comparing complete folders and supporting files. Preserve the local procedure in the project branch, record which source comparison is known, and repair routing before retiring old copies. Without a recoverable shared ancestor, mark the first import as a manually reconciled baseline; never fabricate ancestry or silently declare the local version equivalent to upstream.
+For an existing copied-skills project, use the [copied-skill reconciliation](../update-project-workflows/SKILL.md#existing-copied-skills) before cutover, comparing complete folders and supporting files. Preserve intentional local behavior with its appropriate owner (project policy/adapter or pinned procedure), record which source comparison is known, and repair routing before retiring old copies. Without a recoverable shared ancestor, mark the first import as a manually reconciled baseline; never fabricate ancestry or silently declare the local version equivalent to upstream.
 
 ## Documentation and routing
 Use [the agent-routing template](assets/templates/AGENTS.md.template), [the index template](assets/templates/TODO.md.template), and [the ignore baseline](assets/templates/default.gitignore) as inputs to adapt, not files to overwrite existing documents with. Create only needed structure:
@@ -48,7 +53,7 @@ Use [the agent-routing template](assets/templates/AGENTS.md.template), [the inde
 
 Do not add redundant READMEs inside documentation folders. Do not create catch-all pinned-issues or future-ideas lists for new capture. Keep existing notes and legacy lists where they are unless migration is requested; related existing material should be updated rather than duplicated. Preserve existing paths unless migration is authorized. A scaffold does not establish a product specification or capture unwritten project reasoning.
 
-Skill directories live directly under the collection root: `project-workflows/<skill-name>/SKILL.md`. Preserve each complete folder, including assets and client metadata. Parent routing must prefer the adopted project version over global seeds. Explain how to read the project configuration and load required skills. Do not claim automatic discovery in an agent client unless it has actually been configured. Do not implicitly copy Kaizen, authoring, LifeOS, or service capabilities to make the project work.
+Skill directories live directly under the collection root: `project-workflows/<skill-name>/SKILL.md`. Preserve each complete folder, including assets and client metadata. For pinned mode, parent routing prefers the adopted project version over global seeds; global-only routing names installed procedures and the target-owned config/policy entrypoints. Explain how to read the project configuration and load required skills. Do not claim automatic discovery in an agent client unless it has actually been configured. Do not implicitly copy Kaizen, authoring, LifeOS, or service capabilities to make the project work.
 
 ## Verification and handoff
 Verify the adopted revision, initial project branch, parent pin, required files, relative references, and configuration/ignore behavior. Inspect staged and unstaged effects in both repositories. Confirm project-specific conventions and validation are actually documented rather than inferred from folder names.

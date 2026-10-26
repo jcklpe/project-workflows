@@ -4,7 +4,7 @@ description: "Save an idea, possibility, unresolved question, or deliberately pa
 ---
 
 # Capture for Later
-Resolve the actual requested target using [target resolution](../README.md#resolve-the-target) before selecting configuration or document paths. Global invocation does not target the installation checkout. Plain folders use global skills without adding a local collection or initializing Git.
+Resolve the actual requested target using [target resolution](../README.md#resolve-the-target). Read its declared policies, local adapters and configuration before applying defaults, and follow its chosen global-only or pinned workflow source. Global invocation never selects the installation checkout or its config as the target. Plain folders use global skills without adding a collection or initializing Git.
 ## Scope and local authority
 Capture something the user wants to remember without committing to explore, decide, or implement it now. Features, design, content, research, tooling, and other project subjects all qualify. The subject does not determine whether it is a possibility or deliberately parked; that is the note's current state.
 
