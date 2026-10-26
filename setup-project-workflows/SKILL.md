@@ -18,6 +18,8 @@ This combines documentation setup with workflow distribution. If the request is 
 ## Synchronized storage
 Before adopting inside a synced drive, inspect the actual Git directory and common directory, including pointer files and linked worktrees. Reuse the project's established external-metadata arrangement: repository objects, indexes, and refs must stay outside the synchronized tree, while working files remain in their selected location. Do not copy a prior machine's absolute pointer or run ordinary setup that creates an object store inside Drive. Check parent and child metadata locations and local restoration in an isolated fixture first; a linked-worktree/submodule combination must be verified, not assumed supported.
 
+A public upstream URL identifies shared source; it does not make a private adaptation pin remotely retrievable. For an explicitly local-only private adaptation, verify a complete private recovery bundle and a restoration with Git metadata outside the synced tree. Record how to reconnect the restored child and recreate machine-local pointer files; distinguish local recovery from off-device backup and collaborator cloning. Never upload private branch history as a way to satisfy a generic reproducibility check.
+
 Respect local-only/no-remote policies, tracking allowlists, and commit cadence. A proposed submodule may require a narrow policy/ignore exception for its gitlink and `.gitmodules`; surface that concrete conflict before changing it. Private adaptations need an authorized private persistence/recovery arrangement and must not be published to the public upstream. No plain-folder adoption is needed merely because it is stored on a synced drive.
 
 ## Adopt and branch
