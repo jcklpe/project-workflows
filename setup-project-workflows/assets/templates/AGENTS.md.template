@@ -2,9 +2,9 @@
 Describe this project's purpose, implementation boundaries, and local rules here. Adapt this template; do not leave placeholders as active instructions.
 
 ## Workflow source
-This project adopts `project-workflows/`. Read its `workflow.toml` for configured document locations, then use its `skills/<skill-name>/SKILL.md` procedures. The project-specific copy is authoritative over global seeds. Project instructions override seed defaults. General skills and external-service tooling are optional unless explicitly adopted.
+This project adopts `project-workflows/`. Read its `workflow.toml` for configured document locations, then use its `<skill-name>/SKILL.md` procedures. The project-specific copy is authoritative over global seeds. Project instructions override seed defaults. General skills and external-service tooling are optional unless explicitly adopted.
 
-The workflow adaptation branch lives inside that submodule; it is separate from this repository's branch. Record the actual platform-neutral branch name during adoption. Use the adopted update procedure for shared improvements, project reconciliation, branch-name metadata, and exact consumer pins. Publication scope and remote availability must be verified separately.
+For an ordinary adopting project, the workflow adaptation branch lives inside that submodule; it is separate from this repository's branch. Record the actual platform-neutral branch name during adoption. Use the adopted update procedure for shared improvements, project reconciliation, branch-name metadata, and exact consumer pins. Publication scope and remote availability must be verified separately. If this checkout is explicitly designated as the canonical maintenance/global installation, record shared `main` instead and retain neutral configuration; this exception does not remove project branches from other adoptions.
 
 ## Documentation
 README explains the project and how to start. TODO indexes active work. Current policies define standing guidance; spike pairs hold scoped reasoning and work state; scratch is provisional; archives preserve history. Actual project documents live in this repository, outside the workflow submodule.

@@ -1,6 +1,6 @@
 ---
 name: setup-project-workflows
-description: "Set up or retrofit a project's documentation and reusable operating skills. Use for initial project-workflows submodule adoption, creating a project branch, migrating copied skills, or establishing README, agent routing, spike/scratch/archive/policy locations, and private local configuration."
+description: "Set up or retrofit a project's documentation and reusable operating skills. Use for initial project-workflows submodule adoption, creating a project branch, migrating copied skills, or establishing README, agent routing, spike/scratch/archive/policy locations, and project configuration."
 ---
 
 # Setup Project Workflows
@@ -17,11 +17,13 @@ This combines documentation setup with workflow distribution. If the request is 
 ## Adopt and branch
 Use a root-level `project-workflows/` submodule. Inspect any existing destination before changing it. Record the reviewed source URL in the parent's submodule metadata and pin the exact child commit. Follow the parent's Git policy, including ignore checks and scoped commits; submodule setup can stage metadata, so inspect its complete effect and do not sweep unrelated index content into a commit.
 
-Create/select a project-specific branch inside the workflow submodule from the reviewed shared branch, normally `main`, immediately, even with no content changes. Do not use another project's adaptation as the baseline. Follow the user's naming choice or a local platform-neutral convention; absent one, use `project/<project-slug>`. The adopting repository's own branch is separate and need not be renamed. Do not create a fake localization commit. If the name exists, verify its ancestry and intended ownership before selecting it; do not repoint or reset it. Record the selected branch and upstream in `workflow.toml`; `.gitmodules` may also record the project's tracking branch when appropriate. The parent commit pin remains authoritative.
+For an adopting project, create/select a project-specific branch inside the workflow submodule from the reviewed shared branch, normally `main`, immediately, even with no content changes. Do not use another project's adaptation as the baseline. Follow the user's naming choice or a local platform-neutral convention; absent one, use `project/<project-slug>`. The adopting repository's own branch is separate and need not be renamed. Do not create a fake localization commit. If the name exists, verify its ancestry and intended ownership before selecting it; do not repoint or reset it. Record the selected branch and upstream in `workflow.toml`; `.gitmodules` may also record the project's tracking branch when appropriate. The parent commit pin remains authoritative.
 
-For an existing adoption's branch rename, metadata repair, or shared/project reconciliation, use [update-project-workflows](../update-project-workflows/SKILL.md). Keep a correctly placed `project-workflows/` folder; a branch rename alone does not call for a folder move.
+An explicitly designated canonical maintenance/global installation is the exception: select shared `main`, keep neutral `workflow.toml` defaults, and use the containing project instructions for its own workflow. A global client link alone does not establish canonical ownership. Do not create a project branch merely to label that installation. Ordinary adopting projects still get a branch before they diverge.
 
-Keep project configuration inside the collection: `workflow.toml` is tracked on the project branch, `.workflow.env.example` documents local-only values, and `.workflow.env` is ignored. Do not create real private configuration until ignore behavior has been verified in the child repository. Parse configuration as data, not executable shell. Keep actual project documents in the parent, not on a shared skill branch.
+For an existing adoption's branch rename, canonical-checkout migration, metadata repair, or shared/project reconciliation, use [update-project-workflows](../update-project-workflows/SKILL.md). Keep a correctly placed `project-workflows/` folder; a branch rename alone does not call for a folder move.
+
+Keep public-safe project configuration in `workflow.toml` on the adaptation branch; the canonical installation retains the shared defaults. No workflow env file is required. Preserve any existing project-declared private-context mechanism and its access rules instead of adding an unused example or a speculative setting. Verify ignores before creating any real private configuration and parse it as data, not executable shell. Keep actual project documents in the parent, not on a shared skill branch.
 
 For an existing copied-skills project, compare complete folders and supporting files before cutover. Preserve the local procedure in the project branch, record which source comparison is known, and repair routing before retiring old copies. Without a recoverable shared ancestor, mark the first import as a manually reconciled baseline; never fabricate ancestry or silently declare the local version equivalent to upstream.
 
@@ -38,7 +40,7 @@ Use [the agent-routing template](assets/templates/AGENTS.md.template), [the inde
 
 Do not add redundant READMEs inside documentation folders. Create pinned issues or future-ideas files when there is material for them. Preserve existing paths unless migration is authorized. A scaffold does not establish a product specification or capture unwritten project reasoning.
 
-Parent routing must prefer the adopted project version over global seeds. Explain how to read the project configuration and load required skills. Do not claim automatic discovery in an agent client unless it has actually been configured. Do not implicitly copy Kaizen, authoring, LifeOS, or service capabilities to make the project work.
+Skill directories live directly under the collection root: `project-workflows/<skill-name>/SKILL.md`. Preserve each complete folder, including assets and client metadata. Parent routing must prefer the adopted project version over global seeds. Explain how to read the project configuration and load required skills. Do not claim automatic discovery in an agent client unless it has actually been configured. Do not implicitly copy Kaizen, authoring, LifeOS, or service capabilities to make the project work.
 
 ## Verification and handoff
 Verify the adopted revision, initial project branch, parent pin, required files, relative references, and configuration/ignore behavior. Inspect staged and unstaged effects in both repositories. Confirm project-specific conventions and validation are actually documented rather than inferred from folder names.
