@@ -4,6 +4,7 @@ description: "Set up or retrofit a project's documentation and reusable operatin
 ---
 
 # Setup Project Workflows
+Resolve the actual requested target using [target resolution](../README.md#resolve-the-target) before selecting configuration or document paths. Global invocation does not target the installation checkout. Plain folders use global skills without adding a local collection or initializing Git.
 ## Scope and authority
 Read the target project's instructions, current documents, commit policy, and existing skill sources first. A setup request authorizes its stated local scope, not external repository creation, publication, a push, or an unrelated reorganization. Honor review holds; do not add another approval ritual for already-authorized setup. Preserve existing human content and deliberate local conventions.
 
@@ -13,6 +14,11 @@ This combines documentation setup with workflow distribution. If the request is 
 1. Resolve the actual parent repository from the request and its instructions, never from the location of a global skill. Inspect working-tree/index changes, current docs, local skills, existing submodules, and tracked/ignored configuration. Preserve concurrent work; do not stash, reset, or force checkout to make adoption easier.
 2. Identify the selected source repository and reviewed revision, using its actual remote/default branch. Require a public-safe, collaborator-usable URL before recording `.gitmodules`; never put credentials or a private machine path there. Confirm license compatibility and retained notices. An available folder is not automatically an independent repository or permission to republish it.
 3. Identify the scope to adopt. The collection's seven project procedures travel together; unrelated personal/service skills do not. Preserve any existing project-specific procedure differences. Missing required sources are an explicit setup gap, not permission to invent their content.
+
+## Synchronized storage
+Before adopting inside a synced drive, inspect the actual Git directory and common directory, including pointer files and linked worktrees. Reuse the project's established external-metadata arrangement: repository objects, indexes, and refs must stay outside the synchronized tree, while working files remain in their selected location. Do not copy a prior machine's absolute pointer or run ordinary setup that creates an object store inside Drive. Check parent and child metadata locations and local restoration in an isolated fixture first; a linked-worktree/submodule combination must be verified, not assumed supported.
+
+Respect local-only/no-remote policies, tracking allowlists, and commit cadence. A proposed submodule may require a narrow policy/ignore exception for its gitlink and `.gitmodules`; surface that concrete conflict before changing it. Private adaptations need an authorized private persistence/recovery arrangement and must not be published to the public upstream. No plain-folder adoption is needed merely because it is stored on a synced drive.
 
 ## Adopt and branch
 Use a root-level `project-workflows/` submodule. Inspect any existing destination before changing it. Record the reviewed source URL in the parent's submodule metadata and pin the exact child commit. Follow the parent's Git policy, including ignore checks and scoped commits; submodule setup can stage metadata, so inspect its complete effect and do not sweep unrelated index content into a commit.
@@ -25,7 +31,7 @@ For an existing adoption's branch rename, canonical-checkout migration, metadata
 
 Keep public-safe project configuration in `workflow.toml` on the adaptation branch; the canonical installation retains the shared defaults. No workflow env file is required. Preserve any existing project-declared private-context mechanism and its access rules instead of adding an unused example or a speculative setting. Verify ignores before creating any real private configuration and parse it as data, not executable shell. Keep actual project documents in the parent, not on a shared skill branch.
 
-For an existing copied-skills project, compare complete folders and supporting files before cutover. Preserve the local procedure in the project branch, record which source comparison is known, and repair routing before retiring old copies. Without a recoverable shared ancestor, mark the first import as a manually reconciled baseline; never fabricate ancestry or silently declare the local version equivalent to upstream.
+For an existing copied-skills project, use the [copied-skill reconciliation](../update-project-workflows/SKILL.md#existing-copied-skills) before cutover, comparing complete folders and supporting files. Preserve the local procedure in the project branch, record which source comparison is known, and repair routing before retiring old copies. Without a recoverable shared ancestor, mark the first import as a manually reconciled baseline; never fabricate ancestry or silently declare the local version equivalent to upstream.
 
 ## Documentation and routing
 Use [the agent-routing template](assets/templates/AGENTS.md.template), [the index template](assets/templates/TODO.md.template), and [the ignore baseline](assets/templates/default.gitignore) as inputs to adapt, not files to overwrite existing documents with. Create only needed structure:

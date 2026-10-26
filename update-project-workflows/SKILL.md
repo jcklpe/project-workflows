@@ -4,10 +4,18 @@ description: "Reconcile adopted Project Workflows with shared upstream, contribu
 ---
 
 # Update Project Workflows
+Resolve the actual requested target using [target resolution](../README.md#resolve-the-target) before selecting configuration or document paths. Global invocation does not target the installation checkout. Plain folders use global skills without adding a local collection or initializing Git.
 ## Authority and scope
 Use the current project's instructions and adopted workflow source before a globally installed seed. An update request alone does not authorize publication, unknown changes, private-policy changes, or history rewriting. Honor explicit publication authorization already covering the requested repositories and refs; do not infer broader publication from it. Resolve material behavioral conflicts with the user while continuing independent authorized work.
 
 This procedure handles the project collection's Git ancestry, configuration, templates, and parent pin. It does not require general skills or service integrations. Ordinary Git and document access suffice; a remote read requires an available authorized route.
+
+## Bound the adoption inventory
+For a multi-project request, first record a small inventory of the authorized roots: actual project/workspace and Git boundaries, source type (global-only, copied skills, or adopted collection), branch/pin, dirty or staged work, local routing, intentional conventions, and publication scope. Search for known workflow markers within those roots; do not turn discovery into a whole-disk or private-content audit. Do not treat reference copies, product submodules, or ordinary subject folders as new adoptions merely because they exist.
+
+Plain folders use globally available workflows; do not create repositories or local collections for them. For Git projects, preserve their own adaptations even before divergence. Identify partial setup explicitly: staged `.gitmodules`/gitlinks and dirty child configuration are not a completed adoption. Reconcile that work without resetting, restaging unrelated files, or claiming the index entry is already committed. Check synchronized-storage constraints through [setup](../setup-project-workflows/SKILL.md#synchronized-storage).
+
+Pilot a representative project before broad rollout. Use the existing spike/index to record the bounded comparison, retained differences, deliberate replacements, verification and remaining publication steps; no separate inventory framework is required.
 
 ## Establish the comparison
 1. Map the repositories, their roles, and authorized consumers before editing: the shared collection, each project adaptation, and every parent that records their gitlinks. Inspect their status, index, remotes, actual branches, pins, and outgoing commits. A containing repository's `main` or `master` is not its workflow submodule's project branch. Preserve unrelated work; do not stash, reset, force checkout, or hide dirty state to proceed.
@@ -53,6 +61,10 @@ Use a fresh recursive clone when feasible to verify the final published consumer
 
 ## Existing copied skills
 If there is no adopted submodule, compare the existing complete local folders with the designated seed before using setup-project-workflows to migrate. Preserve intentional divergence and supporting assets. No shared Git ancestor means a manual comparison, not a fake merge history. Do not erase existing copies until the replacement routes and behavior are verified. A rename alone does not authorize resetting local guidance.
+
+Map each retiring entrypoint to its replacement before deleting copies. For the earlier collection, `setup-project-docs` maps to `setup-project-workflows`, `update-local-skills` maps to `update-project-workflows` for this collection, and `pin-issue`/`log-future-idea` map to `capture-for-later`. General or service skills outside this collection retain their own ownership and update process. Reconcile support files such as client metadata and ignore templates at the corresponding destination; rename stale labels rather than carrying conflicting old behavior forward.
+
+Distinguish intentional project rules from stale seed behavior. A shared correction is not a customization to preserve merely because a copied file predates it. Compare local authority, closure/commit rules, privacy, indexes, and cross-skill dependencies. References to project-owned skills outside the collection must still resolve after moving. Update current routing, installer/client links when in scope, and maintained navigation before retiring old copies. Leave historical references as history, and preserve existing scratch notes, registers, and logs unless their content migration is separately requested. Verify that a second setup/update would recognize the existing adoption rather than duplicate it.
 
 ## Completion
 Validate changed skill frontmatter and supporting resources, TOML parsing, ignores, current links/routing, branch ancestry, project customization, and all changed pins. Use meaningful checks for the change, not tests that merely mirror prose. For requested workflow improvements, assess the previous coverage against the actual process and explain what changed beyond naming. Record failed checks and their bounded follow-up rather than silently replacing them with a broader success claim.

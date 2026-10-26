@@ -4,6 +4,7 @@ description: "Run and bucket project work in focused spike docs with a conceptua
 ---
 
 # Run Project Spike
+Resolve the actual requested target using [target resolution](../README.md#resolve-the-target) before selecting configuration or document paths. Global invocation does not target the installation checkout. Plain folders use global skills without adding a local collection or initializing Git.
 ## Local Precedence
 Read the current project's instructions first. If they adopt a `project-workflows` collection, use that project's skill copy and `workflow.toml` to resolve document locations; existing local conventions override fallback paths in this procedure. Otherwise prefer an existing project-local `skills/run-project-spike/SKILL.md` over a global seed. Never derive the target project's root from the location of a globally installed skill. Required companion project procedures ship in the same collection; general skills and service integrations are optional unless the project explicitly adopts them.
 

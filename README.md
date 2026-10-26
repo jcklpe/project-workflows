@@ -1,7 +1,14 @@
 # Project Workflows
 Reusable agent skills for organizing project documentation, working through implementation spikes, reviewing proposed changes, and making scoped commits. Keep the procedures alongside your code so someone cloning the project can understand how its documentation and development workflow operate.
 
-Adopt this collection as a root-level `project-workflows/` Git submodule. Each adopting project gets its own branch from the start, while the parent repository pins an exact revision. An explicitly designated canonical maintenance/global installation uses shared `main` directly. Project-specific procedures can evolve freely, with Git ancestry available when reconciling improvements upstream or downstream.
+For a Git project, adopt this collection as a root-level `project-workflows/` Git submodule. Each adopting project gets its own branch from the start, while the parent repository pins an exact revision. An explicitly designated canonical maintenance/global installation uses shared `main` directly. Project-specific procedures can evolve freely, with Git ancestry available when reconciling improvements upstream or downstream.
+
+## Resolve the target
+Resolve the requested project or folder before reading collection configuration or choosing document paths. Prefer the explicit target in the request; otherwise use the active working context and its nearest applicable instructions. Inspect the target's actual Git boundary separately from its document/workspace boundary. If several plausible targets remain, ask which one before writing; a skill's installation path is never a target-selection fallback.
+
+A globally invoked skill uses the target's instructions, existing document locations, and adopted collection if present. Read `workflow.toml` only from that target's declared adoption. Do not use the global installation's consumer-relative `..` as the working project. A plain folder without a Git repository uses available global skills and its own conventions: no local workflow clone/submodule, automatic `git init`, or invented pin is needed. A folder inside an existing repository follows that repository's applicable instructions; it is not automatically an independent adoption.
+
+When the explicit task is development of Project Workflows itself, use this repository's [maintenance instructions](AGENTS.md#maintaining-this-collection), [work index](TODO.md), and root skills. Its `docs/` is an ordinary directory in the same repository, not a copy of the workflow collection nested inside itself.
 
 ## Get started
 You can clone the collection to inspect it first:
@@ -62,7 +69,7 @@ your-project/
     ...
 ```
 
-Actual project documents stay in the parent repository. The submodule contains the operating procedures, their templates, and configuration. It should not accumulate another project's narrative, document history, credentials, or private context.
+For an adoption, actual project documents stay in the parent repository. The submodule contains the operating procedures, their templates, and configuration. It should not accumulate another project's narrative, document history, credentials, or private context.
 
 ### Configuration
 [workflow.toml](workflow.toml) holds tracked choices such as the project's name, document locations, adoption metadata, and optional validation commands. Resolve `project.root` relative to the adopted collection, then document locations relative to that root. The default `..` fits a submodule at the parent's root. Parent instructions identify the adopted collection and can override seed conventions.
