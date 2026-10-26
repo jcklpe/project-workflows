@@ -30,11 +30,10 @@ docs/
     topic.todo.md
   scratch/
     misc.md
-    future-ideas.md
+    subject.md
     misc-1.md
   archive/
   policies/
-  pinned-issues.md
 ```
 
 In the fallback layout, use `TODO.md` as the index rather than adding redundant per-folder READMEs. Follow local indexing and existing overview conventions when they differ.
@@ -66,7 +65,7 @@ Keep topical `tags` separate. If the repository uses `reviewed: YYYY-MM-DD`, adv
 ## TODO.md Role
 Use the resolved index (`TODO.md` in the fallback layout) as a coordination map, not as the place for fiddly implementation detail. Reuse a local index or owning note rather than requiring a new index for each work context.
 
-It should point to active spike docs, note waiting-for-human-QA items, list recently completed or archived spikes, and hold lightweight later ideas. Detailed work items, command logs, and state transitions belong in the spike's `.todo.md`.
+It should point to active spike docs, note waiting-for-human-QA items, list recently completed or archived spikes, and, when useful, link to existing later notes without turning capture into a backlog commitment. Detailed work items, command logs, and state transitions belong in the spike's `.todo.md`.
 
 ## The Two Documents
 Active spikes use two docs:
@@ -194,8 +193,7 @@ For loose unrouted notes, use `docs/scratch/misc.md` and the `triage-project-mis
 
 Use the shared routing taxonomy before promoting scratch material:
 
-- `docs/pinned-issues.md` for unresolved issues intentionally preserved for later.
-- `docs/scratch/future-ideas.md` for conceptual someday material.
+- Individual `docs/scratch/<subject>.md` notes for saved possibilities or deliberately parked subjects, using `capture-for-later`. Existing legacy records remain valid; do not migrate them as a side effect.
 - `docs/scratch/misc.md` for raw observed friction and issue intake.
 - `docs/policies/` for current durable rules, defaults, and procedures.
 - `docs/active-spikes/` for active scoped work.

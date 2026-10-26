@@ -34,8 +34,9 @@ Then follow the setup skill to configure and review the adoption. These two comm
 | [triage-project-misc](triage-project-misc/SKILL.md) | Route loose scratch observations into the appropriate project records. |
 | [draft-approval-slate](draft-approval-slate/SKILL.md) | Present concrete external or hard-to-reverse changes for human review. |
 | [commit-work](commit-work/SKILL.md) | Review scope and make coherent commits under the project's actual policy. |
-| [pin-issue](pin-issue/SKILL.md) | Preserve unresolved issues without prematurely adopting a solution or creating a backlog item. |
-| [log-future-idea](log-future-idea/SKILL.md) | Retain future infrastructure and workflow ideas outside active work. |
+| [capture-for-later](capture-for-later/SKILL.md) | Save possibilities and deliberately parked subjects as small individual scratch notes, without starting work. |
+
+The former [pin-issue](pin-issue/SKILL.md) and [log-future-idea](log-future-idea/SKILL.md) entrypoints are thin compatibility routes to `capture-for-later`; they no longer define separate categories or list templates. Existing notes remain valid and are not migrated by installation.
 
 The collection contains procedures and templates, not an autonomous project manager. The current project's instructions and authorized task determine which procedures apply. Installing these skills does not authorize publication or external writes.
 
@@ -91,7 +92,7 @@ git submodule update --init --recursive
 See [Git's submodule reference](https://git-scm.com/docs/git-submodule) and [gitmodules reference](https://git-scm.com/docs/gitmodules) for the Git mechanics.
 
 ## Dependencies and client installation
-These are Markdown procedures with supporting templates. They need ordinary document access and Git for versioning; no Python, uv, service account, personal vault, or Agent Hands installation is required. All eight project procedures travel together, without unrelated personal or service skills.
+These are Markdown procedures with supporting templates. They need ordinary document access and Git for versioning; no Python, uv, service account, personal vault, or Agent Hands installation is required. The seven current project procedures and two compatibility routes travel together, without unrelated personal or service skills.
 
 Each skill is a complete top-level directory containing `SKILL.md` and any supporting assets or client metadata. Project adoption and global client installation are separate choices. A project can route agents directly to these files through its instructions; do not assume every agent client automatically discovers skill folders. Use the project's adopted version when available so its procedures match its pinned history and local choices. Verify routing in the actual client after adoption.
 

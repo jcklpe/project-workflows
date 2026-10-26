@@ -12,7 +12,7 @@ This combines documentation setup with workflow distribution. If the request is 
 ## Inspect and select
 1. Resolve the actual parent repository from the request and its instructions, never from the location of a global skill. Inspect working-tree/index changes, current docs, local skills, existing submodules, and tracked/ignored configuration. Preserve concurrent work; do not stash, reset, or force checkout to make adoption easier.
 2. Identify the selected source repository and reviewed revision, using its actual remote/default branch. Require a public-safe, collaborator-usable URL before recording `.gitmodules`; never put credentials or a private machine path there. Confirm license compatibility and retained notices. An available folder is not automatically an independent repository or permission to republish it.
-3. Identify the scope to adopt. The collection's eight project procedures travel together; unrelated personal/service skills do not. Preserve any existing project-specific procedure differences. Missing required sources are an explicit setup gap, not permission to invent their content.
+3. Identify the scope to adopt. The collection's seven current project procedures and two compatibility routes travel together; unrelated personal/service skills do not. Preserve any existing project-specific procedure differences. Missing required sources are an explicit setup gap, not permission to invent their content.
 
 ## Adopt and branch
 Use a root-level `project-workflows/` submodule. Inspect any existing destination before changing it. Record the reviewed source URL in the parent's submodule metadata and pin the exact child commit. Follow the parent's Git policy, including ignore checks and scoped commits; submodule setup can stage metadata, so inspect its complete effect and do not sweep unrelated index content into a commit.
@@ -34,11 +34,11 @@ Use [the agent-routing template](assets/templates/AGENTS.md.template), [the inde
 - Optional CLAUDE symlink: point to AGENTS only when requested or already conventional; preserve existing real files and unrelated links.
 - TODO: short active-work/QA/history coordination index, not a task dump.
 - Active spikes: paired conceptual/task documents under the resolved location, using `run-project-spike`.
-- Scratch: provisional working notes and a misc inbox only when useful; not standing policy.
+- Scratch: individual subject notes for possibilities or deliberately parked work, using [capture-for-later](../capture-for-later/SKILL.md), plus a misc inbox only when useful. New capture notes need only `status: captured` or `status: parked` and a short body; they are not active work or standing policy.
 - Archive: closed/superseded history with the project's attention and continuation conventions.
 - Policies: maintained current rules with useful rationale; Git carries their evolution. Preserve existing vocabulary and do not force ADR chains or a numbered template.
 
-Do not add redundant READMEs inside documentation folders. Create pinned issues or future-ideas files when there is material for them. Preserve existing paths unless migration is authorized. A scaffold does not establish a product specification or capture unwritten project reasoning.
+Do not add redundant READMEs inside documentation folders. Do not create catch-all pinned-issues or future-ideas lists for new capture. Keep existing notes and legacy lists where they are unless migration is requested; related existing material should be updated rather than duplicated. Preserve existing paths unless migration is authorized. A scaffold does not establish a product specification or capture unwritten project reasoning.
 
 Skill directories live directly under the collection root: `project-workflows/<skill-name>/SKILL.md`. Preserve each complete folder, including assets and client metadata. Parent routing must prefer the adopted project version over global seeds. Explain how to read the project configuration and load required skills. Do not claim automatic discovery in an agent client unless it has actually been configured. Do not implicitly copy Kaizen, authoring, LifeOS, or service capabilities to make the project work.
 
