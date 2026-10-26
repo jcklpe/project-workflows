@@ -14,7 +14,6 @@ active_spikes = "docs/active-spikes"
 scratch = "docs/scratch"
 archive = "docs/archive"
 policies = "docs/policies"
-pinned_issues = "docs/pinned-issues.md"
 
 # Adoption fills these with public-safe source metadata. The parent gitlink, not these fields, records the adopted commit.
 [adoption]
