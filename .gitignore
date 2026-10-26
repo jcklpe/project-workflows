@@ -1,6 +1,5 @@
 .workflow.env
 .workflow.env.*
-!.workflow.env.example
 .env
 .env.*
 !.env.example

@@ -4,6 +4,7 @@ description: "Run and bucket project work in focused spike docs with a conceptua
 ---
 
 # Run Project Spike
+Resolve the actual requested target using [target resolution](../README.md#resolve-the-target) before selecting configuration or document paths. Global invocation does not target the installation checkout. Plain folders use global skills without adding a local collection or initializing Git.
 ## Local Precedence
 Read the current project's instructions first. If they adopt a `project-workflows` collection, use that project's skill copy and `workflow.toml` to resolve document locations; existing local conventions override fallback paths in this procedure. Otherwise prefer an existing project-local `skills/run-project-spike/SKILL.md` over a global seed. Never derive the target project's root from the location of a globally installed skill. Required companion project procedures ship in the same collection; general skills and service integrations are optional unless the project explicitly adopts them.
 
@@ -11,6 +12,8 @@ Also honor a project-owned `how-to-spike.md` process. Resolve the work's owning 
 
 ## Purpose
 Keep a project's spike records with its actual working project, following local documentation conventions, rather than creating a parallel set in a separate context store. A project may contain many spikes; a product may persist across them. Closing a spike or project does not automatically close its broader subject or move a stable product. Use context indexes to retain useful active/archive project pointers.
+
+A spike is a bounded workstream through which project work progresses, including investigation, design, implementation, validation, and delivery. The term describes the work's scope; it does not imply research-only work or disposable code.
 
 A spike is not just a checklist. It is a temporary collaboration space for the user and agents to build taste, vocabulary, decisions, and implementation history around a specific theme of work.
 
@@ -28,11 +31,10 @@ docs/
     topic.todo.md
   scratch/
     misc.md
-    future-ideas.md
+    subject.md
     misc-1.md
   archive/
   policies/
-  pinned-issues.md
 ```
 
 In the fallback layout, use `TODO.md` as the index rather than adding redundant per-folder READMEs. Follow local indexing and existing overview conventions when they differ.
@@ -64,7 +66,7 @@ Keep topical `tags` separate. If the repository uses `reviewed: YYYY-MM-DD`, adv
 ## TODO.md Role
 Use the resolved index (`TODO.md` in the fallback layout) as a coordination map, not as the place for fiddly implementation detail. Reuse a local index or owning note rather than requiring a new index for each work context.
 
-It should point to active spike docs, note waiting-for-human-QA items, list recently completed or archived spikes, and hold lightweight later ideas. Detailed work items, command logs, and state transitions belong in the spike's `.todo.md`.
+It should point to active spike docs, note waiting-for-human-QA items, list recently completed or archived spikes, and, when useful, link to existing later notes without turning capture into a backlog commitment. Detailed work items, command logs, and state transitions belong in the spike's `.todo.md`.
 
 ## The Two Documents
 Active spikes use two docs:
@@ -192,8 +194,7 @@ For loose unrouted notes, use `docs/scratch/misc.md` and the `triage-project-mis
 
 Use the shared routing taxonomy before promoting scratch material:
 
-- `docs/pinned-issues.md` for unresolved issues intentionally preserved for later.
-- `docs/scratch/future-ideas.md` for conceptual someday material.
+- Individual `docs/scratch/<subject>.md` notes for saved possibilities or deliberately parked subjects, using `capture-for-later`. Existing legacy records remain valid; do not migrate them as a side effect.
 - `docs/scratch/misc.md` for raw observed friction and issue intake.
 - `docs/policies/` for current durable rules, defaults, and procedures.
 - `docs/active-spikes/` for active scoped work.
