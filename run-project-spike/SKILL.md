@@ -12,6 +12,8 @@ Also honor a project-owned `how-to-spike.md` process. Resolve the work's owning 
 ## Purpose
 Keep a project's spike records with its actual working project, following local documentation conventions, rather than creating a parallel set in a separate context store. A project may contain many spikes; a product may persist across them. Closing a spike or project does not automatically close its broader subject or move a stable product. Use context indexes to retain useful active/archive project pointers.
 
+A spike is a bounded workstream through which project work progresses, including investigation, design, implementation, validation, and delivery. The term describes the work's scope; it does not imply research-only work or disposable code.
+
 A spike is not just a checklist. It is a temporary collaboration space for the user and agents to build taste, vocabulary, decisions, and implementation history around a specific theme of work.
 
 Use a spike for substantial or evolving project work that needs shared reasoning, an implementation plan, or continuity across checkpoints. Related small work can share a miscellaneous spike bucket such as `misc-302` when that context is useful.
