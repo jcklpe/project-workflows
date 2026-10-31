@@ -1,0 +1,69 @@
+name: Project lifecycle
+
+on:
+  issues:
+    types: [opened, closed, reopened, labeled, unlabeled]
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Preview changes without writing
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: project-lifecycle-${{ github.repository }}
+  queue: max
+  cancel-in-progress: false
+
+jobs:
+  lifecycle:
+    if: github.event_name == 'workflow_dispatch' || vars.PW_AUTOMATION_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+          sparse-checkout: .github/project-workflows
+      - name: Create the selected App token
+        if: vars.PW_AUTH_METHOD == 'app'
+        id: app-token
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3
+        with:
+          client-id: ${{ vars.PW_APP_CLIENT_ID }}
+          private-key: ${{ secrets.PW_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: ${{ github.event.repository.name }}
+      - name: Apply the selected lifecycle
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
+        env:
+          PW_AUTH_METHOD: ${{ vars.PW_AUTH_METHOD }}
+          PW_AUTOMATION_ENABLED: ${{ vars.PW_AUTOMATION_ENABLED }}
+          PW_NATIVE_SETTINGS_VERIFIED: ${{ vars.PW_NATIVE_SETTINGS_VERIFIED }}
+          PW_DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
+          PW_PROJECT_ID: ${{ vars.PW_PROJECT_ID }}
+          PW_STATUS_FIELD_ID: ${{ vars.PW_STATUS_FIELD_ID }}
+          PW_STATUS_FIELD_NAME: ${{ vars.PW_STATUS_FIELD_NAME }}
+          PW_ENTRY_OPTION_ID: ${{ vars.PW_ENTRY_OPTION_ID }}
+          PW_REOPEN_OPTION_ID: ${{ vars.PW_REOPEN_OPTION_ID }}
+          PW_DONE_OPTION_ID: ${{ vars.PW_DONE_OPTION_ID }}
+          PW_TERMINAL_OPTION_IDS: ${{ vars.PW_TERMINAL_OPTION_IDS }}
+          PW_BLOCKED_OPTION_ID: ${{ vars.PW_BLOCKED_OPTION_ID }}
+          PW_READY_OPTION_ID: ${{ vars.PW_READY_OPTION_ID }}
+          PW_BLOCKED_LABEL: ${{ vars.PW_BLOCKED_LABEL }}
+          PW_DEPENDENCY_BLOCKING: ${{ vars.PW_DEPENDENCY_BLOCKING }}
+          PW_REOPEN_CLOSED_ISSUES: ${{ vars.PW_REOPEN_CLOSED_ISSUES }}
+          PW_FRESH_CLOSE_SECONDS: ${{ vars.PW_FRESH_CLOSE_SECONDS }}
+          PW_MAX_CHANGES: ${{ vars.PW_MAX_CHANGES }}
+        with:
+          github-token: ${{ vars.PW_AUTH_METHOD == 'app' && steps.app-token.outputs.token || vars.PW_AUTH_METHOD == 'token' && secrets.PW_PROJECT_TOKEN || '' }}
+          retries: 0
+          script: |
+            const { run } = require(process.env.GITHUB_WORKSPACE + '/.github/project-workflows/lifecycle.cjs');
+            await run({ github, context, core, env: process.env });
