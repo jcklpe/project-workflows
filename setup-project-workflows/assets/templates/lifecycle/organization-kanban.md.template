@@ -1,0 +1,19 @@
+# Organization Kanban lifecycle
+Use this as editable starting guidance, not a copy of a particular organization's policy. Preserve established project choices. Installing this document enables no automation.
+
+| Stage | Starting meaning |
+| --- | --- |
+| To Do | Work awaiting selection or preparation. |
+| On Deck | Ready to start. |
+| Blocked | Progress is waiting on an identified condition. |
+| In Progress | Work in progress. |
+| Done | The shared outcome meets its acceptance criteria. |
+
+## Selected transitions
+- To Do is the proposed entry/reopen stage; confirm the project's existing mapping before adopting it.
+- Completed closes move existing cards to Done. A deliberate terminal stage is preserved. Cancellation and other close reasons need their own project decision; the starter automation leaves them alone.
+- Select label blocking, dependency blocking or both. Clearing one enabled blocker cannot clear another. On Deck is the proposed label-clear destination when no blocker remains; dependency removal alone does not auto-unblock.
+- Board-driven reopening is optional. Preserve the ten-minute fresh-close guard or the project's existing interval. The bundled workflow starts at a fifteen-minute cadence; a project choosing a five-minute cadence must deliberately adapt the schedule and retain its guard. Scheduled execution is not immediate.
+
+## Setup record
+Record the selected board/repository scope, enabled transitions, field/options, authoritative actors and actual schedule. Specialized boards can use other terminal mappings such as Filled; do not impose this software-work profile on them. Keep credentials in the forge's secret store, and verify native configuration and writer ownership before enabling writes.

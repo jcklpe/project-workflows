@@ -1,0 +1,20 @@
+# Team Kanban lifecycle
+Use this as editable starting guidance, not an assertion about an existing board. Preserve established project choices. Installing this document enables no automation.
+
+| Stage | Starting meaning |
+| --- | --- |
+| Backlog | Captured work awaiting prioritization. |
+| Upcoming | Selected for a future period. |
+| On Deck | Ready to start. |
+| Active | Work in progress. |
+| Blocked | Progress is waiting on an identified condition. |
+| Done | The shared outcome meets its acceptance criteria. |
+
+## Selected transitions
+- New issues enter Backlog; explicitly reopened issues return to Backlog unless an enabled blocker applies.
+- Completed closes move existing cards to Done. A deliberate terminal stage is preserved. Cancellation and other close reasons need their own project decision; the starter automation leaves them alone.
+- Select label blocking, dependency blocking or both. If both apply, clearing one does not clear the other. Label clearing can return a Blocked card to On Deck only when no other enabled blocker remains. Dependency removal alone does not auto-unblock.
+- Board-driven reopening is optional. If selected, use a ten-minute fresh-close guard as the starting value and a fifteen-minute reconciliation schedule. Preserve an existing guard and advertise scheduler lag.
+
+## Setup record
+Record the selected board/repository scope, enabled transitions, field/options, authoritative actors and actual schedule. Keep credentials in the forge's secret store and nonsecret runtime settings in repository/organization variables. Verify the actual native close mapping and competing native workflows before enabling writes. A terminal board stage does not close an agent's spike.
