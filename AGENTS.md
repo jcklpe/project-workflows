@@ -7,7 +7,9 @@ When the selected task is development of Project Workflows itself, this reposito
 The neutral `workflow.toml` describes an adopted collection's default consumer location; its `project.root = ".."` must not redirect collection-maintenance documents into a containing checkout. This maintenance rule does not make the global installation the target of unrelated requests. For work in an adopting project, its instructions and configured destinations remain authoritative; its actual project narrative stays outside this collection.
 
 ## Changes and verification
-Use [Coordinate Project Contribution](coordinate-project-contribution/SKILL.md) for contribution scope, cross-person review and optional forge coordination. Each spike belongs to one agent/thread; independent agents use distinct linked records. Platform tooling remains optional and owns service operations.
+Use [Coordinate Project Contribution](coordinate-project-contribution/SKILL.md) for contribution scope, cross-person review and optional forge coordination. Each spike belongs to one agent/thread; independent agents use distinct linked records. Platform tooling remains optional and owns agent-facing service operations.
+
+Optional forge starter assets and their self-contained CI helpers belong here alongside workflow profiles and tests. Keep the core Markdown procedures usable without a local language runtime or dependency installation. Run selected automation in its documented hosted environment; do not introduce dependency trees, build systems or background services into consumer folders merely to use these workflows.
 
 Preserve intentional project divergence, complete supporting files, license notices, and source attribution. Keep prose paragraphs on single lines and avoid unrelated reformatting. Read commit-work/SKILL.md before checkpoints. Use scoped pathspec commits, guard new-file additions with ignore checks, never add co-author trailers, and never push. Preserve concurrent work and do not rewrite history without explicit authorization.
 
