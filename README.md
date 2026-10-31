@@ -2,22 +2,31 @@
 Reusable agent skills for organizing project documentation, working through implementation spikes, reviewing proposed changes, and making scoped commits. Keep the procedures alongside your code so someone cloning the project can understand how its documentation and development workflow operate.
 
 ## Get started
-Open the project in your chosen agent client and use the prompt that fits. These prompts ask the agent to read the skill files, so you can begin before registering skill names in the client.
+Open the project in your chosen agent client. The robot icon marks prompts to copy and paste into your agent's chat. These prompts ask the agent to read the skill files, so you can begin before registering skill names in the client.
 
-### Set up a project
-Use [Setup Project Workflows](setup-project-workflows/SKILL.md) when the project has not adopted a workflow source yet:
+<a name="set-up-a-project"></a>
+<h3><img src="assets/agent-hands-head-thumbs-up.png" height="32" alt="Robot head giving a thumbs-up"> Set up a project</h3>
+When the project has not adopted a workflow source yet, use [Setup Project Workflows](setup-project-workflows/SKILL.md). **Copy and paste this prompt into your agent:**
 
-> Read setup-project-workflows/SKILL.md from https://github.com/jcklpe/project-workflows and help me set up Project Workflows in this project. Inspect its existing instructions and documents first, preserve its conventions, and help me choose pinned or global-only use. Configure the selected workflow and show me how to start contribution work.
+```text
+Read setup-project-workflows/SKILL.md from https://github.com/jcklpe/project-workflows and help me set up Project Workflows in this project. Inspect its existing instructions and documents first, preserve its conventions, and help me choose pinned or global-only use. Configure the selected workflow and show me how to start contribution work.
+```
 
-### Join an existing project
-The project adopts its workflow once; each collaborator gets that declared source ready in their own checkout and agent client. You do not need the maintainer's personal configs, global skills or service accounts. Use the [collaborator onboarding route](setup-project-workflows/SKILL.md#onboard-a-collaborator):
+<a name="join-an-existing-project"></a>
+<h3><img src="assets/agent-hands-head-thumbs-up.png" height="32" alt="Robot head giving a thumbs-up"> Join an existing project</h3>
+The project adopts its workflow once; each collaborator gets that declared source ready in their own checkout and agent client. You do not need the maintainer's personal configs, global skills or service accounts. To use the [collaborator onboarding route](setup-project-workflows/SKILL.md#onboard-a-collaborator), **copy and paste this prompt into your agent:**
 
-> Read this project's README and AGENTS. Help me get its declared Project Workflows source ready in my checkout, then read that source's setup-project-workflows/SKILL.md and follow "Onboard a collaborator". Preserve the project's pins, adaptation branch, configuration and other contributors' work. Start with direct file-based skill use and explain any optional client discovery setup. Finish by showing me how to start coordinate-project-contribution here.
+```text
+Read this project's README and AGENTS. Help me get its declared Project Workflows source ready in my checkout, then read that source's setup-project-workflows/SKILL.md and follow "Onboard a collaborator". Preserve the project's pins, adaptation branch, configuration and other contributors' work. Start with direct file-based skill use and explain any optional client discovery setup. Finish by showing me how to start coordinate-project-contribution here.
+```
 
-### Start contribution work
-Use **[Coordinate Project Contribution](coordinate-project-contribution/SKILL.md)** as the entry point for starting work with another person:
+<a name="start-contribution-work"></a>
+<h3><img src="assets/agent-hands-head-thumbs-up.png" height="32" alt="Robot head giving a thumbs-up"> Start contribution work</h3>
+Use **[Coordinate Project Contribution](coordinate-project-contribution/SKILL.md)** as the entry point for starting work with another person. Replace `[contribution]` with the work you want to start, then **copy and paste this prompt into your agent:**
 
-> Read coordinate-project-contribution/SKILL.md from this project's selected workflow source and help me start [contribution]. Read the project instructions, work index and relevant records; follow the humans' existing direction. Use run-project-spike for your own agent-owned thread when needed. Preserve other agents' spikes and the current branch arrangement, use commit-work for atomic checkpoints, and surface material blockers. When the work is reviewable, prepare an overview and propose contribution boundaries from the actual commits and dependencies.
+```text
+Read coordinate-project-contribution/SKILL.md from this project's selected workflow source and help me start [contribution]. Read the project instructions, work index and relevant records; follow the humans' existing direction. Use run-project-spike for your own agent-owned thread when needed. Preserve other agents' spikes and the current branch arrangement, use commit-work for atomic checkpoints, and surface material blockers. When the work is reviewable, prepare an overview and propose contribution boundaries from the actual commits and dependencies.
+```
 
 Already set up and upgrading the workflow itself? Use [Update Project Workflows](update-project-workflows/SKILL.md) to preserve the project's adaptations and reconcile its selected source.
 
