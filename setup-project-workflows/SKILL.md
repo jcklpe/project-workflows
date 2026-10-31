@@ -1,6 +1,6 @@
 ---
 name: setup-project-workflows
-description: "Set up or retrofit a project's documentation and reusable operating skills. Use for initial project-workflows submodule adoption, creating a project branch, migrating copied skills, or establishing README, agent routing, spike/scratch/archive/policy locations, and project configuration."
+description: "Set up Project Workflows or onboard a collaborator to an existing project. Use for local collaborator setup, initial adoption, project branches, copied-skill migration, documentation/routing and project configuration. Use update-project-workflows for upgrades."
 ---
 
 # Setup Project Workflows
@@ -8,7 +8,18 @@ Resolve the actual requested target using [target resolution](../README.md#resol
 ## Scope and authority
 Read the target project's instructions, current documents, commit policy, and existing skill sources first. A setup request authorizes its stated local scope, not external repository creation, publication, a push, or an unrelated reorganization. Honor review holds; do not add another approval ritual for already-authorized setup. Preserve existing human content and deliberate local conventions.
 
-This combines documentation setup with workflow distribution. If the request is documentation-only, adapt the bundled templates without forcing a submodule adoption. If a collection already exists, use `update-project-workflows`; do not overwrite it. Dependencies are Git for versioned adoption and ordinary filesystem/document access, not global general skills or service tools.
+This combines documentation setup with workflow distribution. Joining an already configured project uses the collaborator route below. If the request is documentation-only, adapt the bundled templates without forcing a submodule adoption. Upgrading an existing collection uses `update-project-workflows`; do not overwrite it. Dependencies are Git for versioned adoption and ordinary filesystem/document access, not global general skills or service tools.
+
+## Onboard a collaborator
+Use this route when a person joins a project that already declares its workflow source. Adoption, upgrades and a person's local client setup are different operations.
+
+1. Read the target's README, AGENTS, selected configuration and existing records. Determine whether it uses a pinned collection or global-only skills. Follow that choice and its local overrides; do not create a new adaptation branch, change the project pin or replace its configuration merely to onboard another person.
+2. Make the declared source available locally. For an uninitialized pinned checkout, restore the recorded collection using project instructions; preserve an active or dirty checkout. If the required revision cannot be obtained, report its exact source/access gap rather than replacing it with shared main or a global copy. For global-only use, locate the declared complete collection or retrieve the selected source/revision into a collaborator-chosen external skill location within setup authorization. Preserve existing installations and keep target-owned configuration with the project; do not create a project-local collection, submodule or adaptation branch for this route.
+3. Start with direct file-based invocation: have the agent read the selected `SKILL.md` and its resources. Global registration is optional. If the person wants named discovery, use the chosen client's supported setup, preserve existing files/links and project-version precedence, and verify actual discovery separately from filesystem availability. Do not install a maintainer's dotfiles, personal/general skills or service tooling to make these project procedures usable.
+4. Verify that the selected entrypoints/resources and target configuration resolve, the project instructions take precedence, and its documented checks are visible. Report available files, actual client discovery and missing access separately; a successful clone is not evidence of client registration or forge permission.
+5. Point the collaborator to [Coordinate Project Contribution](../coordinate-project-contribution/SKILL.md) and the [contribution starter prompt](../README.md#start-contribution-work). Use it when they choose the work to start; each agent keeps its own spike, and the project's branch/commit rules remain authoritative. Leave feature work, platform writes and workflow upgrades to their actual requested scope.
+
+For a project that has not adopted a source yet, continue with the adoption procedure below. A request to join an existing project is not permission to redesign its shared workflow.
 
 ## Choose the workflow source
 Honor the user's or target's declared mode. For a pinned adoption, follow the branch/submodule procedure below. A Git project may instead explicitly choose global-only use; plain folders use global workflows without creating repositories. Global-only setup reads installed procedures, preserves project policies/adapters, declares the target's optional root `workflow.toml` with `project.root = "."`, and adds only the required documentation/routing. Omit adoption branch metadata and skip submodule, branch and pin steps. Do not run an installer or create a config merely because one is absent; report a missing required global skill.
@@ -42,7 +53,7 @@ For an existing copied-skills project, use the [copied-skill reconciliation](../
 
 ## Documentation and routing
 Use [the agent-routing template](assets/templates/AGENTS.md.template), [the index template](assets/templates/TODO.md.template), and [the ignore baseline](assets/templates/default.gitignore) as inputs to adapt, not files to overwrite existing documents with. Create only needed structure:
-- Root README: purpose, how to start, relevant validation, and clone/submodule instructions. Include a short collaborator path for someone joining the configured project: actual work entrypoints, checks, optional first-agent prompt and the project's human-directed review/integration expectations. Adapt the collection's [joiner guidance](../README.md#join-an-existing-project) to this project rather than copying whole procedures or assuming the maintainer's personal tooling. Do not impose a negotiation process or one-issue/one-branch/one-change-request format.
+- Root README: purpose, how to start, relevant validation, and clone/submodule instructions. Include a short collaborator path for someone joining the configured project: actual source restoration, checks, a setup prompt that works before skill registration, and a contribution starter prompt naming `coordinate-project-contribution` from the selected source. Adapt the collection's [joiner guidance](../README.md#join-an-existing-project) to this project rather than copying whole procedures or assuming the maintainer's personal tooling. Keep human-directed review/integration expectations; do not impose a negotiation process or one-issue/one-branch/one-change-request format.
 - Root AGENTS: current authority, project-specific rules, validation, privacy, and the actual adopted skill/configuration location.
 - Optional CLAUDE symlink: point to AGENTS only when requested or already conventional; preserve existing real files and unrelated links.
 - TODO: short active-work/QA/history coordination index, not a task dump.
