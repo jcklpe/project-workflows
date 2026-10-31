@@ -1,6 +1,6 @@
 ---
 attention: live
-reviewed: 2026-10-30
+reviewed: 2026-10-31
 tags: [project-workflows, collaboration]
 ---
 
@@ -225,3 +225,12 @@ The containing installer/pin checkpoint is recorded locally. The user approved i
 
 ## Collaborator bootstrap — 2026-10-31
 The README leads with Get started prompts for setting up a project, joining an existing project and starting contribution work with `coordinate-project-contribution`. The workflow overview and skill list follow those starting paths; manual Git instructions and the agent-facing target/configuration/branch reference come later. Target means the project or folder the person asked the agent to work on, independent of the skill's installation checkout. A collaborator can begin through direct file-based invocation without a pre-existing global skill installation or the maintainer's personal setup. The setup skill has a joining route that restores the declared source, preserves existing pins/branches/configuration and distinguishes optional named discovery from file availability. New or updated project READMEs should adapt both prompts to their own selected source and commands. These source changes do not claim a fresh collaborator/client test, remote availability or an automatic consumer rollout.
+
+## Optional board and lifecycle setup — 2026-10-31
+The user authorized extending Setup Project Workflows after reading Agent Hands' “Board setup extension and Project Workflows handoff” in its `docs/active-spikes/github-collaboration-operations.md`. The inspected wiki and organization Kanban stage sets are configurable starting points, with project-owned meanings, entry/active/terminal/reopen mappings, blocked-label/dependency choices and timing expectations. Preserve existing adaptations and local/no-forge use. A specialized roles board is not a universal software lifecycle.
+
+The [optional setup route](../../setup-project-workflows/SKILL.md#optional-board-and-lifecycle-setup) and [supporting reference](../../setup-project-workflows/references/board-and-lifecycle-setup.md) keep semantic selection and human setup guidance here. Selected platform tooling owns project/field/view operations, API calls, automation assets, identity/permission checks, previews, readback and recovery. Agent Hands' additional Projects capabilities are scoped but not implemented at this handoff; issue/PR support does not establish provisioning support. Do not edit its implementation, task record or the reference boards from this workstream.
+
+Retain the selected fresh-close guard and one authoritative actor per transition, prevent generic edits/label events from resetting progress, and evaluate blocked signals independently. The inspected architectures both use a ten-minute fresh-close interval but different scheduled cadences; these are examples to preserve/adapt, not new universal defaults. Explicit human verification of the actual native close-trigger mapping and competing native settings follows [GitHub's documented workflow setup](https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project/using-the-built-in-automations). Enabled metadata alone is insufficient. Pending manual checks and unavailable provider capabilities remain visible; no live automation outcome is claimed by workflow documentation.
+
+Keep this extension's tasks in this pair. Its authorization covers the source guidance and local validation/checkpoints, not publication, reference-board changes or another consumer rollout. The preceding collaboration/onboarding rollout is already published and independently verified; that evidence does not extend publication authority to this new slice.

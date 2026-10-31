@@ -16,6 +16,8 @@ The optional `[coordination]` table uses `mode = "local"` or `"forge"`, `reposit
 
 Agent Hands supplies platform tooling when selected. Read the actual selected setup/use skills and use only their supported capabilities. A human can perform a platform step with their own tools; prepare an exact handoff if agent tooling is unavailable. Do not install tools, expand access, silently switch providers or embed provider commands/API calls in this workflow.
 
+For a separately selected board/lifecycle setup request, use [Setup Project Workflows' optional route](../setup-project-workflows/SKILL.md#optional-board-and-lifecycle-setup). Ordinary contribution work preserves the project's existing profile and requires no new board or automation.
+
 ## Follow human coordination
 People mediate scope, interfaces, ownership and review. Follow their existing decisions and project records; do not impose an agreement checklist, named-role form or separate coordination ritual before work can start. Raise a missing decision only when it materially blocks the next action or changes its scope. Do not infer another person's acceptance, assignment or availability.
 

@@ -1,6 +1,6 @@
 ---
 name: setup-project-workflows
-description: "Set up Project Workflows or onboard a collaborator to an existing project. Use for local collaborator setup, initial adoption, project branches, copied-skill migration, documentation/routing and project configuration. Use update-project-workflows for upgrades."
+description: "Set up Project Workflows, onboard a collaborator, or guide optional project-board and lifecycle setup. Use for adoption, project branches, copied-skill migration, documentation/routing and project configuration. Use update-project-workflows for collection upgrades."
 ---
 
 # Setup Project Workflows
@@ -20,6 +20,13 @@ Use this route when a person joins a project that already declares its workflow 
 5. Point the collaborator to [Coordinate Project Contribution](../coordinate-project-contribution/SKILL.md) and the [contribution starter prompt](../README.md#start-contribution-work). Use it when they choose the work to start; each agent keeps its own spike, and the project's branch/commit rules remain authoritative. Leave feature work, platform writes and workflow upgrades to their actual requested scope.
 
 For a project that has not adopted a source yet, continue with the adoption procedure below. A request to join an existing project is not permission to redesign its shared workflow.
+
+## Optional board and lifecycle setup
+Use this route when board/lifecycle setup is requested or explicitly included in the project's setup scope. When an adoption selects forge coordination, board setup can be offered as an optional next step; it is not a prerequisite. Local/no-forge use and routine collaborator onboarding require no board, service tooling or automation. A board-only request preserves the existing workflow source, branch, pin and project adaptations; it does not require collection adoption or an upgrade.
+
+Read [Board and lifecycle setup](references/board-and-lifecycle-setup.md) for this route. Follow existing human decisions, select or adapt a profile, and record its stage meanings, lifecycle mappings, blocked-signal choices, transition ownership and timing expectations in the project's maintained guidance. Ask only for choices that materially affect the selected setup; a reference board is not a universal default.
+
+Request platform operations through the selected tooling's actual supported capabilities, or prepare a human handoff. Keep provider commands, IDs, API calls, automation templates and recovery mechanics with that owner. Include the required manual verification of native automation settings and distinguish pending checks from verified setup. Missing provisioning support does not block independent local work or justify an ad hoc implementation here.
 
 ## Choose the workflow source
 Honor the user's or target's declared mode. For a pinned adoption, follow the branch/submodule procedure below. A Git project may instead explicitly choose global-only use; plain folders use global workflows without creating repositories. Global-only setup reads installed procedures, preserves project policies/adapters, declares the target's optional root `workflow.toml` with `project.root = "."`, and adds only the required documentation/routing. Omit adoption branch metadata and skip submodule, branch and pin steps. Do not run an installer or create a config merely because one is absent; report a missing required global skill.
