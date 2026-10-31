@@ -30,6 +30,8 @@ Read coordinate-project-contribution/SKILL.md from this project's selected workf
 
 Already set up and upgrading the workflow itself? Use [Update Project Workflows](update-project-workflows/SKILL.md) to preserve the project's adaptations and reconcile its selected source.
 
+For optional project-board and lifecycle setup, use [Setup Project Workflows' board route](setup-project-workflows/SKILL.md#optional-board-and-lifecycle-setup). Its [GitHub starter pack](setup-project-workflows/references/github-starter-pack.md) includes issue/PR templates, editable profiles and hosted Actions automation. Setup guides credentials only for selected forge setup. Local use and collaborator onboarding require no board or language runtime.
+
 ## How collaboration fits together
 [Run Project Spike](run-project-spike/SKILL.md) keeps each agent's reasoning, execution state and QA in its own spike. People coordinate shared outcomes through their existing records.
 
@@ -42,7 +44,7 @@ One branch may host many agent-owned spikes, several issues and multiple eventua
 ## Included skills
 | Skill | Purpose |
 | --- | --- |
-| [setup-project-workflows](setup-project-workflows/SKILL.md) | Set up a project or get a collaborator's local checkout/client ready; preserve existing project choices. |
+| [setup-project-workflows](setup-project-workflows/SKILL.md) | Set up a project, onboard collaborators, or guide optional board/lifecycle setup; preserve existing project choices. |
 | [coordinate-project-contribution](coordinate-project-contribution/SKILL.md) | Kick off contribution work, link agent-owned spikes to shared outcomes, and prepare review or integration. |
 | [update-project-workflows](update-project-workflows/SKILL.md) | Compare against shared ancestry and reconcile upstream improvements while preserving intentional project differences. |
 | [run-project-spike](run-project-spike/SKILL.md) | Keep reasoning and task documents together, track QA, and preserve closure history. |
