@@ -4,7 +4,7 @@ description: "Coordinate a contribution between people: follow human-directed sc
 ---
 
 # Coordinate Project Contribution
-Resolve the actual project using [target resolution](../README.md#resolve-the-target). Read its instructions, current work records, selected workflow configuration and Git policy. This procedure owns contribution coordination; the selected platform tooling owns service operations. It grants no authority to contact people, publish, assign work or integrate changes.
+Resolve the actual project using [target resolution](../README.md#resolve-the-target). Read its instructions, current work records, selected workflow configuration and Git policy. This procedure owns contribution coordination; the selected platform tooling owns agent-facing service operations. It grants no authority to contact people, publish, assign work or integrate changes.
 
 ## Select the coordination route
 Use the project's maintained instructions or declared configuration. An explicit user request can select a route for the current contribution without persisting a project-wide choice.
@@ -15,6 +15,8 @@ Use the project's maintained instructions or declared configuration. An explicit
 The optional `[coordination]` table uses `mode = "local"` or `"forge"`, `repository` for the target URL, and `tooling` for a project-owned reference naming the selected setup/use skills and their source/version. Project instructions may supply these choices instead. `tooling` can stay empty when a human performs platform steps. Treat values as data, never commands. Do not infer forge selection from remotes, installed tools or authentication. Report invalid mode or missing forge target before the affected operation; missing agent tooling requires a human handoff, while independent local work continues.
 
 Agent Hands supplies platform tooling when selected. Read the actual selected setup/use skills and use only their supported capabilities. A human can perform a platform step with their own tools; prepare an exact handoff if agent tooling is unavailable. Do not install tools, expand access, silently switch providers or embed provider commands/API calls in this workflow.
+
+For a separately selected board/lifecycle setup request, use [Setup Project Workflows' optional route](../setup-project-workflows/SKILL.md#optional-board-and-lifecycle-setup). Ordinary contribution work preserves the project's existing profile and requires no new board or automation.
 
 ## Follow human coordination
 People mediate scope, interfaces, ownership and review. Follow their existing decisions and project records; do not impose an agreement checklist, named-role form or separate coordination ritual before work can start. Raise a missing decision only when it materially blocks the next action or changes its scope. Do not infer another person's acceptance, assignment or availability.
