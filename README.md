@@ -3,6 +3,11 @@ Reusable agent skills for organizing project documentation, working through impl
 
 A Git project can pin this collection as a root-level `project-workflows/` Git submodule or explicitly use installed global skills with project-owned policy/configuration. Preserve the chosen mode; do not create or remove a submodule merely because global skills are available. For a pinned adoption, each project gets its own branch from the start, while the parent repository pins an exact revision. An explicitly designated canonical maintenance/global installation uses shared `main` directly. Project-specific procedures can evolve freely, with Git ancestry available when reconciling improvements upstream or downstream.
 
+## Start here
+- **Joining another person's project:** follow [Join an existing project](#join-an-existing-project) for a setup prompt that works before these skills are registered in your agent client.
+- **Starting contribution work:** [Coordinate Project Contribution](coordinate-project-contribution/SKILL.md) is the entry point for human-directed collaboration, agent-owned spikes and review.
+- **Adopting the workflow in a project:** use [Setup Project Workflows](setup-project-workflows/SKILL.md); use [Update Project Workflows](update-project-workflows/SKILL.md) to upgrade an existing adoption.
+
 ## Resolve the target
 Resolve the requested project or folder before reading collection configuration or choosing document paths. Prefer the explicit target in the request; otherwise use the active working context and its nearest applicable instructions. Inspect the target's actual Git boundary separately from its document/workspace boundary. If several plausible targets remain, ask which one before writing; a skill's installation path is never a target-selection fallback.
 
@@ -51,9 +56,29 @@ Then follow the setup skill to configure and review the adoption. These two comm
 The collection contains procedures and templates, not an autonomous project manager. The current project's instructions and authorized task determine which procedures apply. Installing these skills does not authorize publication or external writes.
 
 ## Join an existing project
-Start with that project's README, AGENTS, work index and relevant work records. Restore its chosen workflow source using its documented instructions; you do not need the maintainer's personal agent setup. Use your own editor or agent client, and run the project's documented checks. With an agent, a useful first prompt is:
+The project adopts its workflow once; each collaborator makes that declared source usable in their own checkout and agent client. You do not need the maintainer's personal configs, global skills or service accounts.
 
-> Read this project's README, AGENTS, work index and relevant spike records. Summarize the current contribution, acceptance checks, selected coordination route and missing access. Explain the next bounded step before changing anything. Each spike is owned by one agent and one thread; read other agents' spikes for context and keep independent work in your own spike.
+### Get the skills on your machine
+Clone the team's project using its documented instructions. For a project with an uninitialized root-level workflow submodule, run this from the project root:
+
+```sh
+git submodule update --init --recursive -- project-workflows
+```
+
+This restores the project's recorded workflow version. Preserve an already active checkout and follow its instructions rather than rerunning setup over other work. The maintainer must make the pinned revision available at the recorded URL before another person can retrieve it; report an unavailable pin rather than substituting a different version.
+
+For a global-only project, use its declared workflow source/version and target-owned instructions/configuration. If the collection is missing locally, have the setup agent retrieve the selected complete source into a location you choose outside the project. Keep its supporting resources available. A global installation does not replace a project's pinned copy or supply another project's configuration.
+
+Open the project in your chosen agent client and paste this setup prompt; it asks the agent to read files, so it does not require named skill discovery first:
+
+> Read this project's README and AGENTS. Help me get its declared Project Workflows source ready in my checkout, then read that source's setup-project-workflows/SKILL.md and follow "Onboard a collaborator". Preserve the project's pins, adaptation branch, configuration and other contributors' work. Start with direct file-based skill use and explain any optional client discovery setup. Finish by showing me how to start coordinate-project-contribution here.
+
+[Setup Project Workflows](setup-project-workflows/SKILL.md#onboard-a-collaborator) distinguishes joining from adopting or upgrading. Your agent can read the selected `SKILL.md` files directly and follow their sibling resources. Optional client registration makes supported named invocations such as `$coordinate-project-contribution` available; verify discovery in that client before relying on the name. Service tooling is a separate choice when the work needs it.
+
+### Start contribution work
+Use **[Coordinate Project Contribution](coordinate-project-contribution/SKILL.md)** to kick off the work after setup. A copyable prompt is:
+
+> Read coordinate-project-contribution/SKILL.md from this project's selected workflow source and help me start [contribution]. Read the project instructions, work index and relevant records; follow the humans' existing direction. Use run-project-spike for your own agent-owned thread when needed. Preserve other agents' spikes and the current branch arrangement, use commit-work for atomic checkpoints, and surface material blockers. When the work is reviewable, prepare an overview and propose contribution boundaries from the actual commits and dependencies.
 
 Follow the humans' existing coordination and project records. [Coordinate Project Contribution](coordinate-project-contribution/SKILL.md) connects that direction to each agent's execution and review without imposing a negotiation process or prerequisite agreement checklist. Raise concrete blockers for the people involved to resolve.
 
