@@ -21,6 +21,14 @@ upstream_url = "https://github.com/jcklpe/project-workflows.git"
 upstream_branch = "main"
 project_branch = "project/texas-landlordmapper-design"
 
+# Optional collaboration selection. Local use needs no forge, platform tooling or credentials.
+[coordination]
+mode = "local"
+repository = ""
+# Optional project-owned reference naming setup/use skills and source/version. Empty allows human platform steps.
+# Never store a command or secret here.
+tooling = ""
+
 # Optional documented checks; inspect them and project instructions before running commands.
 [validation]
 commands = []
