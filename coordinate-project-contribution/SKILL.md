@@ -4,7 +4,7 @@ description: "Coordinate a contribution between people: follow human-directed sc
 ---
 
 # Coordinate Project Contribution
-Resolve the actual project using [target resolution](../README.md#resolve-the-target). Read its instructions, current work records, selected workflow configuration and Git policy. This procedure owns contribution coordination; the selected platform tooling owns service operations. It grants no authority to contact people, publish, assign work or integrate changes.
+Resolve the actual project using [target resolution](../README.md#resolve-the-target). Read its instructions, current work records, selected workflow configuration and Git policy. This procedure owns contribution coordination; the selected platform tooling owns agent-facing service operations. It grants no authority to contact people, publish, assign work or integrate changes.
 
 ## Select the coordination route
 Use the project's maintained instructions or declared configuration. An explicit user request can select a route for the current contribution without persisting a project-wide choice.

@@ -1,6 +1,6 @@
 ---
 name: setup-project-workflows
-description: "Set up Project Workflows, onboard a collaborator, or guide optional project-board and lifecycle setup. Use for adoption, project branches, copied-skill migration, documentation/routing and project configuration. Use update-project-workflows for collection upgrades."
+description: "Set up Project Workflows, onboard a collaborator, or adapt optional forge templates and board/lifecycle setup. Use for adoption, project branches, copied-skill migration and project documentation/routing. Use update-project-workflows for collection upgrades."
 ---
 
 # Setup Project Workflows
@@ -26,7 +26,9 @@ Use this route when board/lifecycle setup is requested or explicitly included in
 
 Read [Board and lifecycle setup](references/board-and-lifecycle-setup.md) for this route. Follow existing human decisions, select or adapt a profile, and record its stage meanings, lifecycle mappings, blocked-signal choices, transition ownership and timing expectations in the project's maintained guidance. Ask only for choices that materially affect the selected setup; a reference board is not a universal default.
 
-Request platform operations through the selected tooling's actual supported capabilities, or prepare a human handoff. Keep provider commands, IDs, API calls, automation templates and recovery mechanics with that owner. Include the required manual verification of native automation settings and distinguish pending checks from verified setup. Missing provisioning support does not block independent local work or justify an ad hoc implementation here.
+For selected GitHub setup, adapt the [GitHub starter pack](references/github-starter-pack.md) rather than rebuilding issue/PR content, profiles or lifecycle automation. Its workflow and self-contained helper run on GitHub; consuming the collection needs no local language runtime or dependency installation. Preserve existing files and project choices. Guide GitHub-side credentials/settings only when that forge setup is actually selected, using the supported provider setup or a human handoff; local work and ordinary onboarding require none of it.
+
+Agent Hands owns agent-facing service access and provisioning operations. Project Workflows owns installed project-workflow assets and their CI implementation, including their API calls, guards and tests. Keep the core procedures platform-neutral, use the tooling's actual capabilities for service setup, and distinguish manual/pending steps from verification. Missing board provisioning does not block independent local work or authorize changing reference boards.
 
 ## Choose the workflow source
 Honor the user's or target's declared mode. For a pinned adoption, follow the branch/submodule procedure below. A Git project may instead explicitly choose global-only use; plain folders use global workflows without creating repositories. Global-only setup reads installed procedures, preserves project policies/adapters, declares the target's optional root `workflow.toml` with `project.root = "."`, and adds only the required documentation/routing. Omit adoption branch metadata and skip submodule, branch and pin steps. Do not run an installer or create a config merely because one is absent; report a missing required global skill.

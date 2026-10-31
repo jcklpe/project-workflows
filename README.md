@@ -30,7 +30,7 @@ Read coordinate-project-contribution/SKILL.md from this project's selected workf
 
 Already set up and upgrading the workflow itself? Use [Update Project Workflows](update-project-workflows/SKILL.md) to preserve the project's adaptations and reconcile its selected source.
 
-For optional project-board and lifecycle setup, use [Setup Project Workflows' board route](setup-project-workflows/SKILL.md#optional-board-and-lifecycle-setup). It guides project-specific profiles and human verification; platform operations stay with the selected tooling. Local use and collaborator onboarding require no board setup.
+For optional project-board and lifecycle setup, use [Setup Project Workflows' board route](setup-project-workflows/SKILL.md#optional-board-and-lifecycle-setup). Its [GitHub starter pack](setup-project-workflows/references/github-starter-pack.md) includes issue/PR templates, editable profiles and hosted Actions automation. Setup guides credentials only for selected forge setup. Local use and collaborator onboarding require no board or language runtime.
 
 ## How collaboration fits together
 [Run Project Spike](run-project-spike/SKILL.md) keeps each agent's reasoning, execution state and QA in its own spike. People coordinate shared outcomes through their existing records.
