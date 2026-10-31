@@ -15,7 +15,9 @@ Keep a project's spike records with its actual working project, following local 
 
 A spike is a bounded workstream through which project work progresses, including investigation, design, implementation, validation, and delivery. The term describes the work's scope; it does not imply research-only work or disposable code.
 
-A spike is not just a checklist. It is a temporary collaboration space for the user and agents to build taste, vocabulary, decisions, and implementation history around a specific theme of work.
+A spike is not just a checklist. It is a temporary collaboration space for the user and its owning agent to build taste, vocabulary, decisions, and implementation history around a specific theme of work.
+
+Each spike is owned by one agent and one thread of work. Other agents, including agents working for the same person, keep independent work in distinct spikes rather than sharing its task record. They may read and link one another's records. Use continuation links when a successor takes over a thread; preserve the predecessor's work. [Coordinate Project Contribution](../coordinate-project-contribution/SKILL.md) connects separate agent-owned workstreams to a shared outcome between people without a shared execution ledger.
 
 Use a spike for substantial or evolving project work that needs shared reasoning, an implementation plan, or continuity across checkpoints. Related small work can share a miscellaneous spike bucket such as `misc-302` when that context is useful.
 
