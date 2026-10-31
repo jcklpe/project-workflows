@@ -4,9 +4,9 @@ description: "Run and bucket project work in focused spike docs with a conceptua
 ---
 
 # Run Project Spike
-Resolve the actual requested target using [target resolution](../README.md#resolve-the-target) before selecting configuration or document paths. Global invocation does not target the installation checkout. Plain folders use global skills without adding a local collection or initializing Git.
+Resolve the actual requested target using [target resolution](../README.md#resolve-the-target). Read its declared policies, local adapters and configuration before applying defaults, and follow its chosen global-only or pinned workflow source. Global invocation never selects the installation checkout or its config as the target. Plain folders use global skills without adding a collection or initializing Git.
 ## Local Precedence
-Read the current project's instructions first. If they adopt a `project-workflows` collection, use that project's skill copy and `workflow.toml` to resolve document locations; existing local conventions override fallback paths in this procedure. Otherwise prefer an existing project-local `skills/run-project-spike/SKILL.md` over a global seed. Never derive the target project's root from the location of a globally installed skill. Required companion project procedures ship in the same collection; general skills and service integrations are optional unless the project explicitly adopts them.
+The target's declared policies and adapters override shared defaults. Use its pinned collection when adopted, or installed procedures when global-only use is explicitly chosen. With no declared source, preserve an existing project-local skill convention before falling back to globals. Resolve document locations from the target-selected config or its existing instructions; never derive the project root from a global installation. Required companion procedures come from the selected collection or global installation. General skills and service integrations remain optional unless explicitly adopted.
 
 Also honor a project-owned `how-to-spike.md` process. Resolve the work's owning context, active-spike location, scratch location, archive location, and index from local instructions or existing conventions before acting. Use those resolved destinations throughout this procedure. The `docs/...` paths and root `TODO.md` below illustrate a fallback layout, not mandatory locations or permission to create a scaffold. Preserve existing placement unless a migration is explicitly authorized.
 
@@ -15,7 +15,9 @@ Keep a project's spike records with its actual working project, following local 
 
 A spike is a bounded workstream through which project work progresses, including investigation, design, implementation, validation, and delivery. The term describes the work's scope; it does not imply research-only work or disposable code.
 
-A spike is not just a checklist. It is a temporary collaboration space for the user and agents to build taste, vocabulary, decisions, and implementation history around a specific theme of work.
+A spike is not just a checklist. It is a temporary collaboration space for the user and its owning agent to build taste, vocabulary, decisions, and implementation history around a specific theme of work.
+
+Each spike is owned by one agent and one thread of work. Other agents, including agents working for the same person, keep independent work in distinct spikes rather than sharing its task record. They may read and link one another's records. Use continuation links when a successor takes over a thread; preserve the predecessor's work. [Coordinate Project Contribution](../coordinate-project-contribution/SKILL.md) connects separate agent-owned workstreams to a shared outcome between people without a shared execution ledger.
 
 Use a spike for substantial or evolving project work that needs shared reasoning, an implementation plan, or continuity across checkpoints. Related small work can share a miscellaneous spike bucket such as `misc-302` when that context is useful.
 
