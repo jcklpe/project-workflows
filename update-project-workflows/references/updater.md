@@ -47,6 +47,9 @@ The file can be maintained by hand with ordinary text/Git access using the same 
 
 An unchanged copy takes the incoming source mechanically; an edited copy uses Git's three-way file merge and focused review when both source and copy changed. A conflict, missing source/destination or symlink stops before the collection merge. If upstream source bytes are unchanged, keep the local copy and its existing baseline. Baselines advance to the resulting child commit only for changed sources, preventing unnecessary file churn. The helper recognizes the four standard `.github` destinations and refuses to skip existing unrecorded copies; nonstandard destinations must be inventoried and registered explicitly. Keep original baseline commits retrievable in the adaptation history before publishing the parent.
 
+## Agent policy adoption boundary
+Agent policy copies are project-owned, explicitly adopted text, not auto-refreshed starters. The helper rejects baseline registration/refresh for known kernel-source copies, `policy.index.md` destinations and the default or configured `documents.agent_policies` directory. This refusal is not bypassed by `--reviewed`; reconcile policy adoption through [Adopt Agent Policies](../../adopt-agent-policies/SKILL.md). A collection merge can deliver newer candidate source without touching frozen project copies. The guard is structural and cannot recognize every arbitrarily renamed paragraph; agents must preserve the adoption boundary during ordinary Git/manual work too. Existing legacy policy locations remain under their declared authority until deliberate migration.
+
 ## Offline checks
 From this collection's root, use an existing interpreter:
 

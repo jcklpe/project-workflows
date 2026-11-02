@@ -159,16 +159,29 @@ def merge_copy(local, base, incoming, name):
         return result.stdout
 
 
+def guard_policy_asset(dest, source, settings):
+    policy_root = settings.get("documents", {}).get("agent_policies", "docs/agent-policies")
+    if not isinstance(policy_root, str) or not policy_root:
+        raise Stop("Invalid agent policy directory; reconcile configuration explicitly")
+    policy_root = str(PurePosixPath(policy_root))
+    if (PurePosixPath(dest).name == "policy.index.md" or dest == policy_root or dest.startswith(policy_root + "/")
+            or dest.startswith("docs/agent-policies/") or source.startswith("adopt-agent-policies/assets/kernel/")):
+        raise Stop(f"Agent policy copies require explicit adoption, not automatic asset refresh: {dest}")
+
+
 def record(args):
-    parent, child, head, _ = adoption(args.project)
+    parent, child, head, settings = adoption(args.project)
     source_revision = revision(child, args.revision)
     data = receipt(parent)
     before = snapshot(parent, [RECEIPT])
+    for dest, entry in data["files"].items():
+        guard_policy_asset(dest, entry["source"], settings)
     for mapping in args.asset:
         dest, sep, source = mapping.partition("=")
         if not sep:
             raise Stop("--asset uses DESTINATION=SOURCE")
         local_path(parent, source)
+        guard_policy_asset(dest, source, settings)
         target = local_path(parent, dest)
         if dest == RECEIPT or dest == "project-workflows" or dest.startswith("project-workflows/"):
             raise Stop("An installed asset must belong to the parent")
@@ -212,6 +225,8 @@ def update(args):
     overlaps = changed(child, base, head) & changed(child, base, target) - {"workflow.toml"}
     review = {p for p in overlaps if out(child, "ls-tree", head, "--", p) != out(child, "ls-tree", target, "--", p)}
     data = receipt(parent)
+    for dest, entry in data["files"].items():
+        guard_policy_asset(dest, entry["source"], config(child, tree))
     for dest in STARTERS:
         if local_path(parent, dest).exists() and dest not in data["files"]:
             raise Stop(f"Installed starter has no recorded baseline: {dest}; use record-assets with its actual installed revision")
