@@ -28,3 +28,6 @@ Update Project Workflows includes optional `agents/openai.yaml` interface metada
 
 ## Configuration discovery
 Setup writes the exact configuration link into AGENTS and verifies it. The helper supports --config for that declared project-relative path and rejects ambiguous conventional discovery. Existing root configs and branch-based layouts remain supported; no consumer file is moved by this change.
+
+## Policy record ownership followup
+The explicitly approved metadata amendment makes PRESERVE-IDENTITY the canonical owner of required frontmatter fields, their meanings and descriptive type. ADOPT-POLICIES retains adoption authority and RESOLVE-DEPENDENCIES retains edge semantics. The adopted provider copy and proposed distribution source receive the same reviewed body section. Task skills reference the actual project contract, with a single inline creation example in Create; the separate template file is removed at the user’s request. Technical parser/index notes stay with Review. No schema/checker behavior or other project’s policy adoption is changed. This work stays local.

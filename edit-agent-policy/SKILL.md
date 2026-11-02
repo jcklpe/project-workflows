@@ -9,7 +9,7 @@ Resolve the actual project through [target resolution](../README.md#resolve-the-
 ## Establish the change
 Read the human's intended change, the current adopted/proposed version and useful source history. Explain what behavior or scope would change. Separate an editorial repair from a substantive change; do not label a changed obligation cosmetic. Apply the kernel's distinction to decide whether the requested correction belongs in the policy or its procedural skill.
 
-Use the [shared format contract](../review-agent-policies/references/policy-format.md) for fields/dates. An authorized spelling or link repair that preserves the obligation need not manufacture a new adoption or substantive revision date.
+Read the selected project’s adopted PRESERVE-IDENTITY metadata contract for fields/dates and the [format/checker notes](../review-agent-policies/references/policy-format.md) for technical representation. An authorized spelling or link repair that preserves the obligation need not manufacture a new adoption or substantive revision date.
 
 ## Prepare the amendment
 1. Compare old and candidate obligations, scope and exceptions. Assess whether the same ID still expresses useful continuity. Review a type/filename change under `PRESERVE-IDENTITY`; an underscore prefix is presentation metadata, not an identity or authority change. Propose a split/new ID only when the changed meaning warrants it; coordinate [Create Agent Policy](../create-agent-policy/SKILL.md) and [Retire Agent Policy](../retire-agent-policy/SKILL.md) for those tasks.

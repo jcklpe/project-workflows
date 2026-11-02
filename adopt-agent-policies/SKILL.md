@@ -13,7 +13,7 @@ For initial kernel adoption, inspect the selected complete source/revision, then
 
 ## Apply the authorized decision
 1. Recheck current files/concurrent edits and the exact human decision against the reviewed set. Include required prerequisite/dependent changes in the same reviewed adoption set or resolve them first.
-2. Apply the authorized bodies to the actual project copies and record YAML metadata, descriptive type, status, real human decision authority and substantive dates using the [shared contract](../review-agent-policies/references/policy-format.md). Do not invent a human decision record or apply a draft that the instruction did not cover.
+2. Apply the authorized bodies to the actual project copies and record YAML metadata, descriptive type, status, real human decision authority and substantive dates under the selected kernel’s PRESERVE-IDENTITY metadata contract, using the [technical representation notes](../review-agent-policies/references/policy-format.md). Do not invent a human decision record or apply a draft that the instruction did not cover.
 3. Reconcile the project index using the shared tool and route AGENTS to the actual index when that routing change is included. Check the complete graph and report the resulting operative loading plan. Kernel/source copies distributed to other projects remain separate candidates.
 4. Review the exact diff and any actual tool changes. Use Commit Work only under the project's commit policy; adoption does not supply publication or merge rights.
 
