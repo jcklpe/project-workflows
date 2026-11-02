@@ -275,7 +275,7 @@ class UpdateTest(unittest.TestCase):
                 self.assertFalse((self.parent / RECEIPT).exists())
 
     def test_kernel_source_cannot_be_registered_under_an_arbitrary_destination(self):
-        source = "adopt-agent-policies/assets/kernel/ADOPT-POLICIES-require-explicit-adoption.md"
+        source = "adopt-agent-policies/assets/kernel/_ADOPT-POLICIES-require-explicit-adoption.md"
         accepted = self.incoming(source, "New kernel candidate.\n")
         self.write(self.parent, "rules.md", "Existing adopted rule.\n")
         result = self.run_helper("record-assets", accepted, "--asset", f"rules.md={source}", "--apply", code=1)
@@ -302,7 +302,7 @@ class UpdateTest(unittest.TestCase):
         dest = "docs/agent-policies/ADOPT-POLICIES-require-explicit-adoption.md"
         self.write(self.parent, dest, "Existing explicitly adopted project obligation.\n")
         body = (self.parent / dest).read_bytes()
-        accepted = self.incoming("adopt-agent-policies/assets/kernel/ADOPT-POLICIES-require-explicit-adoption.md", "New proposed kernel source.\n")
+        accepted = self.incoming("adopt-agent-policies/assets/kernel/_ADOPT-POLICIES-require-explicit-adoption.md", "New proposed kernel source.\n")
         result = self.run_helper("update", accepted, "--apply")
         self.assertTrue(result["changed"])
         self.assertEqual((self.parent / dest).read_bytes(), body)

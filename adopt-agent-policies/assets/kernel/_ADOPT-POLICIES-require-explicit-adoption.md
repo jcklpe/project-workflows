@@ -1,12 +1,13 @@
-+++
-id = "ADOPT-POLICIES"
-scope = "Agent treatment of policy obligations, skill procedures and local policy decisions."
-status = "proposed"
-authority = ""
-revised = "2026-11-02"
-depends_on = []
-related_to = ["PRESERVE-IDENTITY", "RESOLVE-DEPENDENCIES"]
-+++
+---
+id: ADOPT-POLICIES
+type: kernel
+scope: "Agent treatment of policy obligations, skill procedures and local policy decisions."
+status: proposed
+authority: ""
+revised: "2026-11-02"
+depends_on: []
+related_to: ["PRESERVE-IDENTITY", "RESOLVE-DEPENDENCIES"]
+---
 # Adopt agent policies explicitly
 Policies in this system govern agents only. A policy states durable obligations, their scope, exceptions and decision authority. A skill describes how to perform a task under the applicable obligations; it is not an independent source of standing authority. Skills must not silently invent, amend or override policy obligations or grant permissions. Imperative names can describe either: content and authority determine the distinction, not verb–noun grammar.
 

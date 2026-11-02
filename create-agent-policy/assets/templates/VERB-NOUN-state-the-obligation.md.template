@@ -1,12 +1,13 @@
-+++
-id = "VERB-NOUN"
-scope = "Describe the concrete agent activity and project boundary."
-status = "proposed"
-authority = ""
-revised = "YYYY-MM-DD"
-depends_on = []
-related_to = []
-+++
+---
+id: VERB-NOUN
+type: operational
+scope: "Describe the concrete agent activity and project boundary."
+status: proposed
+authority: ""
+revised: "YYYY-MM-DD"
+depends_on: []
+related_to: []
+---
 # State the durable obligation
 State the durable agent obligation, its scope and any real exceptions. Put the task procedure in its owning skill rather than the policy body. Replace the example ID, filename, date, scope and title before indexing. This is a proposal until the human explicitly adopts the exact obligation.
 
