@@ -6,6 +6,9 @@ When the selected task is development of Project Workflows itself, this reposito
 
 The neutral `workflow.toml` describes an adopted collection's default consumer location; its `project.root = ".."` must not redirect collection-maintenance documents into a containing checkout. This maintenance rule does not make the global installation the target of unrelated requests. For work in an adopting project, its instructions and configured destinations remain authoritative; its actual project narrative stays outside this collection.
 
+## Agent policy routing
+Read the project-owned [agent policy index](docs/agent-policies/policy.index.md) for policy status and scope. The reviewed kernel was explicitly adopted here on 2026-11-02: ADOPT-POLICIES, PRESERVE-IDENTITY and RESOLVE-DEPENDENCIES are operative project-owned policies. Load the applicable adopted prerequisite closure through that index; bundled distribution candidates remain proposed. Existing instructions here remain applicable. Use the task-specific [Create](create-agent-policy/SKILL.md), [Edit](edit-agent-policy/SKILL.md), [Review](review-agent-policies/SKILL.md), [Adopt](adopt-agent-policies/SKILL.md) and [Retire](retire-agent-policy/SKILL.md) skills for policy work. The kernel defines obligations and the policy/skill distinction; skills supply procedures under it. Keep human governance separate, preserve legacy rules during authorized migration, and never infer adoption or tool permission from a package update or successful structural check.
+
 ## Changes and verification
 Use [Coordinate Project Contribution](coordinate-project-contribution/SKILL.md) for contribution scope, cross-person review and optional forge coordination. Each spike belongs to one agent/thread; independent agents use distinct linked records. Platform tooling remains optional and owns agent-facing service operations.
 

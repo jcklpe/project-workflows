@@ -266,5 +266,49 @@ class UpdateTest(unittest.TestCase):
         self.assertIn("exact source commit", self.run_helper(code=1)["error"])
 
 
+    def test_agent_policy_destinations_cannot_be_registered_for_auto_refresh(self):
+        for dest in ("docs/agent-policies/EDIT-SAFE-preserve-edits.md", "other/policy.index.md"):
+            with self.subTest(dest=dest):
+                self.write(self.parent, dest, TEMPLATE)
+                result = self.run_helper("record-assets", self.base, "--asset", f"{dest}={SOURCE}", "--apply", code=1)
+                self.assertIn("explicit adoption", result["error"])
+                self.assertFalse((self.parent / RECEIPT).exists())
+
+    def test_kernel_source_cannot_be_registered_under_an_arbitrary_destination(self):
+        source = "adopt-agent-policies/assets/kernel/_ADOPT-POLICIES-require-explicit-adoption.md"
+        accepted = self.incoming(source, "New kernel candidate.\n")
+        self.write(self.parent, "rules.md", "Existing adopted rule.\n")
+        result = self.run_helper("record-assets", accepted, "--asset", f"rules.md={source}", "--apply", code=1)
+        self.assertIn("explicit adoption", result["error"])
+        self.assertFalse((self.parent / RECEIPT).exists())
+
+    def test_existing_policy_receipt_blocks_before_collection_merge(self):
+        self.write(self.child, "workflow.toml", (self.child / "workflow.toml").read_text() + '[documents]\nagent_policies = "rules/agents"\n')
+        local = self.commit(self.child, "select existing policy location")
+        self.commit(self.parent, "record selected location")
+        dest = "rules/agents/EDIT-SAFE-preserve-edits.md"
+        self.write(self.parent, dest, "Existing adopted rule.\n")
+        data = {"schema_version": 1, "files": {dest: {"source": SOURCE, "revision": self.base}}}
+        self.write(self.parent, RECEIPT, json.dumps(data))
+        baseline = (self.parent / RECEIPT).read_bytes()
+        accepted = self.incoming()
+        result = self.run_helper("update", accepted, "--reviewed", dest, "--apply", code=1)
+        self.assertIn("explicit adoption", result["error"])
+        self.assertEqual(self.git(self.child, "rev-parse", "HEAD"), local)
+        self.assertEqual((self.parent / dest).read_text(), "Existing adopted rule.\n")
+        self.assertEqual((self.parent / RECEIPT).read_bytes(), baseline)
+
+    def test_package_kernel_update_preserves_frozen_project_policy_and_repeat(self):
+        dest = "docs/agent-policies/ADOPT-POLICIES-require-explicit-adoption.md"
+        self.write(self.parent, dest, "Existing explicitly adopted project obligation.\n")
+        body = (self.parent / dest).read_bytes()
+        accepted = self.incoming("adopt-agent-policies/assets/kernel/_ADOPT-POLICIES-require-explicit-adoption.md", "New proposed kernel source.\n")
+        result = self.run_helper("update", accepted, "--apply")
+        self.assertTrue(result["changed"])
+        self.assertEqual((self.parent / dest).read_bytes(), body)
+        self.assertEqual(result["assets_changed"], [])
+        self.assertFalse(self.run_helper("update", accepted, "--apply")["changed"])
+        self.assertEqual((self.parent / dest).read_bytes(), body)
+
 if __name__ == "__main__":
     unittest.main()
