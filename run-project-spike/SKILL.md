@@ -53,6 +53,7 @@ Respect the repo's own rules first. In this pattern, use docs according to this 
 - Active spike docs explain current thinking for a theme of work.
 - Active spike to-do docs track implementation state.
 - `TODO.md` is the index of active, recently completed, waiting, and later spikes.
+- In the agent-policy system, the declared `policy.index.md` routes to explicitly adopted obligations; proposals are not operative. Dependency/loading order does not confer authority or settle contradictions with project instructions.
 - `docs/scratch/` is non-authoritative working material.
 - `docs/archive/` is historical context, not current rules. Confirm any guidance against maintained docs or the current implementation; agreement does not make the archive authoritative.
 
@@ -200,13 +201,13 @@ Use the shared routing taxonomy before promoting scratch material:
 
 - Individual `docs/scratch/<subject>.md` notes for saved possibilities or deliberately parked subjects, using `capture-for-later`. Existing legacy records remain valid; do not migrate them as a side effect.
 - `docs/scratch/misc.md` for raw observed friction and issue intake.
-- `docs/policies/` for current durable rules, defaults, and procedures.
+- The selected agent-policy location/index for adopted durable agent obligations, through the relevant [Create](../create-agent-policy/SKILL.md), [Edit](../edit-agent-policy/SKILL.md) and [Adopt](../adopt-agent-policies/SKILL.md) tasks; existing `docs/policies/` conventions remain until deliberate migration. Human governance stays separate.
 - `docs/active-spikes/` for active scoped work.
 
 Only promote material into an active spike when the user is actually starting scoped work or the project needs an active implementation container now.
 
 ## Durable Policies
-Policies are part of the project's durable docs structure, not the spike process itself. During a spike, create or update a policy when an approach has become durable guidance that should outlive the spike. Policies describe the current rules, defaults, procedures, exceptions, and useful rationale; revise them directly and let Git preserve their evolution. Respect existing project conventions unless migration is authorized.
+Policies are part of the project's durable docs structure, not the spike process itself. For durable instructions governing agents, use the project's selected agent-policy index and [Create](../create-agent-policy/SKILL.md) for a new obligation or [Edit](../edit-agent-policy/SKILL.md) for an existing one. Use [Review](../review-agent-policies/SKILL.md) for assessment and [Adopt](../adopt-agent-policies/SKILL.md) for the actual adoption task. The kernel defines the policy/skill distinction; policy holds the durable obligation while its skill holds the procedure. Saving a spike decision or policy proposal does not adopt it; honor the human's explicit decision and status. Keep proposed amendments separate from operative adopted bodies until adoption. Review affected prerequisites/dependents and contradictions, update the generated index, and let Git preserve evolution without active supersedes/override chains. Human governance remains separate. Preserve existing legacy policy paths and authority unless their migration is explicitly authorized.
 
 Do not create policies for every local implementation choice. Keep ordinary reasoning in the conceptual spike doc unless it needs to become long-lived project authority.
 
