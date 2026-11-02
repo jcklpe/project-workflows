@@ -65,7 +65,14 @@ def blob(root, tree, path):
 
 
 def config(root, tree):
-    return tomllib.loads(blob(root, tree, "workflow.toml").decode())
+    return validate_tables(tomllib.loads(blob(root, tree, "workflow.toml").decode()))
+
+
+def validate_tables(settings):
+    for name in ("project", "adoption", "documents", "coordination", "workflows"):
+        if name in settings and not isinstance(settings[name], dict):
+            raise Stop(f"{name} must be a TOML table")
+    return settings
 
 
 def preserve_settings(before, after, prefix=""):
@@ -77,6 +84,30 @@ def preserve_settings(before, after, prefix=""):
             preserve_settings(value, after[key], name)
         elif value != after[key]:
             raise Stop(f"Project setting changed: {name}; reconcile this setting explicitly")
+
+
+def workflow_notes(parent, settings):
+    notes = settings.get("workflows", {})
+    if not isinstance(notes, dict):
+        raise Stop("workflows must be a table mapping skill names to local note paths")
+    for name, value in notes.items():
+        if not isinstance(value, str):
+            raise Stop(f"Local workflow note must be a relative path: {name}")
+        path = local_path(parent, value)
+        if value == "project-workflows" or value.startswith("project-workflows/"):
+            raise Stop(f"Local workflow notes must belong to the parent project: {name}")
+        if not path.is_file():
+            raise Stop(f"Required local workflow note is missing: {value}")
+    return notes
+
+
+def shared_config(child, tree):
+    settings = config(child, tree)
+    project = settings.get("project", {})
+    adoption_settings = settings.get("adoption", {})
+    if project.get("name") or settings.get("workflows") or any(adoption_settings.values()):
+        raise Stop("Shared mode requires neutral package configuration; preserve the localized child and use a separately reviewed migration")
+    return settings
 
 
 def snapshot(parent, names):
@@ -112,14 +143,29 @@ def adoption(project):
         if Path(out(child, "rev-parse", "--path-format=absolute", "--git-path", name)).exists():
             raise Stop("Workflow child has an operation in progress")
     head = revision(child, "HEAD")
-    branch = out(child, "symbolic-ref", "--quiet", "--short", "HEAD")
-    settings = config(child, head)
-    expected = settings.get("adoption", {}).get("project_branch")
-    if not expected or branch != expected:
-        raise Stop("Select the declared project branch first; canonical/global-only sources use the manual route")
-    if (child / settings.get("project", {}).get("root", "..")).resolve() != parent:
-        raise Stop("workflow.toml does not resolve to the selected parent")
-    return parent, child, head, settings
+    branch = git(child, "symbolic-ref", "--quiet", "--short", "HEAD", allowed=(0, 1)).stdout.decode().strip()
+    root_config = local_path(parent, "workflow.toml")
+    external = root_config.exists()
+    if external:
+        settings = validate_tables(tomllib.loads(root_config.read_text()))
+        if type(settings.get("schema_version")) is not int or settings["schema_version"] != 1:
+            raise Stop("Root workflow.toml requires schema_version = 1")
+        if settings.get("adoption", {}).get("mode") != "shared" or settings["adoption"].get("project_branch"):
+            raise Stop('Root pinned configuration requires adoption.mode = "shared" and no project_branch; reconcile an existing adoption explicitly')
+        if settings.get("project", {}).get("root") != ".":
+            raise Stop('Root workflow.toml must use project.root = "."')
+        shared_config(child, head)
+        if branch:
+            raise Stop("Shared mode requires a detached shared pin; preserve existing branches and select the intended layout explicitly")
+    else:
+        settings = config(child, head)
+        expected = settings.get("adoption", {}).get("project_branch")
+        if not expected or branch != expected:
+            raise Stop("Select the declared project branch first; canonical/global-only sources use the manual route")
+        if (child / settings.get("project", {}).get("root", "..")).resolve() != parent:
+            raise Stop("workflow.toml does not resolve to the selected parent")
+    workflow_notes(parent, settings)
+    return parent, child, head, settings, external
 
 
 def receipt(parent):
@@ -169,19 +215,29 @@ def guard_policy_asset(dest, source, settings):
         raise Stop(f"Agent policy copies require explicit adoption, not automatic asset refresh: {dest}")
 
 
+def guard_project_asset(dest, source, settings, external):
+    guard_policy_asset(dest, source, settings)
+    if (external and dest == "workflow.toml") or dest in settings.get("workflows", {}).values():
+        raise Stop(f"Project configuration and local workflow notes are not automatically refreshed assets: {dest}")
+
+
+def project_state_paths(settings, external):
+    return (["workflow.toml"] if external else []) + list(settings.get("workflows", {}).values())
+
+
 def record(args):
-    parent, child, head, settings = adoption(args.project)
+    parent, child, head, settings, external = adoption(args.project)
     source_revision = revision(child, args.revision)
     data = receipt(parent)
-    before = snapshot(parent, [RECEIPT])
+    before = snapshot(parent, [RECEIPT, *project_state_paths(settings, external)])
     for dest, entry in data["files"].items():
-        guard_policy_asset(dest, entry["source"], settings)
+        guard_project_asset(dest, entry["source"], settings, external)
     for mapping in args.asset:
         dest, sep, source = mapping.partition("=")
         if not sep:
             raise Stop("--asset uses DESTINATION=SOURCE")
         local_path(parent, source)
-        guard_policy_asset(dest, source, settings)
+        guard_project_asset(dest, source, settings, external)
         target = local_path(parent, dest)
         if dest == RECEIPT or dest == "project-workflows" or dest.startswith("project-workflows/"):
             raise Stop("An installed asset must belong to the parent")
@@ -195,7 +251,8 @@ def record(args):
         data["files"][dest] = entry
     encoded = (json.dumps(data, indent=2, sort_keys=True) + "\n").encode()
     if args.apply and before[RECEIPT] != encoded:
-        if snapshot(parent, [RECEIPT]) != before or revision(child, "HEAD") != head:
+        adoption(args.project)
+        if snapshot(parent, before) != before or revision(child, "HEAD") != head:
             raise Stop("State changed after baseline preview")
         local_path(parent, RECEIPT).write_bytes(encoded)
     return {"operation": "record-assets", "applied": args.apply, "changed": before[RECEIPT] != encoded,
@@ -203,7 +260,7 @@ def record(args):
 
 
 def update(args):
-    parent, child, head, settings = adoption(args.project)
+    parent, child, head, settings, external = adoption(args.project)
     if args.fetch:
         git(child, "fetch", "--", args.fetch)
     target = revision(child, args.revision)
@@ -211,6 +268,8 @@ def update(args):
     if len(bases) != 1:
         raise Stop("Missing or ambiguous ancestry; reconcile history explicitly")
     base = bases[0]
+    if external and base != head:
+        raise Stop("Shared mode requires forward shared ancestry; preserve divergent or newer work and reconcile explicitly")
     if base == target:
         tree, mode = out(child, "rev-parse", head + "^{tree}"), "unchanged"
     elif base == head:
@@ -220,17 +279,22 @@ def update(args):
         if preview.returncode:
             raise Stop("Textual merge conflict; nothing applied: " + preview.stdout.decode().split("\n\n")[0].partition("\n")[2].strip())
         tree, mode = preview.stdout.decode().splitlines()[0], "merge"
-    preserve_settings(settings, config(child, tree))
+    if external:
+        shared_config(child, tree)
+    else:
+        preserve_settings(settings, config(child, tree))
+    effective_settings = settings if external else config(child, tree)
+    workflow_notes(parent, effective_settings)
     git(child, "diff", "--check", head, tree)
     overlaps = changed(child, base, head) & changed(child, base, target) - {"workflow.toml"}
     review = {p for p in overlaps if out(child, "ls-tree", head, "--", p) != out(child, "ls-tree", target, "--", p)}
     data = receipt(parent)
     for dest, entry in data["files"].items():
-        guard_policy_asset(dest, entry["source"], config(child, tree))
+        guard_project_asset(dest, entry["source"], effective_settings, external)
     for dest in STARTERS:
         if local_path(parent, dest).exists() and dest not in data["files"]:
             raise Stop(f"Installed starter has no recorded baseline: {dest}; use record-assets with its actual installed revision")
-    before = snapshot(parent, [RECEIPT, *data["files"]])
+    before = snapshot(parent, [RECEIPT, *data["files"], *project_state_paths(effective_settings, external)])
     writes, advanced = {}, []
     for dest, entry in data["files"].items():
         source = entry["source"]
@@ -248,7 +312,9 @@ def update(args):
             advanced.append(dest)
     pending = sorted(review - set(args.reviewed))
     summary = {"operation": "update", "mode": mode, "old": head, "accepted": target,
-               "branch": settings["adoption"]["project_branch"], "review_required": pending,
+               "branch": None if external else settings["adoption"]["project_branch"], "review_required": pending,
+               "configuration": "workflow.toml" if external else "project-workflows/workflow.toml",
+               "source_mode": "shared" if external else "adaptation", "local_workflows": effective_settings.get("workflows", {}),
                "assets_changed": sorted(writes), "baselines_advanced": advanced,
                "parent_pin": {"recorded": out(parent, "rev-parse", "HEAD:project-workflows"), "staged": False},
                "merge_message": args.message if mode == "merge" else None,
@@ -262,15 +328,21 @@ def update(args):
     if revision(child, "HEAD") != head or snapshot(parent, before) != before:
         raise Stop("Selected state changed after preview; nothing applied")
     if mode != "unchanged":
-        message = ["-m", args.message] if mode == "merge" else []
-        git(child, "-c", "merge.autoStash=false", "merge", "--no-edit", "--no-autostash", "--ff", *message, target)
+        if external:
+            git(child, "checkout", "--detach", target)
+        else:
+            message = ["-m", args.message] if mode == "merge" else []
+            git(child, "-c", "merge.autoStash=false", "merge", "--no-edit", "--no-autostash", "--ff", *message, target)
     result = revision(child, "HEAD")
     if out(child, "rev-parse", "HEAD^{tree}") != tree:
         raise Stop("Merge result differs from preview; inspect before continuing, no asset writes attempted")
     git(child, "merge-base", "--is-ancestor", target, result)
-    preserve_settings(settings, config(child, result))
+    if external:
+        shared_config(child, result)
+    else:
+        preserve_settings(settings, config(child, result))
     if snapshot(parent, before) != before:
-        raise Stop("Parent assets changed during merge; child advanced but assets were left alone")
+        raise Stop("Parent project files changed during update; child advanced but assets were left alone")
     for dest in advanced:
         data["files"][dest]["revision"] = result
     if advanced:

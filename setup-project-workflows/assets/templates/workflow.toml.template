@@ -1,0 +1,36 @@
+schema_version = 1
+
+# Project-owned settings beside the project's AGENTS.md, outside the shared package.
+[project]
+name = "Example project"
+root = "."
+
+[documents]
+readme = "README.md"
+instructions = "AGENTS.md"
+index = "TODO.md"
+active_spikes = "docs/active-spikes"
+scratch = "docs/scratch"
+archive = "docs/archive"
+# Declare the project's actual policy location when selected; do not create empty policy folders.
+# policies = "docs/policies"
+# agent_policies = "docs/agent-policies"
+
+# The parent gitlink pins the exact shared revision; no project branch is needed.
+[adoption]
+mode = "shared"
+upstream_url = "https://github.com/jcklpe/project-workflows.git"
+upstream_branch = "main"
+
+# Optional skill-name = project-relative Markdown path. Add only notes that exist.
+[workflows]
+# run-project-spike = "docs/workflows/spikes.md"
+# capture-for-later = "docs/workflows/capture.md"
+
+[coordination]
+mode = "local"
+repository = ""
+tooling = ""
+
+[validation]
+commands = []

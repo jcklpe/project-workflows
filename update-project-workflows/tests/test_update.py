@@ -2,6 +2,7 @@
 import json
 import os
 from pathlib import Path
+import shlex
 import subprocess
 import sys
 import tempfile
@@ -75,6 +76,13 @@ class UpdateTest(unittest.TestCase):
         self.write(self.parent, DEST, TEMPLATE)
         self.run_helper("record-assets", self.base, "--asset", f"{DEST}={SOURCE}", "--apply")
         self.commit(self.parent, "install copied template with actual baseline")
+
+    def shared(self):
+        self.git(self.child, "checkout", "--detach", self.base)
+        self.write(self.parent, "workflow.toml", 'schema_version = 1\n[project]\nname = "Example"\nroot = "."\n[documents]\nactive_spikes = "work-notes/active"\nagent_policies = "rules/agents"\n[adoption]\nmode = "shared"\n[coordination]\nmode = "local"\n[workflows]\nexample = "work-notes/workflows/example.md"\n')
+        self.write(self.parent, "work-notes/workflows/example.md", "Keep this project's local review examples.\n")
+        self.write(self.parent, "rules/agents/READ-SAFE.md", "Existing adopted project rule.\n")
+        self.commit(self.parent, "select unchanged shared source and project-owned context")
 
     def test_config_only_merge_preserves_history_and_unrelated_parent_state(self):
         self.write(self.parent, "unrelated.txt", "staged\n")
@@ -309,6 +317,146 @@ class UpdateTest(unittest.TestCase):
         self.assertEqual(result["assets_changed"], [])
         self.assertFalse(self.run_helper("update", accepted, "--apply")["changed"])
         self.assertEqual((self.parent / dest).read_bytes(), body)
+
+    def test_shared_update_uses_exact_source_and_preserves_parent_context_and_refs(self):
+        self.shared()
+        protected = {p: (self.parent / p).read_bytes() for p in ("workflow.toml", "work-notes/workflows/example.md", "rules/agents/READ-SAFE.md")}
+        self.write(self.parent, "unrelated.txt", "staged unrelated work\n")
+        self.git(self.parent, "add", "unrelated.txt")
+        self.write(self.parent, "README.md", "unfinished parent work\n")
+        index = self.git(self.parent, "ls-files", "--stage")
+        refs = self.git(self.child, "show-ref", "--heads")
+        accepted = self.incoming("example/SKILL.md", "Improved shared procedure.\n")
+        plan = self.run_helper("update", accepted)
+        self.assertEqual(plan["source_mode"], "shared")
+        self.assertEqual(plan["configuration"], "workflow.toml")
+        self.assertEqual(plan["local_workflows"], {"example": "work-notes/workflows/example.md"})
+        self.assertEqual(self.git(self.child, "rev-parse", "HEAD"), self.base)
+        result = self.run_helper("update", accepted, "--apply")
+        self.assertEqual(result["result"], accepted)
+        self.assertIsNone(result["branch"])
+        self.assertEqual(self.git(self.child, "rev-parse", "HEAD^{tree}"), self.git(self.upstream, "rev-parse", accepted + "^{tree}"))
+        self.assertEqual(self.git(self.child, "show-ref", "--heads"), refs)
+        self.assertEqual(self.git(self.parent, "ls-files", "--stage"), index)
+        self.assertEqual(self.git(self.parent, "rev-parse", "HEAD:project-workflows"), self.base)
+        self.assertEqual(self.git(self.child, "status", "--porcelain"), "")
+        for p, body in protected.items():
+            self.assertEqual((self.parent / p).read_bytes(), body)
+        self.assertFalse(self.run_helper("update", accepted, "--apply")["changed"])
+        self.assertEqual(self.git(self.parent, "ls-files", "--stage"), index)
+
+    def test_shared_neutral_default_changes_do_not_replace_project_settings(self):
+        self.shared()
+        before = (self.parent / "workflow.toml").read_bytes()
+        accepted = self.incoming("workflow.toml", (self.upstream / "workflow.toml").read_text().replace('mode = "local"', 'mode = "forge"'))
+        self.assertEqual(self.run_helper("update", accepted, "--apply")["result"], accepted)
+        self.assertEqual((self.parent / "workflow.toml").read_bytes(), before)
+
+    def test_shared_copied_assets_use_existing_baselines_and_repeat(self):
+        self.shared()
+        self.install()
+        self.write(self.parent, DEST, TEMPLATE.replace("first paragraph", "local first paragraph"))
+        accepted = self.incoming(SOURCE, TEMPLATE.replace("last paragraph", "new shared last paragraph"))
+        self.run_helper("update", accepted, "--apply", code=2)
+        self.assertEqual(self.git(self.child, "rev-parse", "HEAD"), self.base)
+        result = self.run_helper("update", accepted, "--reviewed", DEST, "--apply")
+        self.assertEqual(result["result"], accepted)
+        self.assertIn("local first paragraph", (self.parent / DEST).read_text())
+        self.assertIn("new shared last paragraph", (self.parent / DEST).read_text())
+        self.assertFalse(self.run_helper("update", accepted, "--apply")["changed"])
+
+    def test_root_config_cannot_silently_migrate_an_existing_adaptation(self):
+        self.write(self.parent, "workflow.toml", 'schema_version = 1\n[project]\nroot = "."\n[adoption]\nmode = "shared"\n')
+        accepted = self.incoming()
+        index = self.git(self.child, "ls-files", "--stage")
+        result = self.run_helper("update", accepted, "--apply", code=1)
+        self.assertIn("localized child", result["error"])
+        self.assertEqual(self.git(self.child, "rev-parse", "HEAD"), self.local)
+        self.assertEqual(self.git(self.child, "ls-files", "--stage"), index)
+        self.assertEqual(self.git(self.child, "branch", "--show-current"), "project/example")
+
+    def test_shared_divergence_is_refused_without_discarding_local_work(self):
+        self.shared()
+        self.write(self.child, "example/SKILL.md", "Experiment still owned by this checkout.\n")
+        local = self.commit(self.child, "unpublished experiment")
+        accepted = self.incoming()
+        self.assertIn("forward shared ancestry", self.run_helper("update", accepted, "--apply", code=1)["error"])
+        self.assertEqual(self.git(self.child, "rev-parse", "HEAD"), local)
+
+    def test_shared_mode_does_not_switch_or_advance_a_named_branch(self):
+        self.shared()
+        self.git(self.child, "switch", "-c", "keep-this-branch")
+        accepted = self.incoming()
+        self.assertIn("detached shared pin", self.run_helper("update", accepted, "--apply", code=1)["error"])
+        self.assertEqual(self.git(self.child, "branch", "--show-current"), "keep-this-branch")
+        self.assertEqual(self.git(self.child, "rev-parse", "HEAD"), self.base)
+
+    def test_root_declaration_and_local_note_errors_are_nonmutating(self):
+        self.shared()
+        original = (self.parent / "workflow.toml").read_text()
+        for text, message in [(original.replace('mode = "shared"', 'mode = "adapted"'), "adoption.mode"),
+                              (original.replace('root = "."', 'root = ".."'), "project.root"),
+                              (original.replace('schema_version = 1', 'schema_version = 2'), "schema_version"),
+                              (original.replace('"work-notes/workflows/example.md"', '"../outside.md"'), "Unsafe"),
+                              (original.replace('"work-notes/workflows/example.md"', '"missing.md"'), "missing"),
+                              (original.replace('"work-notes/workflows/example.md"', '"project-workflows/example/SKILL.md"'), "parent project")]:
+            with self.subTest(message=message):
+                self.write(self.parent, "workflow.toml", text)
+                self.assertIn(message, self.run_helper(code=1)["error"])
+                self.assertEqual(self.git(self.child, "rev-parse", "HEAD"), self.base)
+        self.write(self.parent, "workflow.toml", original)
+        note = self.parent / "work-notes/workflows/example.md"
+        note.unlink()
+        note.symlink_to(self.parent / "README.md")
+        self.assertIn("Symlink", self.run_helper(code=1)["error"])
+
+    def test_project_context_and_root_policy_cannot_be_auto_refreshed(self):
+        self.shared()
+        for dest, message in [("workflow.toml", "not automatically refreshed"),
+                              ("work-notes/workflows/example.md", "not automatically refreshed"),
+                              ("rules/agents/READ-SAFE.md", "explicit adoption")]:
+            with self.subTest(dest=dest):
+                before = (self.parent / dest).read_bytes()
+                result = self.run_helper("record-assets", self.base, "--asset", f"{dest}={SOURCE}", "--apply", code=1)
+                self.assertIn(message, result["error"])
+                self.assertEqual((self.parent / dest).read_bytes(), before)
+                self.assertFalse((self.parent / RECEIPT).exists())
+
+    def test_existing_context_receipt_blocks_before_shared_pin_advance(self):
+        self.shared()
+        accepted = self.incoming()
+        for dest in ("workflow.toml", "work-notes/workflows/example.md", "rules/agents/READ-SAFE.md"):
+            with self.subTest(dest=dest):
+                data = {"schema_version": 1, "files": {dest: {"source": SOURCE, "revision": self.base}}}
+                self.write(self.parent, RECEIPT, json.dumps(data))
+                body = (self.parent / dest).read_bytes()
+                self.run_helper("update", accepted, "--reviewed", dest, "--apply", code=1)
+                self.assertEqual(self.git(self.child, "rev-parse", "HEAD"), self.base)
+                self.assertEqual((self.parent / dest).read_bytes(), body)
+                self.assertEqual(json.loads((self.parent / RECEIPT).read_text()), data)
+
+    def test_local_note_drift_after_checkout_stops_assets_and_reports_partial_update(self):
+        self.shared()
+        self.install()
+        accepted = self.incoming(SOURCE, TEMPLATE.replace("last paragraph", "incoming last paragraph"))
+        before = (self.parent / RECEIPT).read_bytes()
+        note = self.parent / "work-notes/workflows/example.md"
+        hook = Path(self.git(self.child, "rev-parse", "--path-format=absolute", "--git-path", "hooks/post-checkout"))
+        hook.parent.mkdir(parents=True, exist_ok=True)
+        hook.write_text("#!/bin/sh\nprintf '%s\\n' 'Concurrent local review edit.' > " + shlex.quote(str(note)) + "\n")
+        hook.chmod(0o755)
+        result = self.run_helper("update", accepted, "--apply", code=1)
+        self.assertIn("child advanced but assets were left alone", result["error"])
+        self.assertEqual(self.git(self.child, "rev-parse", "HEAD"), accepted)
+        self.assertEqual(note.read_text(), "Concurrent local review edit.\n")
+        self.assertEqual((self.parent / DEST).read_text(), TEMPLATE)
+        self.assertEqual((self.parent / RECEIPT).read_bytes(), before)
+
+    def test_shared_target_cannot_introduce_another_projects_configuration(self):
+        self.shared()
+        accepted = self.incoming("workflow.toml", (self.upstream / "workflow.toml").read_text().replace('name = ""', 'name = "Another project"'))
+        self.assertIn("neutral package configuration", self.run_helper("update", accepted, "--apply", code=1)["error"])
+        self.assertEqual(self.git(self.child, "rev-parse", "HEAD"), self.base)
 
 if __name__ == "__main__":
     unittest.main()

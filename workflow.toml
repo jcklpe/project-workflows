@@ -1,6 +1,7 @@
 schema_version = 1
 
-# Read this only for the collection adopted by the current project, never to infer a project from a global skill install.
+# Neutral defaults and legacy child-config example. New shared-source adoptions use the parent-root template.
+# Never infer a project from this file in a global skill installation.
 [project]
 name = ""
 root = ".."
@@ -21,6 +22,9 @@ agent_policies = "docs/agent-policies" # Agent-only opt-in index: policy.index.m
 upstream_url = ""
 upstream_branch = ""
 project_branch = ""
+
+# Optional skill-name = parent-project-relative Markdown path; keep procedural notes outside this package.
+[workflows]
 
 # Optional collaboration selection. Local use needs no forge, platform tooling or credentials.
 [coordination]

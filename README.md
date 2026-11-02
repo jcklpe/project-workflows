@@ -68,7 +68,7 @@ Five task-specific policy skills share one template, format contract and structu
 The new `documents.agent_policies` default is `docs/agent-policies/`; existing `documents.policies` and legacy paths remain valid. Missing new configuration does not retire old rules or adopt the new kernel. Follow the [deliberate migration route](adopt-agent-policies/references/migration.md) rather than mass-renaming consumers. A collection upgrade delivers candidates without replacing operative project copies. Policies use YAML `---` frontmatter and descriptive `type: kernel` or `type: operational` labels. Kernel filenames start with `_` before their unchanged ID, as required by the naming policy; operational filenames are unprefixed. Neither type nor prefix confers precedence. The [optional checker](review-agent-policies/scripts/policies.py) uses an existing Python 3.11+ and supported YAML parsing through existing PyYAML or Ruby/Psych; ordinary Markdown use requires no runtime or validation run. It checks structure, not policy meaning, human intent or agent/tool compliance.
 
 ## Installation choices
-A Git project can pin this collection as a root-level `project-workflows/` Git submodule or explicitly use installed global skills with project-owned policy/configuration. Preserve the chosen mode; do not create or remove a submodule merely because global skills are available. For a pinned adoption, each project gets its own branch from the start, while the parent repository pins an exact revision. An explicitly designated canonical maintenance/global installation uses shared `main` directly. Project-specific procedures can evolve freely, with Git ancestry available when reconciling improvements upstream or downstream.
+A Git project can pin this collection as a root-level `project-workflows/` Git submodule or explicitly use installed global skills with project-owned policy/configuration. New pinned adoptions use an unchanged shared package, a parent-root `workflow.toml` and optional local workflow notes. The parent pins an exact shared revision; no adaptation branch or localization commit is needed. Existing branch-based adoptions retain their configuration, branches and update route until a separate migration is authorized. An explicitly designated canonical maintenance/global installation uses shared `main` directly. Local procedural experimentation can live in project-owned notes; a deliberate source experiment may retain its own reviewed adaptation.
 
 These are Markdown procedures with supporting templates. They need ordinary document access and Git for versioning; no Python, uv, service account, personal vault, or Agent Hands installation is required. The project procedures travel together, without unrelated personal or service skills. Optional forge operations use the selected platform tooling and its own dependencies.
 
@@ -89,14 +89,14 @@ git clone https://github.com/jcklpe/project-workflows.git
 ```
 
 ### Start a pinned adoption
-Run this from the adopting repository's root, using your platform-neutral project branch name in place of `project/example`:
+Run this from the adopting repository's root after selecting the exact shared revision:
 
 ```sh
 git submodule add -b main https://github.com/jcklpe/project-workflows.git project-workflows
-git -C project-workflows switch --no-track -c project/example main
+git -C project-workflows checkout --detach ACCEPTED_SHARED_COMMIT
 ```
 
-Then follow the setup skill to configure and review the adoption. These two commands alone do not configure the workflow or publish the project branch. For project-specific changes, choose a remote you can publish to and collaborators can access, such as your own fork. The public upstream URL does not grant permission to push branches here. Keep private project information out of public branches.
+Then adapt the [root configuration template](setup-project-workflows/assets/templates/workflow.toml.template) into the parent's `workflow.toml`, declare it in the project instructions and follow the setup skill to review routing. These commands alone do not configure a project. The shared package stays unchanged; local procedures and choices belong to the parent. Preserve an existing adapted checkout rather than running these commands over it. A separately selected source experiment follows the adaptation route and its publication/privacy rules.
 
 ### Restore a project's workflow checkout
 Clone the team's project using its documented instructions. For a project with an uninitialized root-level workflow submodule, run this from the project root:
@@ -117,7 +117,9 @@ your-project/
   README.md
   AGENTS.md
   TODO.md
+  workflow.toml              # Project settings; root ".", adoption.mode "shared"
   docs/
+    workflows/               # Optional local notes named by [workflows]
     active-spikes/
     scratch/
     archive/
@@ -125,7 +127,7 @@ your-project/
     agent-policies/          # Only when explicitly adopting the agent-policy system.
       policy.index.md
   project-workflows/          # Git submodule; parent pins an exact commit
-    workflow.toml            # tracked project choices on the project branch
+    workflow.toml            # Unchanged neutral defaults/example, not project settings
     setup-project-workflows/
       SKILL.md
       assets/templates/
@@ -133,7 +135,7 @@ your-project/
     ...
 ```
 
-For an adoption, actual project documents stay in the parent repository. The submodule contains the operating procedures, their templates, and configuration. It should not accumulate another project's narrative, document history, credentials, or private context.
+For an adoption, actual project documents and settings stay in the parent repository. The unchanged submodule contains common procedures, templates and neutral defaults. Existing adapted layouts remain supported. The package should not accumulate another project's narrative, document history, credentials or private context.
 
 ## Agent reference
 These details explain how agents select the owning project, interpret its configuration and maintain an adoption. The starting prompts above route to the relevant skills.
@@ -145,12 +147,26 @@ Resolve the requested project or folder before reading collection configuration 
 
 Before using defaults, read the target's applicable instructions and the project policies, local adapters and configuration they declare. Follow the declared workflow source: a pinned adoption uses its own complete collection; an explicitly global-only target uses installed global procedures with its target-owned overrides. If the source is undeclared, preserve an existing adoption or local skill convention rather than silently switching it. A plain folder uses global skills and its own conventions without an automatic repository, clone or submodule. A folder inside a repository follows its applicable instructions; it is not automatically an independent adoption.
 
-Select configuration from the target's declaration, not from the installed skill's directory. This may be `<target>/workflow.toml` for global-only use or `<target>/project-workflows/workflow.toml` for a pinned adoption. If no configuration is declared, use the target's existing documented locations; a config file is not required merely to invoke a skill. Never substitute the global installation's `workflow.toml` or its consumer-relative `..`. A declared policy, adapter or config that is unavailable is a specific gap to report, not permission to silently apply defaults. Read only relevant declared context and parse configuration as data.
+Select configuration from the target's declaration, not from the installed skill's directory. New shared-source pinned and global-only targets can use `<target>/workflow.toml`; existing adapted adoptions retain `<target>/project-workflows/workflow.toml`. The routine helper recognizes root `adoption.mode = "shared"` explicitly and refuses to hide a localized child behind it. If both locations appear to contain project choices, reconcile the declared layout before writing; do not silently combine them or treat a new root file as migration authority. If no configuration is declared, use the target's existing documented locations; a config file is not required merely to invoke a skill. Never substitute the global installation's `workflow.toml` or its consumer-relative `..`. A declared policy, adapter or config that is unavailable is a specific gap to report, not permission to silently apply defaults. Read only relevant declared context and parse configuration as data.
+
+When invoking a skill, also read its entry in the selected configuration's optional `[workflows]` table. Each key is that skill's name and each value names one project-relative Markdown note. Read that note before applying the shared procedure, together with relevant declared policy prerequisites; follow its links when required, rather than loading every project's workflow note. An unavailable required note is a gap for the affected work, not a reason to ignore it. Existing AGENTS-declared local guidance remains supported. These are instructions for agents, not automatically executed hooks or an independent policy/adoption mechanism. Report substantive contradictions for human resolution.
 
 When the explicit task is development of Project Workflows itself, use this repository's [maintenance instructions](AGENTS.md#maintaining-this-collection), [work index](TODO.md), and root skills. Its `docs/` is an ordinary directory in the same repository, not a copy of the workflow collection nested inside itself.
 
 ### Configuration
 [workflow.toml](workflow.toml) illustrates project identity, document locations, optional adoption metadata and validation commands. Resolve `project.root` relative to the directory containing the selected config file, then document locations relative to that root. Thus a parent-root config normally uses `project.root = "."`; a config inside a root-level `project-workflows/` submodule keeps `".."`. Existing pinned configs retain their meaning. Project instructions identify the config and override seed conventions. Global-only targets omit submodule branch/pin metadata rather than inventing an adoption. Keep nonsecret project choices with the project under its tracking policy; credentials are not workflow configuration.
+
+For a new unchanged pinned adoption, adapt the [parent-root configuration template](setup-project-workflows/assets/templates/workflow.toml.template). Root `adoption.mode = "shared"` selects the exact-source updater route. Keep `project.root = "."` and omit `project_branch`; shared-source metadata describes the intended source while the gitlink remains the exact version pin. Project document paths and coordination settings live here, rather than in the package. A plain folder/global-only project omits the adoption table.
+
+Local procedures can use any existing project folder; `docs/workflows/` is an ordinary example, not a required scaffold. Add a reference only when the corresponding note exists:
+
+```toml
+[workflows]
+run-project-spike = "docs/workflows/spikes.md"
+capture-for-later = "work-notes/capture.md"
+```
+
+Notes hold concrete local procedure, context and QA examples, with links to their policy owners. Keep standing obligations, operative policy copies, private context and authorization with their existing owners. The helper validates declared note paths inside the parent, reports their mapping and preserves their bytes; it does not execute them, adopt policies or prove future agent compliance. Configuration and these notes are not auto-refreshed template assets.
 
 No workflow env file is required. If a project already declares private-context configuration, preserve its own discovery and access rules; do not invent a new pointer or read unrelated private material. A global skill installation must never infer the current project from its own source directory.
 
@@ -161,11 +177,11 @@ The [setup templates](setup-project-workflows/assets/templates/) provide startin
 ### Project branches and updates
 Shared `main` is the reusable baseline and the branch for an explicitly designated canonical maintenance/global installation. Such an installation keeps neutral `workflow.toml` defaults and uses its containing project instructions without creating an adaptation merely to record its name. This does not make every global skill installation canonical.
 
-For other pinned adoptions, create a project-specific branch at adoption even if it initially points at the same commit; no artificial localization commit is necessary. Commit tracked project choices and procedural adaptations on that branch. Configuration supports routine variation, but projects can also change the procedures themselves.
+New shared-source pinned adoptions keep the submodule detached at the reviewed shared commit and own configuration/procedural notes in the parent. An update selects the exact forward shared revision without merging project data into the package. Existing project branches remain supported; they use the legacy ancestry-preserving merge and setting-preservation route. A project choosing a source experiment can keep an adaptation deliberately, without making every configuration-only adoption create one.
 
 Use [update-project-workflows](update-project-workflows/SKILL.md) for routine ancestry-based updates: fast-forward or three-way merge, retained project settings, focused review of customized overlaps, copied-template reconciliation and exact parent pins. Its optional Git/standard-library helper needs an existing Python 3.11+ and Git 2.38+, with no packages or environment; ordinary Git remains available. Selected copied assets retain their source baselines in the parent’s `.project-workflows-assets.json`. Repeating a completed update is a no-op. Exceptional contribution/migration procedures are loaded only when selected. Separate reusable improvements onto the shared `main` baseline without project-only configuration, integrate them through the authorized upstream route, then merge accepted `main` into each project branch while preserving its customization. Review complete outgoing commit ranges before publication and update exact consumer pins from the deepest child outward. The update procedure also covers branch renames, tracking metadata, blocked publication, and fresh recursive-clone verification.
 
-Ordinary submodule checkout restores the parent's recorded commit and may leave a detached HEAD. Select the intended project branch, or shared `main` for the designated canonical installation, before editing. A branch name in `.gitmodules` does not replace the exact commit pin, and configuring `origin` does not publish local commits. Before publishing a parent pin, make the required child commit available from the submodule URL collaborators will use. Project branches such as `project/example` belong to their own adoptions, not to unrelated projects. An outer repository may remain on `main` or `master` while its workflow submodule uses `project/<project-slug>`.
+Ordinary submodule checkout restores the parent's recorded commit and may leave a detached HEAD. That is the intended state for unchanged shared-source adoption. Select a declared adaptation branch only for that existing layout, or shared `main` for designated canonical maintenance. Never edit a consumer's unchanged package merely to record project data. A branch name in `.gitmodules` does not replace the exact commit pin, and configuring `origin` does not publish local commits. Before publishing a parent pin, make the required child commit available from the submodule URL collaborators will use. Existing project branches such as `project/example` remain owned by their adoptions; no rename or deletion follows from the new layout.
 
 Use platform-neutral branch names. Renaming a local project branch requires reconciling `workflow.toml`, consumer metadata, current routing, and its remote upstream; it does not require renaming the `project-workflows/` folder or deleting the old remote branch. Keep historical references identifiable as history.
 
