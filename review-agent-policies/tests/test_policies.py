@@ -23,13 +23,13 @@ class PoliciesTest(unittest.TestCase):
         self.directory.mkdir()
 
     def policy(self, key="EDIT-SAFE", depends=(), related=(), status="adopted", slug="preserve-scoped-edits", body="Preserve scoped agent edits.\n", **extra):
-        data = dict(id=key, scope="Agent edits in this checkout.", status=status,
+        data = dict(id=key, type="operational", scope="Agent edits in this checkout.", status=status,
                     authority="Human fixture adopts the exact obligation." if status != "proposed" else "",
                     revised="2026-11-02", depends_on=list(depends), related_to=list(related))
         data.update(extra)
         path = self.directory / f"{key}-{slug}.md"
-        header = "\n".join(f"{k} = {json.dumps(v)}" for k, v in data.items())
-        path.write_text(f"+++\n{header}\n+++\n# Preserve scoped edits\n{body}")
+        header = "\n".join(f"{k}: {json.dumps(v)}" for k, v in data.items())
+        path.write_text(f"---\n{header}\n---\n# Preserve scoped edits\n{body}")
         return path
 
     def index(self):
@@ -116,7 +116,7 @@ class PoliciesTest(unittest.TestCase):
         path = self.policy()
         renamed = path.with_name("OTHER-ID-preserve-scoped-edits.md")
         path.rename(renamed)
-        self.invalid("filename must begin")
+        self.invalid("filename must use")
         renamed.rename(path)
         path.write_text(path.read_text() + "# Another title\n")
         self.invalid("exactly one level-one")
@@ -245,12 +245,77 @@ class PoliciesTest(unittest.TestCase):
         for source in kernel.glob("*.md"):
             if source.name == tool.INDEX:
                 continue
-            body = source.read_text().replace('status = "proposed"', 'status = "adopted"').replace('authority = ""', 'authority = "Human fixture adopts these exact bodies."')
+            body = source.read_text().replace('status: proposed', 'status: adopted').replace('authority: ""', 'authority: "Human fixture adopts these exact bodies."')
             (self.directory / source.name).write_text(body)
         self.index()
         plan = tool.run(self.directory, roots=["RESOLVE-DEPENDENCIES"])
         self.assertEqual(plan["load_order"], ["ADOPT-POLICIES", "PRESERVE-IDENTITY", "RESOLVE-DEPENDENCIES"])
         self.assertTrue(all(item["status"] == "proposed" for item in tool.collect(kernel)[0].values()))
+
+    def test_yaml_block_lists_unquoted_date_and_crlf(self):
+        self.policy("READ-SAFE")
+        path = self.policy(depends=["READ-SAFE"])
+        text = path.read_text().replace('depends_on: ["READ-SAFE"]', 'depends_on:\n  - READ-SAFE').replace('revised: "2026-11-02"', 'revised: 2026-11-02')
+        path.write_bytes(text.replace("\n", "\r\n").encode())
+        self.index()
+        self.assertEqual(tool.run(self.directory)["load_order"], ["READ-SAFE", "EDIT-SAFE"])
+        self.assertEqual(tool.collect(self.directory)[0]["EDIT-SAFE"]["revised"], "2026-11-02")
+
+    def test_yaml_syntax_and_root_mapping_fail_without_writes(self):
+        path = self.policy()
+        path.write_text('---\nid: [unclosed\n---\n# Preserve edits\n')
+        self.invalid("Invalid YAML", "index", write=True)
+        path.write_text('---\n- a sequence\n---\n# Preserve edits\n')
+        self.invalid("must be a mapping", "index", write=True)
+        self.assertFalse((self.directory / tool.INDEX).exists())
+
+    def test_yaml_object_tags_are_not_executed(self):
+        marker = self.root / "must-not-exist"
+        path = self.policy()
+        path.write_text('---\n!!python/object/apply:os.system ["touch ' + str(marker) + '"]\n---\n# Preserve edits\n')
+        with self.assertRaises(tool.Invalid):
+            tool.run(self.directory)
+        self.assertFalse(marker.exists())
+
+    def test_missing_supported_yaml_parser_reports_manual_route(self):
+        self.policy()
+        with patch.object(tool, "yaml", None), patch.object(tool.shutil, "which", return_value=None):
+            self.invalid("Optional checks need existing PyYAML or Ruby/Psych", "index", write=True)
+        self.assertFalse((self.directory / tool.INDEX).exists())
+
+    def test_kernel_prefix_is_required_and_operational_prefix_is_refused(self):
+        path = self.policy(type="kernel")
+        self.invalid("filename must use its type prefix")
+        prefixed = path.with_name("_" + path.name)
+        path.rename(prefixed)
+        self.index()
+        self.assertTrue(tool.run(self.directory)["valid"])
+        prefixed.write_text(prefixed.read_text().replace('type: "kernel"', 'type: "operational"'))
+        self.invalid("filename must use its type prefix")
+
+    def test_type_groups_navigation_without_changing_dependency_order(self):
+        self.policy("EARLY-WORK")
+        path = self.policy("LATER-KERNEL", type="kernel", depends=["EARLY-WORK"])
+        path.rename(path.with_name("_" + path.name))
+        self.index()
+        text = (self.directory / tool.INDEX).read_text()
+        self.assertLess(text.index("| LATER-KERNEL |"), text.index("| EARLY-WORK |"))
+        self.assertIn("| kernel |", text)
+        self.assertIn("| operational |", text)
+        self.assertEqual(tool.run(self.directory)["load_order"], ["EARLY-WORK", "LATER-KERNEL"])
+
+    def test_human_owned_legacy_retirement_index_survives_regeneration(self):
+        self.policy()
+        archive = self.root / "0002-calendar-history.md"
+        original = "# Retired legacy 0002\nThis is historical evidence, not an operative policy.\n"
+        archive.write_text(original)
+        index = self.directory / tool.INDEX
+        legacy = "\n## Retired legacy identities\n| ID | Record | Status |\n| --- | --- | --- |\n| 0002 | [Retain calendar history](../0002-calendar-history.md) | retired |\n"
+        index.write_text("# Agent policy index\n" + tool.START + "\n" + tool.END + "\n" + legacy)
+        self.index()
+        self.assertTrue(index.read_text().endswith(legacy))
+        self.assertEqual(tool.run(self.directory)["policy_count"], 1)
+        self.assertEqual(archive.read_text(), original)
 
 
 

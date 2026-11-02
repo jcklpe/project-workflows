@@ -36,6 +36,15 @@ The user reviewed the completed five-skill/three-policy feature and explicitly a
 
 The spike stays active for observed real-use/client/semantic acceptance. User approval establishes the decision to adopt and commit, not an unobserved execution result. Consumer migration remains inventoried below and is outside this delivery.
 
+## YAML/type/kernel-filename follow-up — 2026-11-02
+- Complete the explicitly requested YAML frontmatter, descriptive type and kernel underscore naming amendment; verify the final provider before resuming consumer migration. — Implemented and verified on the actual provider tree. All 30 policy tests and all 23 real-Git updater tests pass. Both indexes validate; adopted provider loading order is unchanged and regeneration is a no-op. Seventeen YAML blocks, 85 local links, TOML configuration, source AST, whitespace, ignore and exact-scope checks pass. Actual parsing used existing Ruby/Psych safe_load; no environment or package was installed. PyYAML remains an optional supported route, not a tested installed dependency in this session.
+
+The user explicitly requested familiar YAML frontmatter, descriptive `type: kernel` / `type: operational`, and `_` before kernel filenames, with the naming rule in the kernel. This is an authorized follow-up to the original provider checkpoint, not evidence that the old commit already used YAML. Metadata IDs and prerequisite relationships remain unchanged. Provider adoption is preserved, with the requested naming amendment recorded in PRESERVE-IDENTITY; bundled candidates remain proposed.
+
+The optional checker uses supported safe YAML libraries: PyYAML when present, otherwise existing Ruby/Psych. No bespoke YAML parser or environment/package installation is introduced. No available PyYAML was found in the system interpreter or six existing documented runtimes; actual checks use Ruby/Psych. If no supported parser exists elsewhere, semantic/manual review remains usable and the checker reports the unavailable execution route without claiming graph success.
+
+Focused tests cover YAML shapes/scalars, non-execution of object tags, missing-parser behavior, type/prefix consistency, presentation versus prerequisite order, and preserved indexed legacy retirement records. Fresh final results above apply to this YAML amendment, separately from the original TOML-era checkpoint. The current Agent Hands workflow child has only received the earlier provider feature; its policy migration/adoption waits for this finished version.
+
 ## Consumer adoption inventory
 The completed shared-index rollout inventoried eleven adopted checkouts: Agent Hands, Wireframe Workflows, Agentic Wiki, its nested Wireframe Workflows, Enzo, Website, Open Austin, ResearchOps, Texas LandlordMapper, DesignOps HackPack and Barkonomics. Their existing policy locations, human/agent boundaries, numbered identities and inbound links require a separate receiving-project review before adoption. Global-only projects likewise keep target-owned instructions and policy choices. No busy consumer, global registration or containing pin is changed by this provider pass.
 
@@ -64,7 +73,7 @@ These hashes retain the initial unpublished proposal bodies before the user-appr
 | `POLICY-IDENT-preserve-obligation-identity.md` | `575524af51b67b8b096c7402947b42307d72723d6b39ec1e1c6166439abcb78e` |
 | `POLICY-LOAD-resolve-policy-prerequisites.md` | `6807016c1b77f9ec002fd99519eba16b85694fa9d16df11121bec092ec8a0064` |
 
-## Current kernel proposal provenance
+## Pre-YAML adoption-source provenance — historical
 These are the exact reviewed candidate-source hashes retained as the adoption baseline. Provider copies now differ only in `status` and `authority`; their rule bodies/IDs/edges/dates are unchanged. The separate bundled candidates remain proposed. The later local human adoption decision is recorded above.
 
 | File | SHA-256 |
@@ -82,7 +91,7 @@ These are the exact reviewed candidate-source hashes retained as the adoption ba
 
 The overlap is a task’s reference to its governing obligation, a serialized field, or executable/tested enforcement of a structural invariant. Walkthroughs for source comparison/copying, candidate preparation, adoption edits, index writes and retirement work now live in skills rather than kernel policies. Semantic classification remains a reviewed judgment rather than a regex/test claim.
 
-## Exact current provider path scope
+## Original feature checkpoint path scope — historical
 Modified tracked paths:
 
 - `AGENTS.md`
@@ -122,3 +131,37 @@ New paths included in the approved feature checkpoint:
 - `review-agent-policies/tests/test_policies.py`
 
 The earlier untracked umbrella and three old provider proposal filenames are removed from the live tree after verified preservation. They were never committed, adopted or distributed; no compatibility stubs are retained.
+
+## YAML amendment path scope
+The six old unprefixed kernel filenames are renamed, with metadata IDs preserved. This checkpoint includes only the following explicit paths (old and new paths are both named for the renames):
+
+- `README.md`
+- `TODO.md`
+- `adopt-agent-policies/SKILL.md`
+- `adopt-agent-policies/assets/kernel/ADOPT-POLICIES-require-explicit-adoption.md`
+- `adopt-agent-policies/assets/kernel/PRESERVE-IDENTITY-retain-meaning-and-history.md`
+- `adopt-agent-policies/assets/kernel/RESOLVE-DEPENDENCIES-load-prerequisites-once.md`
+- `adopt-agent-policies/assets/kernel/_ADOPT-POLICIES-require-explicit-adoption.md`
+- `adopt-agent-policies/assets/kernel/_PRESERVE-IDENTITY-retain-meaning-and-history.md`
+- `adopt-agent-policies/assets/kernel/_RESOLVE-DEPENDENCIES-load-prerequisites-once.md`
+- `adopt-agent-policies/assets/kernel/policy.index.md`
+- `adopt-agent-policies/references/migration.md`
+- `create-agent-policy/SKILL.md`
+- `create-agent-policy/assets/templates/VERB-NOUN-state-the-obligation.md.template`
+- `docs/active-spikes/agent-policy-kernel.md`
+- `docs/active-spikes/agent-policy-kernel.todo.md`
+- `docs/agent-policies/ADOPT-POLICIES-require-explicit-adoption.md`
+- `docs/agent-policies/PRESERVE-IDENTITY-retain-meaning-and-history.md`
+- `docs/agent-policies/RESOLVE-DEPENDENCIES-load-prerequisites-once.md`
+- `docs/agent-policies/_ADOPT-POLICIES-require-explicit-adoption.md`
+- `docs/agent-policies/_PRESERVE-IDENTITY-retain-meaning-and-history.md`
+- `docs/agent-policies/_RESOLVE-DEPENDENCIES-load-prerequisites-once.md`
+- `docs/agent-policies/policy.index.md`
+- `edit-agent-policy/SKILL.md`
+- `review-agent-policies/SKILL.md`
+- `review-agent-policies/references/policy-format.md`
+- `review-agent-policies/scripts/policies.py`
+- `review-agent-policies/tests/test_policies.py`
+- `update-project-workflows/tests/test_update.py`
+
+The provider remains adopted; bundled candidates remain proposed. Type/prefix grouping confers no precedence. The spike stays active for real-use acceptance, and the Agent Hands pilot resumes only after this provider checkpoint.

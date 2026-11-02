@@ -7,21 +7,23 @@ import json
 import os
 from pathlib import Path
 import re
+import shutil
+import subprocess
 import sys
 import tempfile
 from urllib.parse import unquote, urlsplit
 
 try:
-    import tomllib
+    import yaml
 except ImportError:
-    sys.exit("Optional policy checks require an existing Python 3.11+; use the documented manual checks otherwise.")
+    yaml = None  # Optional PyYAML; an existing Ruby/Psych can parse the same data safely.
 
 sys.dont_write_bytecode = True
 INDEX = "policy.index.md"
 START = "<!-- agent-policies:start -->"
 END = "<!-- agent-policies:end -->"
 ID = re.compile(r"[A-Z][A-Z0-9]*(?:-[A-Z][A-Z0-9]*)+")
-FIELDS = {"id", "scope", "status", "authority", "revised", "depends_on", "related_to"}
+FIELDS = {"id", "type", "scope", "status", "authority", "revised", "depends_on", "related_to"}
 REQUIRED = FIELDS - {"related_to"}
 
 
@@ -44,30 +46,52 @@ def line(value, field, path, empty=False):
     require(not any(ord(c) < 32 or c == '|' for c in value), f"{path.name}: {field} must be one plain line without table separators")
 
 
+def load_yaml(text):
+    if yaml is not None:
+        try:
+            return yaml.safe_load(text)
+        except yaml.YAMLError as error:
+            raise Invalid(f"Invalid YAML header: {error}") from error
+    ruby = shutil.which("ruby")
+    require(ruby, "Optional checks need existing PyYAML or Ruby/Psych. No parser is available; use the documented manual graph/link checks without installing an environment.")
+    program = "require 'yaml'; require 'json'; require 'date'; data = YAML.safe_load(STDIN.read, permitted_classes: [Date], permitted_symbols: [], aliases: false); STDOUT.write(JSON.generate(data))"
+    result = subprocess.run([ruby, "-e", program], input=text, capture_output=True, text=True)
+    detail = result.stderr.splitlines()[0] if result.stderr else "YAML parser failed"
+    require(result.returncode == 0, "Invalid YAML header: " + detail)
+    return json.loads(result.stdout)
+
+
 def parse(path, raw):
-    text = raw.decode("utf-8")
-    parts = text.split("+++\n", 2)
-    require(len(parts) == 3 and parts[0] == "", f"{path.name}: expected a +++ TOML header")
-    data = tomllib.loads(parts[1])
+    text = raw.decode("utf-8").replace("\r\n", "\n")
+    lines = text.splitlines(keepends=True)
+    require(lines and lines[0].rstrip("\r\n") == "---", f"{path.name}: expected a --- YAML header")
+    end = next((i for i in range(1, len(lines)) if lines[i].rstrip("\r\n") == "---"), None)
+    require(end is not None, f"{path.name}: missing closing YAML frontmatter delimiter")
+    data = load_yaml("".join(lines[1:end]))
+    require(isinstance(data, dict), f"{path.name}: YAML header must be a mapping")
+    if isinstance(data.get("revised"), datetime.date):
+        data["revised"] = data["revised"].isoformat()
+    body = "".join(lines[end + 1:])
     require(REQUIRED <= data.keys(), f"{path.name}: missing fields: {', '.join(sorted(REQUIRED - data.keys()))}")
     require(not data.keys() - FIELDS, f"{path.name}: unsupported fields: {', '.join(sorted(data.keys() - FIELDS))}")
-    for field in ("id", "scope", "status", "authority", "revised"):
+    for field in ("id", "type", "scope", "status", "authority", "revised"):
         line(data[field], field, path, empty=field == "authority")
     require(ID.fullmatch(data["id"]), f"{path.name}: invalid mnemonic ID")
-    require(re.fullmatch(re.escape(data["id"]) + r"-[a-z][a-z0-9]*(?:-[a-z0-9]+)*\.md", path.name), f"{path.name}: filename must begin with its ID and a lowercase imperative slug")
+    prefix = "_" if data["type"] == "kernel" else ""
+    require(re.fullmatch(re.escape(prefix + data["id"]) + r"-[a-z][a-z0-9]*(?:-[a-z0-9]+)*\.md", path.name), f"{path.name}: filename must use its type prefix, ID and a lowercase imperative slug")
     require(data["status"] in {"proposed", "adopted", "retired"}, f"{path.name}: invalid status")
     require(data["status"] == "proposed" or data["authority"].strip(), f"{path.name}: adopted/retired status needs a recorded human decision authority")
-    require(re.fullmatch(r"\d{4}-\d{2}-\d{2}", data["revised"]), f"{path.name}: revised must be a quoted YYYY-MM-DD date")
+    require(re.fullmatch(r"\d{4}-\d{2}-\d{2}", data["revised"]), f"{path.name}: revised must be a YYYY-MM-DD date")
     datetime.date.fromisoformat(data["revised"])
     for field in ("depends_on", "related_to"):
         values = data.setdefault(field, [])
         require(isinstance(values, list) and all(isinstance(v, str) and ID.fullmatch(v) for v in values), f"{path.name}: {field} must be an array of mnemonic IDs")
         require(len(set(values)) == len(values), f"{path.name}: duplicate {field} entries")
         require(data["id"] not in values, f"{path.name}: self-reference in {field}")
-    titles = re.findall(r"^# (.+)$", parts[2], re.M)
+    titles = re.findall(r"^# (.+)$", body, re.M)
     require(len(titles) == 1, f"{path.name}: expected exactly one level-one imperative title")
     line(titles[0], "title", path)
-    data.update(path=path, body=parts[2], title=titles[0])
+    data.update(path=path, body=body, title=titles[0])
     return data
 
 
@@ -180,9 +204,9 @@ def links(path, body):
 
 
 def table(records):
-    rows = [START, "| ID | Policy | Scope | Status | Revised |", "| --- | --- | --- | --- | --- |"]
-    for key, item in sorted(records.items()):
-        rows.append(f"| {key} | [{item['title']}]({item['path'].name}) | {item['scope']} | {item['status']} | {item['revised']} |")
+    rows = [START, "| ID | Policy | Type | Scope | Status | Revised |", "| --- | --- | --- | --- | --- | --- |"]
+    for key, item in sorted(records.items(), key=lambda pair: (pair[1]["type"] != "kernel", pair[0])):
+        rows.append(f"| {key} | [{item['title']}]({item['path'].name}) | {item['type']} | {item['scope']} | {item['status']} | {item['revised']} |")
     return "\n".join([*rows, END])
 
 

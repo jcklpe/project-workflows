@@ -1,12 +1,13 @@
-+++
-id = "RESOLVE-DEPENDENCIES"
-scope = "Agent discovery and loading of applicable adopted policy prerequisites."
-status = "adopted"
-authority = "User's explicit approval of the reviewed provider kernel, 2026-11-02; recorded in agent-policy-kernel spike."
-revised = "2026-11-02"
-depends_on = ["ADOPT-POLICIES", "PRESERVE-IDENTITY"]
-related_to = []
-+++
+---
+id: RESOLVE-DEPENDENCIES
+type: kernel
+scope: "Agent discovery and loading of applicable adopted policy prerequisites."
+status: adopted
+authority: "User's explicit approval of the reviewed provider kernel, 2026-11-02; recorded in agent-policy-kernel spike."
+revised: "2026-11-02"
+depends_on: ["ADOPT-POLICIES", "PRESERVE-IDENTITY"]
+related_to: []
+---
 # Resolve prerequisites before loading
 The actual project's AGENTS routing identifies its `policy.index.md`. The index links each policy's ID, imperative title, one-line scope, status and substantive revision date without duplicating its body. A provider's bundled index is not an adopting project's operative index.
 

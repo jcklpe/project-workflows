@@ -12,7 +12,7 @@ Use `ADOPT-POLICIES` to assess the policy/skill boundary, actual decision author
 Use `PRESERVE-IDENTITY` to assess continuity, retired-ID reuse and incoming dependent/reference impact. Use `RESOLVE-DEPENDENCIES` to assess prerequisite meaning, applicable closure and contradictions. Structural loading order is not semantic precedence. Compare the complete actual/candidate set with project instructions and relevant tool guards; the checker cannot make those judgments. A review is not an adoption decision.
 
 ## Structural checks and index
-The [format/loading contract](references/policy-format.md) owns technical representation. With an **existing Python 3.11+**, use the single [standard-library tool](scripts/policies.py) from this selected skill folder. Resolve these placeholder paths explicitly:
+The [format/loading contract](references/policy-format.md) owns technical representation. With an **existing Python 3.11+** and either existing PyYAML or Ruby/Psych YAML support, use the single [optional tool](scripts/policies.py) from this selected skill folder. No package/environment installation is needed or implied. Ordinary reading/editing and semantic review do not require this tool. Resolve these placeholder paths explicitly:
 
 ```sh
 python3 <selected-review-skill>/scripts/policies.py check --policies <actual-project-agent-policy-directory>
