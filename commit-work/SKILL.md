@@ -64,7 +64,7 @@ A spike knows its own file scope, roughly: the files its work touches and its ow
 - **No spike context at all**: a bounded, self-contained change can be a **patch**. Draft its message with a `Patch: <slug>` trailer (see The Patch Trailer), show it, and commit on a conversational yes. Do not open an editor or invent a `Spike:` trailer. Substantial or evolving work that needs shared reasoning or a plan should enter the spike workflow instead of being treated as a patch merely because no spike exists yet.
 - **Work that belongs to an open spike but falls outside its written scope**: prefer widening the spike, updating its concept and `.todo.md` in the same commit as the work, over committing it as a patch. One coherent history per theme beats a scattering of patches. Ask the human before widening a scope they have not discussed.
 
-The `.todo.md` edit that moves an item and a `TODO.md` update describing the same work belong **in the same commit as that work**, provided their full diffs are in scope. One commit should show both the change and its recorded intent and status.
+The `.todo.md` edit that moves an item and a `TODO.md` update describing the same work belong **in the same commit as that work**, provided their full diffs are in scope. One commit should show both the change and its recorded intent and status. Shared work index snapshots follow [Coordination Files Follow Their Actual Scope](#coordination-files-follow-their-actual-scope).
 
 ### Granularity is file-level, and that is the point
 A pathspec commit takes whole files. If one file holds two unrelated changes, they cannot be separated — splitting hunks requires `git add -p`, which stages, which is forbidden.
@@ -73,7 +73,7 @@ Whole-file selection keeps the recorded file versions inspectable without constr
 
 So the "and" test governs which *files* you choose to include. File-level granularity is a floor beneath it, not a contradiction of it.
 
-**Mixed changes are a warning to inspect, not a normal target.** Delaying completed work can let unrelated changes accumulate, especially when agents work on separate spikes concurrently. Commit promptly at useful boundaries, keep streams separate, and investigate overlap. Do not respond by committing every edit or splitting a change from its own bookkeeping.
+**Mixed changes outside a tracking index are a warning to inspect, not a normal target.** Delaying completed work can let unrelated changes accumulate, especially when agents work on separate spikes concurrently. Commit promptly at useful boundaries, keep streams separate, and investigate overlap. Do not respond by committing every edit or splitting a change from its own bookkeeping.
 
 When it arises anyway, establish that the complete diff is within the authorized scope before including it. Unrecognized or another agent's unfinished changes are not covered merely because you edited the same path. For authorized overlap:
 
@@ -84,10 +84,14 @@ When it arises anyway, establish that the complete diff is within the authorized
 
 Never reach for `git add -p`. Never `git stash` half the file. The shared index is not yours to borrow.
 
-**Frequent mixed commits are an alarm, not a style.** Check whether completed work is sitting too long or concurrent streams repeatedly collide in shared files. Preserve every relevant `Spike:` or `Patch:` trailer so their histories remain traceable.
+**Frequent mixed commits outside tracking indexes are an alarm, not a style.** Check whether completed work is sitting too long or concurrent streams repeatedly collide in shared files. Preserve every relevant `Spike:` or `Patch:` trailer so their histories remain traceable.
 
 ### Coordination Files Follow Their Actual Scope
-`TODO.md`, `AGENTS.md`, and other shared files may be touched by several streams, but they are not automatically separate work. When their full diff describes the same change, include them with it. A separate coordination commit is appropriate when the file genuinely combines independently authorized changes; name those changes and include every relevant trailer. Do not split a one-spike index update into its own commit solely because it is an index file.
+A shared work index such as `TODO.md` may be checkpointed whole with the current work or in a small commit of the index when its complete diff contains understood, authorized tracking updates, even across several workstreams. Take frequent snapshots to preserve intermediate states; do not wait for every referenced workstream to be ready for a commit. When the repository and task already permit local commits, mixed tracking updates alone do not require another per-commit approval.
+
+Reread the current index and review its full diff immediately before committing. If it changes during preparation, review the new changes before proceeding; preserve concurrent edits. Name the included tracking changes honestly and include the relevant `Spike:` or `Patch:` trailers. A snapshot records the index’s current state; it does not approve or complete the work it mentions, or authorize including that work’s implementation and other documents.
+
+Resolve unrecognized edits, unapproved status changes or actual conflicts before committing. Do not strip, stash or overwrite existing edits to manufacture an isolated index change. This allowance is for tracking indexes, not mixed changes to `AGENTS.md`, policies, skills or implementation files; those keep the ordinary scope rules. When an index update’s full diff belongs to one change, include it with that change rather than splitting it merely because it is an index.
 
 ### Format passes go first, on a clean tree
 A repo-wide formatting or renaming pass touches every file, so it collides with every piece of work in flight at once. Commit it **alone, before starting anything else.** If a format pass has already contaminated a dirty tree, put the untouched-by-anything-else files in their own format commit, and let the rest ride along with their own theme's commit, saying so in the body.
