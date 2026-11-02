@@ -125,7 +125,7 @@ def snapshot(parent, names):
     return state
 
 
-def adoption(project):
+def adoption(project, config_name=None):
     parent = Path(project).resolve()
     if Path(out(parent, "rev-parse", "--show-toplevel")).resolve() != parent:
         raise Stop("--project must name the actual parent Git root")
@@ -144,16 +144,26 @@ def adoption(project):
             raise Stop("Workflow child has an operation in progress")
     head = revision(child, "HEAD")
     branch = git(child, "symbolic-ref", "--quiet", "--short", "HEAD", allowed=(0, 1)).stdout.decode().strip()
-    root_config = local_path(parent, "workflow.toml")
-    external = root_config.exists()
+    if config_name:
+        selected_config = local_path(parent, config_name)
+        if not selected_config.is_file():
+            raise Stop(f"Declared project configuration is missing: {config_name}")
+        external = config_name
+    else:
+        candidates = [name for name in ("docs/workflow.toml", "_meta/workflow.toml", "workflow.toml") if local_path(parent, name).exists()]
+        if len(candidates) > 1:
+            raise Stop("Multiple project configurations exist; select the AGENTS-declared path with --config")
+        external = candidates[0] if candidates else None
     if external:
-        settings = validate_tables(tomllib.loads(root_config.read_text()))
+        selected_config = local_path(parent, external)
+        settings = validate_tables(tomllib.loads(selected_config.read_text()))
         if type(settings.get("schema_version")) is not int or settings["schema_version"] != 1:
-            raise Stop("Root workflow.toml requires schema_version = 1")
+            raise Stop("Project workflow.toml requires schema_version = 1")
         if settings.get("adoption", {}).get("mode") != "shared" or settings["adoption"].get("project_branch"):
-            raise Stop('Root pinned configuration requires adoption.mode = "shared" and no project_branch; reconcile an existing adoption explicitly')
-        if settings.get("project", {}).get("root") != ".":
-            raise Stop('Root workflow.toml must use project.root = "."')
+            raise Stop('Project pinned configuration requires adoption.mode = "shared" and no project_branch; reconcile an existing adoption explicitly')
+        relative_root = settings.get("project", {}).get("root")
+        if not isinstance(relative_root, str) or not relative_root or Path(relative_root).is_absolute() or (selected_config.parent / relative_root).resolve() != parent:
+            raise Stop("Project workflow.toml project.root must resolve from its directory to the selected parent")
         shared_config(child, head)
         if branch:
             raise Stop("Shared mode requires a detached shared pin; preserve existing branches and select the intended layout explicitly")
@@ -217,16 +227,16 @@ def guard_policy_asset(dest, source, settings):
 
 def guard_project_asset(dest, source, settings, external):
     guard_policy_asset(dest, source, settings)
-    if (external and dest == "workflow.toml") or dest in settings.get("workflows", {}).values():
+    if (external and dest == external) or dest in settings.get("workflows", {}).values():
         raise Stop(f"Project configuration and local workflow notes are not automatically refreshed assets: {dest}")
 
 
 def project_state_paths(settings, external):
-    return (["workflow.toml"] if external else []) + list(settings.get("workflows", {}).values())
+    return ([external] if external else []) + list(settings.get("workflows", {}).values())
 
 
 def record(args):
-    parent, child, head, settings, external = adoption(args.project)
+    parent, child, head, settings, external = adoption(args.project, args.config)
     source_revision = revision(child, args.revision)
     data = receipt(parent)
     before = snapshot(parent, [RECEIPT, *project_state_paths(settings, external)])
@@ -251,7 +261,7 @@ def record(args):
         data["files"][dest] = entry
     encoded = (json.dumps(data, indent=2, sort_keys=True) + "\n").encode()
     if args.apply and before[RECEIPT] != encoded:
-        adoption(args.project)
+        adoption(args.project, args.config)
         if snapshot(parent, before) != before or revision(child, "HEAD") != head:
             raise Stop("State changed after baseline preview")
         local_path(parent, RECEIPT).write_bytes(encoded)
@@ -260,7 +270,7 @@ def record(args):
 
 
 def update(args):
-    parent, child, head, settings, external = adoption(args.project)
+    parent, child, head, settings, external = adoption(args.project, args.config)
     if args.fetch:
         git(child, "fetch", "--", args.fetch)
     target = revision(child, args.revision)
@@ -313,7 +323,7 @@ def update(args):
     pending = sorted(review - set(args.reviewed))
     summary = {"operation": "update", "mode": mode, "old": head, "accepted": target,
                "branch": None if external else settings["adoption"]["project_branch"], "review_required": pending,
-               "configuration": "workflow.toml" if external else "project-workflows/workflow.toml",
+               "configuration": external if external else "project-workflows/workflow.toml",
                "source_mode": "shared" if external else "adaptation", "local_workflows": effective_settings.get("workflows", {}),
                "assets_changed": sorted(writes), "baselines_advanced": advanced,
                "parent_pin": {"recorded": out(parent, "rev-parse", "HEAD:project-workflows"), "staged": False},
@@ -324,7 +334,7 @@ def update(args):
         summary["blocked"] = bool(pending) or bool(args.apply and summary["merge_message_required"])
         return summary
     # Recheck selected state immediately before mutation. No stash, reset or implicit staging.
-    adoption(args.project)
+    adoption(args.project, args.config)
     if revision(child, "HEAD") != head or snapshot(parent, before) != before:
         raise Stop("Selected state changed after preview; nothing applied")
     if mode != "unchanged":
@@ -361,6 +371,7 @@ def main():
     for name in ("update", "record-assets"):
         sub = commands.add_parser(name)
         sub.add_argument("--project", required=True, help="Explicit parent repository root")
+        sub.add_argument("--config", help="Project-relative config path declared by AGENTS; otherwise select one docs/, _meta/ or legacy root workflow.toml")
         sub.add_argument("--revision", required=True, help="Accepted upstream revision, or actual installed asset baseline")
         sub.add_argument("--apply", action="store_true", help="Apply the previewed local scope; never push or stage parent files")
         if name == "update":

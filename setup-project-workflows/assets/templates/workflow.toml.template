@@ -1,9 +1,9 @@
 schema_version = 1
 
-# Project-owned settings beside the project's AGENTS.md, outside the shared package.
+# Project-owned settings in docs/workflow.toml or the existing documentation folder, outside the shared package.
 [project]
 name = "Example project"
-root = "."
+root = ".."
 
 [documents]
 readme = "README.md"

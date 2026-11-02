@@ -352,6 +352,48 @@ class UpdateTest(unittest.TestCase):
         self.assertEqual(self.run_helper("update", accepted, "--apply")["result"], accepted)
         self.assertEqual((self.parent / "workflow.toml").read_bytes(), before)
 
+    def test_docs_and_meta_configuration_preserve_exact_source_and_repeat(self):
+        self.shared()
+        previous = "workflow.toml"
+        for selected in ("docs/workflow.toml", "_meta/workflow.toml"):
+            with self.subTest(selected=selected):
+                content = (self.parent / previous).read_text().replace('root = "."', 'root = ".."')
+                self.write(self.parent, selected, content)
+                (self.parent / previous).unlink()
+                accepted = self.incoming(text=selected + "\n")
+                before = (self.parent / selected).read_bytes()
+                index = self.git(self.parent, "ls-files", "--stage")
+                result = self.run_helper("update", accepted, "--apply")
+                self.assertEqual(result["configuration"], selected)
+                self.assertEqual(result["result"], accepted)
+                self.assertEqual((self.parent / selected).read_bytes(), before)
+                self.assertEqual(self.git(self.parent, "ls-files", "--stage"), index)
+                self.assertFalse(self.run_helper("update", accepted, "--apply")["changed"])
+                rejected = self.run_helper("record-assets", self.base, "--config", selected, "--asset", f"{selected}={SOURCE}", "--apply", code=1)
+                self.assertIn("not automatically refreshed", rejected["error"])
+                previous = selected
+
+    def test_ambiguous_config_requires_explicit_declared_selection(self):
+        self.shared()
+        content = (self.parent / "workflow.toml").read_text().replace('root = "."', 'root = ".."')
+        self.write(self.parent, "docs/workflow.toml", content)
+        accepted = self.incoming()
+        self.assertIn("Multiple project configurations", self.run_helper("update", accepted, "--apply", code=1)["error"])
+        self.assertEqual(self.git(self.child, "rev-parse", "HEAD"), self.base)
+        result = self.run_helper("update", accepted, "--config", "docs/workflow.toml", "--apply")
+        self.assertEqual(result["configuration"], "docs/workflow.toml")
+
+    def test_custom_declared_config_is_bounded_and_resolves_actual_parent(self):
+        self.shared()
+        original = (self.parent / "workflow.toml").read_text()
+        self.write(self.parent, "work-notes/settings/workflow.toml", original.replace('root = "."', 'root = "../.."'))
+        for selected, message in [("missing.toml", "missing"), ("../outside.toml", "Unsafe")]:
+            self.assertIn(message, self.run_helper("update", self.base, "--config", selected, code=1)["error"])
+        self.write(self.parent, "docs/workflow.toml", original)
+        self.assertIn("project.root", self.run_helper("update", self.base, "--config", "docs/workflow.toml", code=1)["error"])
+        result = self.run_helper("update", self.base, "--config", "work-notes/settings/workflow.toml", "--apply")
+        self.assertEqual(result["configuration"], "work-notes/settings/workflow.toml")
+
     def test_shared_copied_assets_use_existing_baselines_and_repeat(self):
         self.shared()
         self.install()
