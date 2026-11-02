@@ -4,12 +4,15 @@ Read this only for selected project-board/lifecycle setup. Preserve the project'
 ## Select the project's profile
 Start with the project's maintained decisions and the explicitly selected existing or new board and repository scope. A remote, board URL or installed tool does not select a profile or grant access. Keep the choices in an existing project policy/configuration owner, with a pointer from its agent instructions where useful; no new configuration schema or second task ledger is required.
 
+Default to issue-centered tracking: issues hold shared discussion, progress and acceptance and are the board items. PRs hold discrete contribution reviews and integration decisions; several may serve one issue. Filter issue views accordingly and expose [Linked pull requests](https://docs.github.com/en/issues/planning-and-tracking-with-projects/understanding-fields/about-pull-request-fields). A PR card needs an explicit project exception with its purpose; do not create duplicate cards/task ledgers automatically. Existing project exceptions remain intentional adaptations. A view filter alone does not remove existing PR cards or constrain auto-add rules; inspect membership and rules separately and preserve current cards unless their reconciliation is authorized.
+
 Settle only the choices needed for the selected setup:
 
 - Stage names, order and meanings, including which item kinds and views use them. A view hiding a stage does not remove it from the lifecycle.
 - Entry and active stages, terminal mappings and issue-close behavior, and the destination or preservation rule for reopening. Closed outcomes such as completion and cancellation need their intended mapping; a terminal board stage does not close an agent's spike or accept an entire project.
 - Enabled blocked signals: labels, dependencies or other project facts; their precedence, clearing behavior and any return stage. Decide whether closed/terminal items participate in blocked routing.
 - The actor responsible for each transition, event-driven versus scheduled behavior, expected cadence/lag and the fresh-close interval. Preserve an adopted guard rather than silently shortening or removing it. For a new setup, agree the interval against expected synchronization latency.
+- Partial-PR linking and acceptance: repository auto-close behavior, formal Development/branch links and native PR-linked/merged rules. A partial PR merge must not complete an unfinished issue. Inspect these settings separately from PR-card membership; see the [starter link choices](github-starter-pack.md#issue-centered-tracking-and-pr-links).
 
 ## Configurable starting points
 These ordered stage sets were inspected on October 31, 2026. Select and adapt them; their names do not prescribe universal meanings or enable automation.
@@ -27,6 +30,8 @@ Use the editable profile starters and optional repository assets in the [GitHub 
 
 ## Preserve transition ownership and intent
 Assign one authoritative actor to each enabled direction and transition. A native board-to-issue closer can coexist with an issue-to-board synchronizer; two writers handling the same issue-to-board transition can compete. Inspect existing native and repository automation, including defaults on newly created/copied projects. Resolve conflicting writers within the approved plan while preserving unrelated workflows, fields, views and items.
+
+Inspect native linked-PR rules even for issue-only boards: they can change the linked issue's stage without a PR card. A link must not reset Blocked/terminal intent, and a partial merge must not move unfinished scope to Done (which may itself close the issue). Retain, narrow or disable a conflicting rule only within the approved setup; excluding PR cards is insufficient. Repository auto-close and native board-to-issue closing are independent paths to check.
 
 Apply entry, terminal and reopen mappings only to the events they own. An unrelated issue edit or label change must not reapply the entry stage, reset progress, or undo a deliberate board move. Explicit lifecycle mappings can move an item as selected by the project; do not broaden those mappings to every issue event.
 
@@ -56,6 +61,8 @@ Use synthetic or staged scenarios for the plan. Live transitions need separately
 | Label clears while a dependency remains; dependency clears while a label remains | The other enabled blocker remains effective; clearing one signal does not erase another. |
 | Dependency disappears with no remaining label | Follow the selected clearing/return-stage policy, including deliberate no-auto-unblock. |
 | Native workflow is enabled but its configured status is unknown | Manual settings verification remains pending. |
+| Two PRs serve one issue; the first is linked/merged while acceptance remains | Issue stays open; its stage preserves remaining work, Blocked/terminal intent and the selected transition owner. Verify repository auto-close and native linked/merged rules, not just card filters. |
+| Issue-only view with linked PR information | Issue card and supported PR links are visible; no duplicate PR card is required. Descriptive-only references need their own visible issue links. |
 | Partial, drifting or uncertain platform result | Preserve evidence and use the provider's recovery route; do not blindly retry. |
 
 Report the selected profile and its owner, preserved differences, supported and manual steps, actual verification and remaining gaps. Board semantics and local template adaptation can be settled while provisioning capabilities remain pending. Keep repository-workflow assets with Project Workflows, agent-facing service implementation with the selected tooling owner, and each agent's tasks in its own spike.
