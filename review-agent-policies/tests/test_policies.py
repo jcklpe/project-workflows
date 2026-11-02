@@ -104,7 +104,7 @@ class PoliciesTest(unittest.TestCase):
 
     def test_lightweight_header_rejects_invalid_status_authority_dates_and_fields(self):
         for extras, message in [({"status": "active"}, "invalid status"), ({"authority": ""}, "recorded human"),
-                                ({"revised": "2026-02-30"}, "day is out of range"), ({"id": "123"}, "invalid mnemonic"),
+                                ({"revised": "2026-02-30"}, r"day .*range"), ({"id": "123"}, "invalid mnemonic"),
                                 ({"supersedes": "OLD-ID"}, "unsupported fields"), ({"scope": "Agent | human"}, "table separators"),
                                 ({"depends_on": ["READ-SAFE", "READ-SAFE"]}, "duplicate depends_on")]:
             with self.subTest(extras=extras):
