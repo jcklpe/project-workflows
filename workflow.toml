@@ -24,7 +24,7 @@ project_branch = "project/barkonomics"
 # Optional collaboration selection. Local use needs no forge, platform tooling or credentials.
 [coordination]
 mode = "forge"
-repository = "https://github.com/Barkonomics-DataWrangling/pet-names"
+repository = "https://github.com/Barkonomics-DataWrangling/barkonomics-pet-names"
 # Optional project-owned reference naming setup/use skills and source/version. Empty allows human platform steps.
 # Never store a command or secret here.
 tooling = "Agent Hands 2275b24863980c75a65d6c90d666d223cf4f50b3: setup-github, use-github-issues, use-github-pull-requests, use-github-projects; project guide docs/github-tooling.md"
