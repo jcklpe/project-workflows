@@ -1,0 +1,20 @@
+# Reconcile a legacy project or kernel revision
+Use [Adopt Agent Policies](../SKILL.md) for the actual adoption task, the project's adopted kernel for obligations, and [Update Project Workflows](../../update-project-workflows/SKILL.md) for collection delivery. Updating a package and adopting its policy candidates are distinct operations.
+
+## Compatibility
+Existing `documents.policies` and legacy paths retain their declared meaning until deliberate migration. The new `documents.agent_policies` default is `docs/agent-policies/`, with AGENTS routing to its `policy.index.md`. A missing key/index remains legacy mode; it does not retire old rules or create an adoption. Existing numbered paths and useful identity history are not bulk-renamed by setup/update.
+
+## Receiving-project procedure
+1. Inventory AGENTS routing, policy files/identities, operative obligations, human governance, relevant procedural skills, inbound references, selected workflow source and concurrent work. Record comparisons/gaps in the receiving project's own spike. Apply the kernel's policy/skill distinction rather than treating every durable document as policy.
+2. Select the exact complete candidate source/revision. Copy proposed kernel records as project-owned files only within authorized setup scope, preserving existing content. Record that source revision or content hashes and the actual prior baseline. Do not register these copies for automatic asset refresh or point the policy directory/index at a mutable package.
+3. Reconcile obligations with [Edit Agent Policy](../../edit-agent-policy/SKILL.md); use [Create](../../create-agent-policy/SKILL.md) for genuinely new obligations and [Retire](../../retire-agent-policy/SKILL.md) for withdrawn/replaced identities. Review incoming edges and links rather than mechanically redirecting them. Preserve human governance separately and retain useful provenance, including historical product names that are still meaningful.
+4. Use [Review Agent Policies](../../review-agent-policies/SKILL.md) for the complete actual/candidate set, policy/skill boundary, semantic conflicts and structural checks. Preserve the operative bodies while substantive amendments remain proposals. Then apply the actual human decision through the adoption skill, including index/routing changes covered by it.
+5. Follow the project's existing commit/review/publication controls. Verify real agent discovery/loading separately from structural validity. An unchanged index/tool rerun should make no edits. A busy or ambiguous owner remains a specific migration gap rather than permission to overwrite it.
+
+## Format and retained legacy identities
+Current policy records use YAML `---` frontmatter with descriptive `type: kernel` or `type: operational`. Kernel filenames begin with `_`, while metadata IDs stay unchanged. Converting an earlier TOML draft or adding this presentation prefix is not adoption: preserve and review actual bodies, decision authority, statuses and incoming links. A substantive naming obligation change follows the policy amendment decision rather than being hidden as formatting.
+
+An old numbered document can be preserved as a retired historical record outside the flat active policy directory, with its literal legacy identity and content provenance linked in the human-owned part of `policy.index.md`. This keeps the original identity reserved without inventing a new mnemonic alias or extending active-ID syntax. The generated table/checker covers current-format records; humans review legacy retirement status/content separately, and link checks only establish reachable records. No adopted prerequisite may point to an inactive legacy record.
+
+## Later revisions
+The normal deterministic collection update can deliver newer source without changing project-owned operative policies. Compare the new candidates against the actual prior source and current project adaptation, then use the same edit/review/adopt tasks. Keep current operative terms while preparing changes. Publication, client registration, tool permissions and consumer changes remain independently scoped work.
