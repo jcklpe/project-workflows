@@ -13,4 +13,4 @@ about: Propose a shared outcome or a coherent change.
 <!-- Describe the evidence a person can use to assess the outcome. -->
 
 ## Related work
-<!-- Link existing issues, contributions or agent-owned spikes where useful. A separate spike or branch is not required for every issue. -->
+<!-- Keep shared discussion, progress and acceptance on this issue. Link related issues, discrete PR contributions and agent-owned spikes where useful. Several PRs may serve this outcome; partial merges leave unfinished acceptance open. Branches, issues and spikes need not be one-to-one. -->

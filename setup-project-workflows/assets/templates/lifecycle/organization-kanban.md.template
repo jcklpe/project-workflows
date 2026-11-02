@@ -1,6 +1,8 @@
 # Organization Kanban lifecycle
 Use this as editable starting guidance, not a copy of a particular organization's policy. Preserve established project choices. Installing this document enables no automation.
 
+Issues own shared discussion, tracking and acceptance and are the default board cards; linked PRs are discrete review/integration points. Several PRs may serve one issue. Use issue-only views with Linked pull requests information; separate PR cards need an explicit project exception. Check repository auto-close and native linked/merged-PR rules so partial contributions leave unfinished issues open and preserve Blocked/terminal intent.
+
 | Stage | Starting meaning |
 | --- | --- |
 | To Do | Work awaiting selection or preparation. |
