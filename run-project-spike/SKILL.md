@@ -167,7 +167,7 @@ Whenever a commit message is proposed for human review, present its complete sub
 
 Use `commit-work` to choose timely checkpoints for coherent changes and useful experimental states. Preserve distinct candidates and consequential corrections while keeping concurrent spikes traceable. A conversation turn ending is not itself a checkpoint, and an entire spike need not finish before committing. Human QA status is separate from checkpoint timing; an explicit request to review before committing overrides routine checkpointing until that review ends or the user authorizes the checkpoint.
 
-The `.todo.md` edit that moves an item and a `TODO.md` update describing the same work belong in the same commit as that work when their full diffs are in scope. Shared files require checking for unrelated work from concurrent spikes; their filename alone is not a reason to split them into separate commits.
+The `.todo.md` edit that moves an item and a `TODO.md` update describing the same work belong in the same commit as that work when their full diffs are in scope. For a shared index containing understood, authorized tracking updates from several workstreams, follow [Commit Work’s shared-index snapshot rule](../commit-work/SKILL.md#coordination-files-follow-their-actual-scope); do not hold the index update until every referenced workstream is ready. Shared files still require reviewing the current file and full diff and preserving concurrent edits; their filename alone is not a reason to split them into separate commits.
 
 When the user confirms QA, moving items to `Done` is its own doc-only commit, batched per **approval event**: one approval is one commit, however many items it covered. It records when the work was blessed, which no other artifact does.
 
