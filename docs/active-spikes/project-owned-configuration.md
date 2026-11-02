@@ -22,3 +22,6 @@ The old branch-based path keeps its ancestry-preserving merges and setting check
 The [note format](../../setup-project-workflows/references/local-workflows.md) and optional [starter](../../setup-project-workflows/assets/templates/local-workflow.md.template) identify the shared skill, applicable scope, concrete changed steps, relevant policy owners and meaningful checks. Projects keep ordinary Markdown and their existing metadata conventions. Review whether an old customization is still useful before relocating it; preservation is not a reason to perpetuate obsolete instructions.
 
 Setup and update procedures apply this contract. The bundled ADOPT-POLICIES candidate records that local notes cannot silently amend adopted obligations and that policies may delegate bounded contracts to named skills. The provider's adopted copy and receiving projects' operative copies remain unchanged; the distribution amendment is proposed source.
+
+## Shared client display metadata
+Update Project Workflows includes optional `agents/openai.yaml` interface metadata for its display name and short description. These generic labels belong in the shared package. They affect client presentation, not task execution, action permission or project configuration.
