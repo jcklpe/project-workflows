@@ -13,7 +13,7 @@ index = "TODO.md"
 active_spikes = "docs/active-spikes"
 scratch = "docs/scratch"
 archive = "docs/archive"
-policies = "policies" # Shared design agreements remain separate from agent-only obligations.
+policies = "docs/agent-policies" # Legacy locator resolves to the single complete agent-policy layer.
 agent_policies = "docs/agent-policies" # Agent-only opt-in index: policy.index.md; availability is not adoption.
 
 # Adoption fills these with public-safe source metadata. The parent gitlink, not these fields, records the adopted commit.
