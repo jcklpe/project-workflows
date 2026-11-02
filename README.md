@@ -47,6 +47,11 @@ One branch may host many agent-owned spikes, several issues and multiple eventua
 | [setup-project-workflows](setup-project-workflows/SKILL.md) | Set up a project, onboard collaborators, or guide optional board/lifecycle setup; preserve existing project choices. |
 | [coordinate-project-contribution](coordinate-project-contribution/SKILL.md) | Kick off contribution work, link agent-owned spikes to shared outcomes, and prepare review or integration. |
 | [update-project-workflows](update-project-workflows/SKILL.md) | Compare against shared ancestry and reconcile upstream improvements while preserving intentional project differences. |
+| [create-agent-policy](create-agent-policy/SKILL.md) | Assess need/ownership and draft a new obligation's initial scope and identity. |
+| [edit-agent-policy](edit-agent-policy/SKILL.md) | Assess change intent, identity continuity and dependents while preserving the operative version. |
+| [review-agent-policies](review-agent-policies/SKILL.md) | Review meaning/ownership and run shared graph/index checks. |
+| [adopt-agent-policies](adopt-agent-policies/SKILL.md) | Apply explicit adoption, including initial kernel adoption and reviewed revisions. |
+| [retire-agent-policy](retire-agent-policy/SKILL.md) | Retire an obligation with dependent review and reserved identity/history. |
 | [run-project-spike](run-project-spike/SKILL.md) | Keep reasoning and task documents together, track QA, and preserve closure history. |
 | [triage-project-misc](triage-project-misc/SKILL.md) | Route loose scratch observations into the appropriate project records. |
 | [draft-approval-slate](draft-approval-slate/SKILL.md) | Present concrete external or hard-to-reverse changes for human review. |
@@ -56,6 +61,11 @@ One branch may host many agent-owned spikes, several issues and multiple eventua
 `capture-for-later` is the sole entrypoint for saving possibilities and deliberately parked subjects. Existing notes remain valid and are not migrated by installation.
 
 The collection contains procedures and templates, not an autonomous project manager. The current project's instructions and authorized task determine which procedures apply. Installing these skills does not authorize publication or external writes.
+
+## Agent policies
+Five task-specific policy skills share one template, format contract and structural/index tool. The [kernel candidates](adopt-agent-policies/assets/kernel/policy.index.md) state durable obligations and define the policy/skill distinction; the skills supply task procedures under those obligations. For explicit adoption, keep frozen project-owned copies in the selected agent-policy location and route AGENTS to `policy.index.md`. Only an authenticated human decision plus `adopted` status makes a policy operative in that checkout. These policies govern agents, never humans; contribution and shared-branch acceptance remain separate. IDs identify obligations, prerequisites form a graph, and reading order never confers precedence.
+
+The new `documents.agent_policies` default is `docs/agent-policies/`; existing `documents.policies` and legacy paths remain valid. Missing new configuration does not retire old rules or adopt the new kernel. Follow the [deliberate migration route](adopt-agent-policies/references/migration.md) rather than mass-renaming consumers. A collection upgrade delivers candidates without replacing operative project copies. The [optional checker](review-agent-policies/scripts/policies.py) needs an existing Python 3.11+ standard library; ordinary Markdown use requires no runtime. It checks structure, not policy meaning, human intent or agent/tool compliance.
 
 ## Installation choices
 A Git project can pin this collection as a root-level `project-workflows/` Git submodule or explicitly use installed global skills with project-owned policy/configuration. Preserve the chosen mode; do not create or remove a submodule merely because global skills are available. For a pinned adoption, each project gets its own branch from the start, while the parent repository pins an exact revision. An explicitly designated canonical maintenance/global installation uses shared `main` directly. Project-specific procedures can evolve freely, with Git ancestry available when reconciling improvements upstream or downstream.
@@ -111,7 +121,9 @@ your-project/
     active-spikes/
     scratch/
     archive/
-    policies/
+    policies/                # Existing legacy conventions may remain.
+    agent-policies/          # Only when explicitly adopting the agent-policy system.
+      policy.index.md
   project-workflows/          # Git submodule; parent pins an exact commit
     workflow.toml            # tracked project choices on the project branch
     setup-project-workflows/
