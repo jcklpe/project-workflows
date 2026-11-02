@@ -18,6 +18,8 @@ Use this path for an initialized root `project-workflows/` adoption. Root `workf
 
 Project configuration, configured local workflow notes and operative policy copies remain parent-owned. Do not register config or workflow notes for automatic asset refresh. A source update delivers management skills/kernel candidates while preserving operative policies, status and routing. Use [Adopt Agent Policies](../adopt-agent-policies/SKILL.md) for an explicitly selected policy revision; package availability is not adoption.
 
+Review local notes using the [shared note format](../setup-project-workflows/references/local-workflows.md): named skill/scope, actual local steps, relevant policy references and checks. Explicit replacements or omissions need semantic review against incoming shared behavior. A variation made obsolete by upstream work can be proposed for retirement; preserving a file does not establish that its instructions remain needed.
+
 Use the optional [Git/standard-library helper](scripts/update.py) and its [usage and baseline format](references/updater.md) for steps 1–5. It previews by default, surfaces focused review paths, preserves settings, reconciles copied assets, and never stages/commits parent files or pushes. It needs an **existing** Python 3.11+ and Git 2.38+; do not create an environment or install dependencies merely to use this collection. The same procedure can be performed with ordinary Git and document access. No service credentials are required for local merging.
 
 ## Focused verification and result
