@@ -6,3 +6,6 @@
 
 ## Recent checkpoints
 - **Shared tracking index checkpoints** — [Commit Work](commit-work/SKILL.md#coordination-files-follow-their-actual-scope) permits frequent whole-file snapshots of understood, authorized tracking updates; [Run Project Spike](run-project-spike/SKILL.md#committing-spike-work) routes to that rule. Eleven adopted checkouts and their immediate parent pins are updated locally, preserving project settings, customizations and copied assets. Barkonomics completed after the concurrent configuration change was committed; the deterministic updater preserved the selected tooling and a repeat preview reports no changes. Global links already resolve to the canonical guidance. These commits remain unpublished; fresh-clone, fresh-client and real-use behavior are not claimed.
+
+## Recently completed
+- **Project-owned configuration** — [released design and history](docs/archive/project-owned-configuration.md) · [verification and closure](docs/archive/project-owned-configuration.todo.md). Shared-source mode and docs-folder configuration are released, with explicit target routing and project-owned policies/settings. Fresh consumer retrieval and repeated updater use pass. Optional local-note client loading remains an observation for a real future use, not a required extension.

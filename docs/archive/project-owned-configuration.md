@@ -1,10 +1,16 @@
 ---
-attention: live
-reviewed: 2026-11-02
+attention: historical
+reviewed: 2026-11-03
 ---
 # Project-owned configuration
 Opened 2026-11-02. Stable slug: `project-owned-configuration`. [Tasks](project-owned-configuration.todo.md).
 
+Historical implementation record. Closed 2026-11-03. Stable slug: `project-owned-configuration`. Current behavior is defined by the shared README, Setup/Update procedures and adopted policy owners.
+
+## Released outcome
+The unchanged shared-source mode, documentation-folder configuration and explicit AGENTS discovery are released. Project configuration, adopted policies and any useful local procedures stay outside the package. The kernel owns the policy field contract, inline example and reusable history requirements. Fresh retrieval and repeated real updater use verify the released configuration/pin boundary. Optional local notes remain supported without requiring a new folder or consumer extension.
+
+## Implementation and review history — November 2
 ## Outcome and authorized boundary
 Support a pinned, unchanged shared collection with project configuration and local procedural notes owned by the parent project. Existing adaptation branches and their child configuration remain supported. This delivery changes upstream source and isolated fixtures only; it does not migrate existing consumers, change their pins, retire branches, adopt policies or publish anything.
 

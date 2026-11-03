@@ -1,17 +1,20 @@
 ---
-attention: live
-reviewed: 2026-11-02
+attention: historical
+reviewed: 2026-11-03
 ---
 # Project-owned configuration — work
 Opened 2026-11-02. Stable slug: `project-owned-configuration`. [Concept](project-owned-configuration.md).
 
+Historical implementation record. Closed 2026-11-03. Stable slug: `project-owned-configuration`. Current behavior is defined by the shared README, Setup/Update procedures and adopted policy owners.
+
 ## To Do
-- No provider implementation remains in this slice. Observe ordinary use under the QA item; any consumer migration, branch retirement or publication is separate scope.
+- None. The implementation and release verification are complete.
 
 ## Ready for Human QA
-- Observe local workflow-note loading in an ordinary explicitly selected task after this feature is available. No existing consumer migration or live service action is required by the provider tests.
+- No acceptance item blocks this slice. No actual consumer required a new local workflow note. Ordinary client loading of that optional path remains unobserved; revisit it when a real project needs one rather than creating an artificial extension.
 
 ## Done
+- Publish the approved shared implementation and verify fresh retrieval and actual updater use. — Shared release e31ac82 is available on main. Fresh public consumer clones retrieve exact shared pins and parent-owned documentation-folder settings. Repeated updater applies preserve settings and copied assets without edits. Fresh release checks pass 37 updater, 30 policy and 24 lifecycle tests under Python 3.14; the same suites passed on the existing Python 3.13 runtime. Client compliance and live forge execution are separate evidence.
 - Verify and checkpoint the approved kernel-owned example/history and removal of optional UI metadata; keep the shared package unpublished. — The header example now lives beside the field definition in PRESERVE-IDENTITY, with the approved Git history/Policy trailer obligation. Create, Edit and Retire reference their actual kernel owners. Both Capture and Updater display-only openai.yaml files are removed. Kernel scope/index routing reflects the metadata/history owner. All 30 policy tests pass on Python 3.13 and 3.14; kernel/index/resource/YAML/whitespace checks pass. Shared source and containing pins remain unpublished/unchanged.
 - Verify and locally checkpoint the approved kernel metadata ownership and inline creation example; preserve concurrent kernel/rollout tracking work. — Applied the exact reviewed field/type section to provider and proposed distribution source. All thirty policy tests pass on Python 3.13 and 3.14; adopted/proposed kernel checks pass, with 70 local resource targets and syntax/whitespace checks. The separate template is removed and Create owns the one inline example. Other projects’ operative policies and checker behavior remain unchanged; checkpoint is local only.
 - Support project configuration in the documentation folder and make setup own its AGENTS pointer. — docs/workflow.toml and _meta/workflow.toml use relative project.root; explicit --config supports other declared paths. Ambiguous conventional discovery stops, selected config stays protected from copied-asset refresh, and legacy root/child layouts remain supported. Thirty-seven real-Git updater tests pass on Python 3.13 and 3.14. No consumer configuration is moved by this provider change.
