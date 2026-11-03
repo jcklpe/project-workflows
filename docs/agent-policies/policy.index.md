@@ -5,6 +5,6 @@ The user explicitly adopted ADOPT-POLICIES, PRESERVE-IDENTITY and RESOLVE-DEPEND
 | ID | Policy | Type | Scope | Status | Revised |
 | --- | --- | --- | --- | --- | --- |
 | ADOPT-POLICIES | [Adopt agent policies explicitly](_ADOPT-POLICIES-require-explicit-adoption.md) | kernel | Agent treatment of policy obligations, skill procedures and local policy decisions. | adopted | 2026-11-02 |
-| PRESERVE-IDENTITY | [Preserve obligation identity](_PRESERVE-IDENTITY-retain-meaning-and-history.md) | kernel | Agent continuity, dependency impact and retirement of policy identities. | adopted | 2026-11-02 |
+| PRESERVE-IDENTITY | [Preserve obligation identity](_PRESERVE-IDENTITY-retain-meaning-and-history.md) | kernel | Agent policy identity, record metadata, change history and retirement. | adopted | 2026-11-02 |
 | RESOLVE-DEPENDENCIES | [Resolve prerequisites before loading](_RESOLVE-DEPENDENCIES-load-prerequisites-once.md) | kernel | Agent discovery and loading of applicable adopted policy prerequisites. | adopted | 2026-11-02 |
 <!-- agent-policies:end -->

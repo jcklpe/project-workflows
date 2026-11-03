@@ -14,4 +14,6 @@ Prepare necessary dependent changes through [Edit Agent Policy](../edit-agent-po
 ## Apply the authorized retirement
 Recheck the exact retirement/dependent decision and current files. Record `retired`, actual human authority, substantive date and concise retirement rationale/history pointers under the selected project’s adopted PRESERVE-IDENTITY metadata contract, using the [technical representation notes](../review-agent-policies/references/policy-format.md). Retain the reserved ID and index record; preserve useful history without leaving a live override chain. Reconcile the index and validate the complete resulting set using the shared tool.
 
+For a Git-backed change, hand Commit Work the affected mnemonic policy IDs and the reviewed decision rationale under PRESERVE-IDENTITY.
+
 Report the retired obligation, handled/remaining incoming dependencies and what remains operative. Preserve concurrent edits and follow the project's commit/publication controls.

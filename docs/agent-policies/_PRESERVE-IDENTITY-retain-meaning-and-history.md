@@ -1,9 +1,9 @@
 ---
 id: PRESERVE-IDENTITY
 type: kernel
-scope: "Agent continuity, dependency impact and retirement of policy identities."
+scope: "Agent policy identity, record metadata, change history and retirement."
 status: adopted
-authority: "User's explicit provider-kernel approval and requested YAML/type/kernel-prefix amendment, and explicit approval of the reviewed frontmatter contract, 2026-11-02; recorded in the provider spikes."
+authority: "User's explicit provider-kernel approval and requested YAML/type/kernel-prefix amendment, and explicit approval of the reviewed frontmatter contract, kernel-owned example and policy-history requirements, 2026-11-02; recorded in the provider spikes."
 revised: "2026-11-02"
 depends_on: ["ADOPT-POLICIES"]
 related_to: ["RESOLVE-DEPENDENCIES"]
@@ -14,6 +14,9 @@ A mnemonic ID identifies substantially the same obligation over time; it encodes
 Identity changes and retirement require review of incoming prerequisites and meaningful references, including skills applying the obligation. A dependent's authority must not transfer to a replacement merely through a renamed file, redirected link or substituted ID. Changes to those obligations remain subject to `ADOPT-POLICIES`.
 
 Retired IDs remain reserved and must never identify a different obligation. Retain an indexed retirement record with the human decision, substantive date and useful rationale/history. Preserve evolution in Git and retirement records instead of active supersedes or override chains. Historical references explain prior meaning without making it operative.
+
+## Policy change history
+When changing an agent policy, preserve the decision, substantive reason and meaningful alternatives considered in the project’s history. For Git-backed projects, commits changing policy obligations carry a `Policy: ID` trailer for each affected mnemonic policy ID.
 
 ## Policy record metadata
 A policy record uses YAML frontmatter between `---` delimiters. It contains these required fields:
@@ -30,4 +33,20 @@ A policy record uses YAML frontmatter between `---` delimiters. It contains thes
 
 The optional `related_to` field contains an array of related policy IDs. These references do not add prerequisites or confer authority.
 
-Skills provide examples and editing procedures under this contract. Validators check its representation; passing validation does not establish adoption, semantic consistency or agent compliance.
+The record definition and header example live in this policy. Skills provide editing procedures and reference this contract. Validators check its representation; passing validation does not establish adoption, semantic consistency or agent compliance.
+
+### Header example
+This is an illustrative proposed-policy header. Replace its ID, scope, date and actual prerequisite/related IDs before using it; a filled header does not adopt the policy.
+
+```yaml
+---
+id: EDIT-SAFE
+type: operational
+scope: "Agent edits in this project checkout."
+status: proposed
+authority: ""
+revised: "2026-11-02"
+depends_on: []
+related_to: []
+---
+```

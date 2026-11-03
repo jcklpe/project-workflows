@@ -17,4 +17,6 @@ Read the selected project’s adopted PRESERVE-IDENTITY metadata contract for fi
 3. For an adopted policy, prepare substantive amendments in a linked spike/change proposal or preview checkout while retaining the operative body. For a proposal, revise the candidate in place within the authorized scope. Keep the exact old/new comparison reviewable.
 4. Use [Review Agent Policies](../review-agent-policies/SKILL.md), then [Adopt Agent Policies](../adopt-agent-policies/SKILL.md) for a separately requested or already-authorized adoption. An edit request that only asks for a candidate does not operate that candidate.
 
+For a Git-backed change, hand Commit Work the affected mnemonic policy IDs and the reviewed decision rationale under PRESERVE-IDENTITY.
+
 Report the intended difference, identity decision, affected dependents/skills and what remains operative. Preserve concurrent work and use the actual project's commit policy.

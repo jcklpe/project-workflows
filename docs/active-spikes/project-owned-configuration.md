@@ -23,11 +23,14 @@ The [note format](../../setup-project-workflows/references/local-workflows.md) a
 
 Setup and update procedures apply this contract. The bundled ADOPT-POLICIES candidate records that local notes cannot silently amend adopted obligations and that policies may delegate bounded contracts to named skills. The provider's adopted copy and receiving projects' operative copies remain unchanged; the distribution amendment is proposed source.
 
-## Shared client display metadata
-Update Project Workflows includes optional `agents/openai.yaml` interface metadata for its display name and short description. These generic labels belong in the shared package. They affect client presentation, not task execution, action permission or project configuration.
+## Client interface metadata
+The collection uses SKILL.md metadata without separately maintained openai.yaml interface files. Optional presentation metadata is not selected for this distribution. Existing pinned copies retain their source state until their authorized updates; this source cleanup does not migrate them.
 
 ## Configuration discovery
 Setup writes the exact configuration link into AGENTS and verifies it. The helper supports --config for that declared project-relative path and rejects ambiguous conventional discovery. Existing root configs and branch-based layouts remain supported; no consumer file is moved by this change.
 
 ## Policy record ownership followup
-The explicitly approved metadata amendment makes PRESERVE-IDENTITY the canonical owner of required frontmatter fields, their meanings and descriptive type. ADOPT-POLICIES retains adoption authority and RESOLVE-DEPENDENCIES retains edge semantics. The adopted provider copy and proposed distribution source receive the same reviewed body section. Task skills reference the actual project contract, with a single inline creation example in Create; the separate template file is removed at the user’s request. Technical parser/index notes stay with Review. No schema/checker behavior or other project’s policy adoption is changed. This work stays local.
+The explicitly approved metadata amendment makes PRESERVE-IDENTITY the canonical owner of required frontmatter fields, their meanings and descriptive type. ADOPT-POLICIES retains adoption authority and RESOLVE-DEPENDENCIES retains edge semantics. The adopted provider copy and proposed distribution source receive the same reviewed body section. Task skills reference the actual project contract, with the header example beside its definition in PRESERVE-IDENTITY; the separate template file is removed at the user’s request. Technical parser/index notes stay with Review. No schema/checker behavior or other project’s policy adoption is changed. This work stays local.
+
+## Approved history and example ownership
+The reviewed policy-history requirement is adopted in the provider’s PRESERVE-IDENTITY copy and supplied as proposed distribution source. Edit and Retire pass mnemonic policy IDs and decision rationale to Commit Work. The record definition and YAML example have one kernel owner; Create references it. Both optional interface metadata files are removed rather than expanding vendor presentation metadata across the collection. These changes remain local and do not alter any consumer’s adoption state.
