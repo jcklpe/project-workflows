@@ -9,6 +9,7 @@ root = ".."
 readme = "README.md"
 instructions = "AGENTS.md"
 index = "TODO.md"
+# catalog = "docs/docs.index.md" # Optional supporting-document navigation; create only when useful.
 active_spikes = "docs/active-spikes"
 scratch = "docs/scratch"
 archive = "docs/archive"
@@ -30,6 +31,17 @@ upstream_branch = "main"
 mode = "local"
 repository = ""
 tooling = ""
+
+# Optional shared tool facts; the guide explains their use rather than repeating pins.
+# [coordination.tooling_source]
+# repository = "https://example.org/workflow-tools"
+# revision = "REVIEWED_SOURCE_REVISION"
+# skills = ["setup-forge", "use-forge-pull-requests"]
+# guide = "docs/forge-tooling.md"
+
+# Contributor keys and prefixes are human-selected, not agent/vendor identifiers.
+# [coordination.branch_prefixes]
+# contributor = "contributor/"
 
 [validation]
 commands = []
