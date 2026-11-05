@@ -1,6 +1,6 @@
 schema_version = 1
 
-# Project-owned settings in docs/workflow.toml or the existing documentation folder, outside the shared package.
+# Project-owned settings in docs/project-workflows.toml or the existing documentation folder, outside the shared package.
 [project]
 name = "Example project"
 root = ".."
@@ -34,3 +34,12 @@ tooling = ""
 
 [validation]
 commands = []
+
+# Optional nonprivate lookup paths, relative to this file's directory.
+# Put machine-specific values in ignored sibling project-workflows.local.toml under [references].
+# A local reference overrides only the same reference key, never shared settings or permissions.
+[references]
+# context = "project-context.md"
+# github_tooling = "/absolute/path/to/external/github-only-bundle"
+
+# The updater records installed copied-asset baselines here in a managed [assets] section.

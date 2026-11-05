@@ -6,6 +6,7 @@ import shlex
 import subprocess
 import sys
 import tempfile
+import tomllib
 import unittest
 
 SCRIPT = Path(__file__).resolve().parents[1] / "scripts" / "update.py"
@@ -355,9 +356,11 @@ class UpdateTest(unittest.TestCase):
     def test_docs_and_meta_configuration_preserve_exact_source_and_repeat(self):
         self.shared()
         previous = "workflow.toml"
-        for selected in ("docs/workflow.toml", "_meta/workflow.toml"):
+        for selected in ("docs/project-workflows.toml", "_meta/project-workflows.toml", "project-workflows.toml", "docs/workflow.toml", "_meta/workflow.toml"):
             with self.subTest(selected=selected):
-                content = (self.parent / previous).read_text().replace('root = "."', 'root = ".."')
+                content = (self.parent / previous).read_text()
+                root_value = ".." if "/" in selected else "."
+                content = content.replace('root = "."', f'root = "{root_value}"').replace('root = ".."', f'root = "{root_value}"')
                 self.write(self.parent, selected, content)
                 (self.parent / previous).unlink()
                 accepted = self.incoming(text=selected + "\n")
@@ -481,7 +484,7 @@ class UpdateTest(unittest.TestCase):
         self.shared()
         self.install()
         accepted = self.incoming(SOURCE, TEMPLATE.replace("last paragraph", "incoming last paragraph"))
-        before = (self.parent / RECEIPT).read_bytes()
+        before = (self.parent / "workflow.toml").read_bytes()
         note = self.parent / "work-notes/workflows/example.md"
         hook = Path(self.git(self.child, "rev-parse", "--path-format=absolute", "--git-path", "hooks/post-checkout"))
         hook.parent.mkdir(parents=True, exist_ok=True)
@@ -492,13 +495,110 @@ class UpdateTest(unittest.TestCase):
         self.assertEqual(self.git(self.child, "rev-parse", "HEAD"), accepted)
         self.assertEqual(note.read_text(), "Concurrent local review edit.\n")
         self.assertEqual((self.parent / DEST).read_text(), TEMPLATE)
-        self.assertEqual((self.parent / RECEIPT).read_bytes(), before)
+        self.assertEqual((self.parent / "workflow.toml").read_bytes(), before)
 
     def test_shared_target_cannot_introduce_another_projects_configuration(self):
         self.shared()
         accepted = self.incoming("workflow.toml", (self.upstream / "workflow.toml").read_text().replace('name = ""', 'name = "Another project"'))
         self.assertIn("neutral package configuration", self.run_helper("update", accepted, "--apply", code=1)["error"])
         self.assertEqual(self.git(self.child, "rev-parse", "HEAD"), self.base)
+
+    def test_shared_records_assets_in_toml_preserving_comments_and_private_file(self):
+        self.shared()
+        config = self.parent / "workflow.toml"
+        original = config.read_bytes()
+        self.write(self.parent, ".gitignore", "project-workflows.local.toml\n")
+        private = 'not valid TOML; updater must not load private context\n'
+        self.write(self.parent, "project-workflows.local.toml", private)
+        self.write(self.parent, DEST, TEMPLATE)
+        preview = self.run_helper("record-assets", self.base, "--asset", f"{DEST}={SOURCE}")
+        self.assertTrue(preview["changed"])
+        self.assertEqual(config.read_bytes(), original)
+        self.run_helper("record-assets", self.base, "--asset", f"{DEST}={SOURCE}", "--apply")
+        self.assertTrue(config.read_bytes().startswith(original))
+        self.assertEqual(tomllib.loads(config.read_text())["assets"][DEST]["revision"], self.base)
+        self.assertFalse((self.parent / RECEIPT).exists())
+        self.assertEqual((self.parent / "project-workflows.local.toml").read_text(), private)
+        self.assertFalse(self.run_helper("record-assets", self.base, "--asset", f"{DEST}={SOURCE}", "--apply")["changed"])
+        accepted = self.incoming(SOURCE, TEMPLATE + "updated\n")
+        self.run_helper("update", accepted, "--apply")
+        self.assertTrue(config.read_bytes().startswith(original))
+        self.assertEqual(tomllib.loads(config.read_text())["assets"][DEST]["revision"], accepted)
+        self.assertEqual((self.parent / "project-workflows.local.toml").read_text(), private)
+        self.assertFalse(self.run_helper("update", accepted, "--apply")["changed"])
+
+    def test_migrate_assets_is_explicit_preserves_baselines_and_repeats(self):
+        self.install()  # Existing adaptation creates the legacy JSON.
+        legacy = (self.parent / RECEIPT).read_bytes()
+        self.shared()
+        config = self.parent / "workflow.toml"
+        original = config.read_bytes()
+        self.assertIn("migrate-assets", self.run_helper("update", self.base, code=1)["error"])
+        self.assertTrue(self.run_helper("migrate-assets", self.base)["changed"])
+        self.assertEqual((self.parent / RECEIPT).read_bytes(), legacy)
+        self.assertEqual(config.read_bytes(), original)
+        index = self.git(self.parent, "ls-files", "--stage")
+        self.run_helper("migrate-assets", self.base, "--apply")
+        self.assertEqual(self.git(self.parent, "ls-files", "--stage"), index)
+        self.assertEqual(self.git(self.child, "rev-parse", "HEAD"), self.base)
+        self.assertFalse((self.parent / RECEIPT).exists())
+        self.assertTrue(config.read_bytes().startswith(original))
+        self.assertEqual(tomllib.loads(config.read_text())["assets"], json.loads(legacy)["files"])
+        self.assertFalse(self.run_helper("migrate-assets", self.base, "--apply")["changed"])
+        # A partially completed migration can leave identical records in both locations.
+        self.write(self.parent, RECEIPT, legacy.decode())
+        self.run_helper("migrate-assets", self.base, "--apply")
+        self.assertFalse((self.parent / RECEIPT).exists())
+
+    def test_migration_refuses_conflicting_records_and_staged_config(self):
+        self.install()
+        self.shared()
+        self.run_helper("migrate-assets", self.base, "--apply")
+        config = self.parent / "workflow.toml"
+        original = config.read_bytes()
+        data = {"schema_version": 1, "files": {DEST: {"source": SOURCE, "revision": "0" * 40}}}
+        self.write(self.parent, RECEIPT, json.dumps(data))
+        result = self.run_helper("migrate-assets", self.base, "--apply", code=1)
+        self.assertIn("disagree", result["error"])
+        self.assertEqual(config.read_bytes(), original)
+        self.assertTrue((self.parent / RECEIPT).exists())
+        self.git(self.parent, "add", "workflow.toml")
+        self.assertIn("staged", self.run_helper("migrate-assets", self.base, "--apply", code=1)["error"])
+
+    def test_malformed_managed_section_stops_before_pin_or_asset_change(self):
+        self.shared()
+        self.install()
+        config = self.parent / "workflow.toml"
+        config.write_text(config.read_text().replace("# project-workflows-assets:end", "# missing end marker"))
+        before = config.read_bytes()
+        accepted = self.incoming(SOURCE, TEMPLATE + "updated\n")
+        self.assertIn("Malformed", self.run_helper("update", accepted, "--apply", code=1)["error"])
+        self.assertEqual(self.git(self.child, "rev-parse", "HEAD"), self.base)
+        self.assertEqual((self.parent / DEST).read_text(), TEMPLATE)
+        self.assertEqual(config.read_bytes(), before)
+
+    def test_asset_markers_cannot_remove_unrelated_settings(self):
+        self.shared()
+        self.install()
+        config = self.parent / "workflow.toml"
+        config.write_text(config.read_text().replace("# project-workflows-assets:end", '[unrelated]\nkeep = true\n# project-workflows-assets:end'))
+        before = config.read_bytes()
+        accepted = self.incoming(SOURCE, TEMPLATE + "updated\n")
+        self.assertIn("other project settings", self.run_helper("update", accepted, "--apply", code=1)["error"])
+        self.assertEqual(config.read_bytes(), before)
+        self.assertEqual(self.git(self.child, "rev-parse", "HEAD"), self.base)
+
+    def test_migration_rejects_symlink_and_missing_destination(self):
+        self.install()
+        self.shared()
+        config = self.parent / "workflow.toml"
+        original = config.read_bytes()
+        (self.parent / DEST).unlink()
+        self.assertIn("missing", self.run_helper("migrate-assets", self.base, "--apply", code=1)["error"])
+        (self.parent / DEST).symlink_to(self.parent / "README.md")
+        self.assertIn("Symlink", self.run_helper("migrate-assets", self.base, "--apply", code=1)["error"])
+        self.assertEqual(config.read_bytes(), original)
+        self.assertTrue((self.parent / RECEIPT).exists())
 
 if __name__ == "__main__":
     unittest.main()

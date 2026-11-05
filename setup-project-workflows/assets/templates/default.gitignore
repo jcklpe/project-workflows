@@ -54,6 +54,8 @@ venv/
 *client_secret*.json
 !*client_secret*.example.json
 *.local.json
+# Private lookup references beside the shared workflow.toml
+project-workflows.local.toml
 
 # Optional secrets folders: ignore contents by default, but allow examples.
 secrets/*

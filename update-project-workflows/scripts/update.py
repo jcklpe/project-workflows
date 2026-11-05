@@ -14,7 +14,9 @@ except ImportError:
     sys.exit("Optional updater requires an existing Python 3.11+ interpreter; use the skill's manual Git route otherwise.")
 
 sys.dont_write_bytecode = True
-RECEIPT = ".project-workflows-assets.json"
+RECEIPT = ".project-workflows-assets.json"  # Legacy consumer storage only.
+ASSETS_START = "# project-workflows-assets:start"
+ASSETS_END = "# project-workflows-assets:end"
 STARTERS = {
     ".github/ISSUE_TEMPLATE/contribution.md": "setup-project-workflows/assets/templates/github/ISSUE_TEMPLATE/contribution.md.template",
     ".github/PULL_REQUEST_TEMPLATE.md": "setup-project-workflows/assets/templates/github/PULL_REQUEST_TEMPLATE.md.template",
@@ -69,7 +71,7 @@ def config(root, tree):
 
 
 def validate_tables(settings):
-    for name in ("project", "adoption", "documents", "coordination", "workflows"):
+    for name in ("project", "adoption", "documents", "coordination", "workflows", "assets", "references"):
         if name in settings and not isinstance(settings[name], dict):
             raise Stop(f"{name} must be a TOML table")
     return settings
@@ -150,7 +152,7 @@ def adoption(project, config_name=None):
             raise Stop(f"Declared project configuration is missing: {config_name}")
         external = config_name
     else:
-        candidates = [name for name in ("docs/workflow.toml", "_meta/workflow.toml", "workflow.toml") if local_path(parent, name).exists()]
+        candidates = [name for name in ("docs/project-workflows.toml", "_meta/project-workflows.toml", "project-workflows.toml", "docs/workflow.toml", "_meta/workflow.toml", "workflow.toml") if local_path(parent, name).exists()]
         if len(candidates) > 1:
             raise Stop("Multiple project configurations exist; select the AGENTS-declared path with --config")
         external = candidates[0] if candidates else None
@@ -158,12 +160,12 @@ def adoption(project, config_name=None):
         selected_config = local_path(parent, external)
         settings = validate_tables(tomllib.loads(selected_config.read_text()))
         if type(settings.get("schema_version")) is not int or settings["schema_version"] != 1:
-            raise Stop("Project workflow.toml requires schema_version = 1")
+            raise Stop("Project workflow configuration requires schema_version = 1")
         if settings.get("adoption", {}).get("mode") != "shared" or settings["adoption"].get("project_branch"):
             raise Stop('Project pinned configuration requires adoption.mode = "shared" and no project_branch; reconcile an existing adoption explicitly')
         relative_root = settings.get("project", {}).get("root")
         if not isinstance(relative_root, str) or not relative_root or Path(relative_root).is_absolute() or (selected_config.parent / relative_root).resolve() != parent:
-            raise Stop("Project workflow.toml project.root must resolve from its directory to the selected parent")
+            raise Stop("Project workflow configuration project.root must resolve from its directory to the selected parent")
         shared_config(child, head)
         if branch:
             raise Stop("Shared mode requires a detached shared pin; preserve existing branches and select the intended layout explicitly")
@@ -178,12 +180,19 @@ def adoption(project, config_name=None):
     return parent, child, head, settings, external
 
 
-def receipt(parent):
+def receipt(parent, settings=None, external=None):
     path = local_path(parent, RECEIPT)
-    data = json.loads(path.read_text()) if path.exists() else {"schema_version": 1, "files": {}}
+    if external:
+        if path.exists():
+            raise Stop("Legacy asset manifest exists; preview migrate-assets before updating this shared consumer")
+        data = {"schema_version": 1, "files": dict(settings.get("assets", {}))}
+    else:
+        data = json.loads(path.read_text()) if path.exists() else {"schema_version": 1, "files": {}}
     if data.get("schema_version") != 1 or not isinstance(data.get("files"), dict):
         raise Stop("Unsupported asset baseline file")
     for dest, entry in data["files"].items():
+        if not isinstance(entry, dict) or set(entry) != {"source", "revision"}:
+            raise Stop(f"Asset baseline requires source and revision only: {dest}")
         local_path(parent, dest)
         if dest in (RECEIPT, "project-workflows") or dest.startswith("project-workflows/"):
             raise Stop("An installed asset must belong to the parent")
@@ -192,6 +201,65 @@ def receipt(parent):
         if not isinstance(commit, str) or len(commit) not in (40, 64) or any(c not in "0123456789abcdef" for c in commit):
             raise Stop("Asset baseline requires an exact source commit")
     return data
+
+
+def encode_baselines(parent, data, external):
+    if not external:
+        return (json.dumps(data, indent=2, sort_keys=True) + "\n").encode()
+    # Replace only the managed section; retain all other settings, comments and formatting.
+    text = local_path(parent, external).read_bytes().decode()
+    original = tomllib.loads(text)
+    lines = text.splitlines(keepends=True)
+    starts = [position for position, line in enumerate(lines) if line.strip() == ASSETS_START]
+    ends = [position for position, line in enumerate(lines) if line.strip() == ASSETS_END]
+    block = ASSETS_START + "\n"
+    for dest, entry in sorted(data["files"].items()):
+        block += f"[assets.{json.dumps(dest)}]\n"
+        block += f"source = {json.dumps(entry['source'])}\nrevision = {json.dumps(entry['revision'])}\n\n"
+    block += ASSETS_END + "\n"
+    if starts or ends:
+        if len(starts) != 1 or len(ends) != 1 or starts[0] >= ends[0]:
+            raise Stop("Malformed asset-section markers; reconcile the selected TOML manually")
+        encoded = "".join(lines[:starts[0]]) + block + "".join(lines[ends[0] + 1:])
+    else:
+        if "assets" in original:
+            raise Stop("Existing assets table has no managed markers; reconcile it manually")
+        encoded = text + ("" if text.endswith("\n") else "\n") + "\n" + block
+    after = tomllib.loads(encoded)
+    if after.pop("assets", {}) != data["files"]:
+        raise Stop("Rendered asset baselines differ from the selected records")
+    original.pop("assets", None)
+    if original != after:
+        raise Stop("Asset section would alter other project settings; reconcile its boundaries")
+    return encoded.encode()
+
+
+def migrate_assets(args):
+    parent, child, head, settings, external = adoption(args.project, args.config)
+    if not external:
+        raise Stop("Asset consolidation requires an existing parent-owned shared configuration")
+    before = snapshot(parent, [RECEIPT, *project_state_paths(settings, external)])
+    if before[RECEIPT] is None:
+        receipt(parent, settings, external)
+        return {"operation": "migrate-assets", "configuration": external, "changed": False, "applied": args.apply}
+    data = receipt(parent)
+    existing = settings.get("assets", {})
+    if existing and existing != data["files"]:
+        raise Stop("TOML and legacy asset baselines disagree; reconcile before migration")
+    for dest, entry in data["files"].items():
+        guard_project_asset(dest, entry["source"], settings, external)
+        blob(child, revision(child, entry["revision"]), entry["source"])
+        if not local_path(parent, dest).is_file():
+            raise Stop(f"Installed destination is missing: {dest}")
+    encoded = encode_baselines(parent, data, external)
+    if args.apply:
+        adoption(args.project, args.config)
+        if snapshot(parent, before) != before or revision(child, "HEAD") != head:
+            raise Stop("State changed after migration preview")
+        local_path(parent, external).write_bytes(encoded)
+        local_path(parent, RECEIPT).unlink()
+    return {"operation": "migrate-assets", "configuration": external, "files": sorted(data["files"]),
+            "changed": True, "applied": args.apply, "staged": False}
 
 
 def changed(root, base, tip):
@@ -238,8 +306,9 @@ def project_state_paths(settings, external):
 def record(args):
     parent, child, head, settings, external = adoption(args.project, args.config)
     source_revision = revision(child, args.revision)
-    data = receipt(parent)
-    before = snapshot(parent, [RECEIPT, *project_state_paths(settings, external)])
+    data = receipt(parent, settings, external)
+    baseline_path = external or RECEIPT
+    before = snapshot(parent, [baseline_path, *project_state_paths(settings, external)])
     for dest, entry in data["files"].items():
         guard_project_asset(dest, entry["source"], settings, external)
     for mapping in args.asset:
@@ -259,13 +328,13 @@ def record(args):
         if dest in data["files"] and data["files"][dest] != entry:
             raise Stop(f"Baseline already exists; do not replace its history: {dest}")
         data["files"][dest] = entry
-    encoded = (json.dumps(data, indent=2, sort_keys=True) + "\n").encode()
-    if args.apply and before[RECEIPT] != encoded:
+    encoded = encode_baselines(parent, data, external)
+    if args.apply and before[baseline_path] != encoded:
         adoption(args.project, args.config)
         if snapshot(parent, before) != before or revision(child, "HEAD") != head:
             raise Stop("State changed after baseline preview")
-        local_path(parent, RECEIPT).write_bytes(encoded)
-    return {"operation": "record-assets", "applied": args.apply, "changed": before[RECEIPT] != encoded,
+        local_path(parent, baseline_path).write_bytes(encoded)
+    return {"operation": "record-assets", "applied": args.apply, "changed": before[baseline_path] != encoded,
             "baseline": source_revision, "files": sorted(data["files"]), "staged": False}
 
 
@@ -298,13 +367,14 @@ def update(args):
     git(child, "diff", "--check", head, tree)
     overlaps = changed(child, base, head) & changed(child, base, target) - {"workflow.toml"}
     review = {p for p in overlaps if out(child, "ls-tree", head, "--", p) != out(child, "ls-tree", target, "--", p)}
-    data = receipt(parent)
+    data = receipt(parent, settings, external)
+    baseline_path = external or RECEIPT
     for dest, entry in data["files"].items():
         guard_project_asset(dest, entry["source"], effective_settings, external)
     for dest in STARTERS:
         if local_path(parent, dest).exists() and dest not in data["files"]:
             raise Stop(f"Installed starter has no recorded baseline: {dest}; use record-assets with its actual installed revision")
-    before = snapshot(parent, [RECEIPT, *data["files"], *project_state_paths(effective_settings, external)])
+    before = snapshot(parent, [baseline_path, *data["files"], *project_state_paths(effective_settings, external)])
     writes, advanced = {}, []
     for dest, entry in data["files"].items():
         source = entry["source"]
@@ -320,6 +390,8 @@ def update(args):
             if local != merged:
                 writes[dest] = merged
             advanced.append(dest)
+    if advanced:
+        encode_baselines(parent, data, external)  # Validate managed boundaries before advancing the child.
     pending = sorted(review - set(args.reviewed))
     summary = {"operation": "update", "mode": mode, "old": head, "accepted": target,
                "branch": None if external else settings["adoption"]["project_branch"], "review_required": pending,
@@ -356,7 +428,7 @@ def update(args):
     for dest in advanced:
         data["files"][dest]["revision"] = result
     if advanced:
-        writes[RECEIPT] = (json.dumps(data, indent=2, sort_keys=True) + "\n").encode()
+        writes[baseline_path] = encode_baselines(parent, data, external)
     # These are local, unstaged writes, not a cross-repository transaction. Failures are never retried.
     for dest, content in writes.items():
         local_path(parent, dest).write_bytes(content)
@@ -368,21 +440,21 @@ def update(args):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="operation", required=True)
-    for name in ("update", "record-assets"):
+    for name in ("update", "record-assets", "migrate-assets"):
         sub = commands.add_parser(name)
         sub.add_argument("--project", required=True, help="Explicit parent repository root")
-        sub.add_argument("--config", help="Project-relative config path declared by AGENTS; otherwise select one docs/, _meta/ or legacy root workflow.toml")
-        sub.add_argument("--revision", required=True, help="Accepted upstream revision, or actual installed asset baseline")
+        sub.add_argument("--config", help="Project-relative config path declared by AGENTS; otherwise select one docs/, _meta/ or root project-workflows.toml (legacy workflow.toml also supported)")
+        sub.add_argument("--revision", required=name != "migrate-assets", help="Accepted upstream revision, or actual installed asset baseline")
         sub.add_argument("--apply", action="store_true", help="Apply the previewed local scope; never push or stage parent files")
         if name == "update":
             sub.add_argument("--fetch", metavar="REMOTE", help="Fetch selected remote before resolving revision")
             sub.add_argument("--reviewed", action="append", default=[], metavar="PATH", help="Specific customized overlap the agent has reviewed")
             sub.add_argument("--message", help="Reviewed merge commit message, including any required spike trailer; required for a divergent apply")
-        else:
+        elif name == "record-assets":
             sub.add_argument("--asset", action="append", required=True, metavar="DEST=SOURCE")
     args = parser.parse_args()
     try:
-        result = update(args) if args.operation == "update" else record(args)
+        result = {"update": update, "record-assets": record, "migrate-assets": migrate_assets}[args.operation](args)
         print(json.dumps(result, indent=2, sort_keys=True))
         return 2 if result.get("blocked") else 0
     except (Stop, OSError, ValueError, KeyError, TypeError) as error:
