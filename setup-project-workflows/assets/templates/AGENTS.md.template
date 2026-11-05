@@ -21,7 +21,7 @@ Declare the project's chosen coordination route and existing review records here
 If board/lifecycle setup is selected, use the setup procedure's optional route and point to this project's maintained profile, transition ownership and verification record. Preserve its stage meanings, independent blocked signals and fresh-close guard; name any pending manual native-settings check. Local use requires none of this board configuration.
 
 ## Branch naming
-During setup, record the selected human contributor prefixes here and in `coordination.branch_prefixes`. Use those prefixes regardless of the agent doing the work; they override agent-specific defaults. Remove this setup placeholder after recording actual choices.
+During setup, record an existing project naming convention here if one is selected. Branches can describe the work and be shared by several contributors; human-name prefixes are optional. Record selected contributor prefixes in `coordination.branch_prefixes` and use them across agent clients. Solo work needs no contribution branch, prefix or PR unless the project chooses that workflow. Remove this placeholder when adapting the template; omit this section when no branch guidance is needed.
 
 ## Validation and Git
 Record the actual validation commands and commit/review policy. Preserve concurrent work. Review scoped diffs before committing; never include private configuration or credentials. Publishing and remote actions follow the user's authorization and repository policy.

@@ -65,8 +65,10 @@ Shared selection values belong in `project-workflows.toml`; explanatory procedur
 
 Issues own shared outcomes and acceptance; PRs own review of the concrete change; commits preserve change history and rationale; spikes hold unfinished local reasoning and execution evidence. Prepare a PR description from the actual diff and commits. A short unpublished coordination note can remain in the owning spike, but do not create standalone PR-draft documents by default. Leave setup/test history in its existing records rather than extending a current operations guide with a chronological log.
 
-## Human-owned branch names
-Resolve the contributor’s selected branch convention before creating a branch. Record a supplied human-owned prefix in `coordination.branch_prefixes` using a contributor key, and emit the same explicit override in project AGENTS so it applies across agent clients. Choose names for the contributor or work, not the current agent or vendor. Preserve a known human choice over tool defaults; do not rename another contributor’s branches as part of setup. A rename requires its actual scope and remote/history verification. Tool names remain appropriate for technical instructions and required source attribution.
+## Branch choices for coordinated work
+Follow the project's chosen branch arrangement when setting up coordinated contributions. Branches may describe the work and may be shared by several people and their agents; human-name prefixes are optional. Record a supplied contributor prefix in `coordination.branch_prefixes` and the same explicit override in project AGENTS so it applies across agent clients. Omit that table when no contributor prefixes are selected. Do not invent a naming requirement or take the current agent's default as the team's convention.
+
+Solo work requires no contribution branch, name prefix or PR merely because an agent or GitHub is involved. Preserve an explicitly chosen review workflow. Do not rename another contributor's branches as part of setup; a rename requires its actual scope and remote/history verification.
 
 ## Documentation and routing
 Use [the agent-routing template](assets/templates/AGENTS.md.template), [the index template](assets/templates/TODO.md.template), and [the ignore baseline](assets/templates/default.gitignore) as inputs to adapt, not files to overwrite existing documents with. Create only needed structure:

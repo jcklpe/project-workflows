@@ -39,7 +39,8 @@ tooling = ""
 # skills = ["setup-forge", "use-forge-pull-requests"]
 # guide = "docs/forge-tooling.md"
 
-# Contributor keys and prefixes are human-selected, not agent/vendor identifiers.
+# Optional contributor prefixes, only when the project selects them.
+# Work-named and shared branches need no contributor-prefix table.
 # [coordination.branch_prefixes]
 # contributor = "contributor/"
 

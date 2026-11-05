@@ -135,7 +135,7 @@ your-project/
 
 For an adoption, actual project documents and settings stay in the parent repository. The unchanged submodule contains common procedures, templates and neutral defaults. The package should not accumulate another project's narrative, document history, credentials or private context.
 
-Supporting documentation follows [purpose, ownership and navigation](setup-project-workflows/SKILL.md#documentation-ownership-and-navigation). Use an optional document catalog when it improves discovery, keep shared configuration facts in TOML, and select human-owned branch prefixes during setup.
+Supporting documentation follows [purpose, ownership and navigation](setup-project-workflows/SKILL.md#documentation-ownership-and-navigation). Use an optional document catalog when it improves discovery and keep shared configuration facts in TOML. [Branch choices](setup-project-workflows/SKILL.md#branch-choices-for-coordinated-work) follow the project's selected coordination: branches may be shared, contributor prefixes are optional, and solo work needs no contribution branch or PR unless that workflow is selected.
 
 ## Agent reference
 These details explain how agents select the owning project, interpret its configuration and maintain an adoption. The starting prompts above route to the relevant skills.
