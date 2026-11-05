@@ -3,8 +3,9 @@ attention: live
 ---
 # Workflow configuration tasks
 ## Done
-- Implemented parent-owned project-workflows.toml asset records, explicit legacy JSON migration and project-workflows.local.toml reference conventions. Setup adds the local filename to the project's ignore rules. Existing workflow.toml names and child-config adaptations remain supported until explicit migration.
-- All 43 offline updater tests pass, including new-name discovery, repeatability, source-baseline preservation, private-file nonloading, conflicting/malformed records, staged-file protection and local edits during checkout. Changed TOML, relative resource links and whitespace checks pass.
+- Consolidated settings and asset baselines in parent-owned project-workflows.toml with an optional ignored project-workflows.local.toml for private references.
+- Removed old config-name discovery, child configuration, adapted-branch updates, JSON baseline storage/migration and legacy policy-location guidance. Replaced the source repository’s runtime example with example.workflow.md.
+- Verified the current-only updater with 22 offline integration tests covering pin updates, asset reconciliation, conflict/nonmutation guards, unsupported layouts, private-file nonloading and concurrent edits.
 ## Ready for review
 - The scoped main checkpoint is authorized; inspect its final commit before discussing publication. Unrelated policy work and remote divergence remain outside this change.
 ## Later

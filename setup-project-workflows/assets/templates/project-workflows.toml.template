@@ -13,7 +13,6 @@ active_spikes = "docs/active-spikes"
 scratch = "docs/scratch"
 archive = "docs/archive"
 # Declare the project's actual policy location when selected; do not create empty policy folders.
-# policies = "docs/policies"
 # agent_policies = "docs/agent-policies"
 
 # The parent gitlink pins the exact shared revision; no project branch is needed.

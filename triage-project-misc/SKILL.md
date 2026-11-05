@@ -29,7 +29,7 @@ The flow is:
 - `docs/scratch/misc.md` is the live inbox for unrouted loose notes.
 - Individual `docs/scratch/<subject>.md` notes preserve saved possibilities or deliberately parked subjects with `capture-for-later`.
 - `docs/scratch/misc-1.md`, `misc-2.md`, and so on are numbered miscellaneous buckets for real work that does not yet form a clean thematic spike.
-- The selected agent-policy directory/index is for explicitly adopted durable agent obligations; preserve legacy `docs/policies/` conventions until authorized migration. Human governance remains separate.
+- The selected agent-policy directory/index is for explicitly adopted durable agent obligations; use `documents.agent_policies` and its declared index. Human governance remains separate.
 - Thematic scratch docs such as `syntax-highlighting.md`, `brand-voice.md`, or `embed-media-support.md` are preferred when notes cluster around a coherent theme.
 - Active spike docs in `docs/active-spikes/` exist only after a scratch topic becomes the active scoped work.
 - Archived spike docs in `docs/archive/` are historical context after a spike closes.
@@ -39,7 +39,7 @@ Use the first matching destination:
 
 Use the collection's [capture-for-later](../capture-for-later/SKILL.md) for saved possibilities and deliberately parked subjects. Preserve existing records, including legacy lists; this triage procedure does not authorize their bulk migration. Starting active work still follows the separate spike workflow.
 
-- If it is a durable agent rule, route it through [Create Agent Policy](../create-agent-policy/SKILL.md) for a new obligation or [Edit Agent Policy](../edit-agent-policy/SKILL.md) for an existing one, then [Review](../review-agent-policies/SKILL.md) and [Adopt](../adopt-agent-policies/SKILL.md) as actually requested in the selected location. Triage alone does not adopt it. Keep human governance separate and preserve legacy policy authority until authorized migration.
+- If it is a durable agent rule, route it through [Create Agent Policy](../create-agent-policy/SKILL.md) for a new obligation or [Edit Agent Policy](../edit-agent-policy/SKILL.md) for an existing one, then [Review](../review-agent-policies/SKILL.md) and [Adopt](../adopt-agent-policies/SKILL.md) as actually requested in the selected location. Triage alone does not adopt it. Keep human governance separate.
 - If the user wants to save a possibility or deliberately park a subject, create or update its individual scratch note with `capture-for-later`. The same subject can be captured or parked; this is state, not a rigid subject classification.
 - If it is raw observed friction, a bug, a nit, a QA reaction, or issue intake, keep or route it through `docs/scratch/misc.md`.
 - If it is active scoped work, promote it into `docs/active-spikes/` with `run-project-spike`.
@@ -109,7 +109,7 @@ For a possibility or deliberately parked subject, follow `capture-for-later`: up
 ### Durable Policy
 If an item is a durable agent obligation, use the project's actual index, [Create](../create-agent-policy/SKILL.md) or [Edit](../edit-agent-policy/SKILL.md) for candidate work, and [Review](../review-agent-policies/SKILL.md)/[Adopt](../adopt-agent-policies/SKILL.md) for those tasks. Apply the kernel’s policy/skill distinction when deciding whether the material is an obligation or a procedure. Preserve adopted bodies while discussing candidate amendments elsewhere; triage or a saved note is not human adoption. Review incoming prerequisites/references before identity changes, then reconcile the index. Human governance stays with its existing owner.
 
-Do not create policies for ordinary implementation choices. Preserve useful rationale/history and existing legacy policy conventions unless migration is authorized.
+Do not create policies for ordinary implementation choices. Preserve useful rationale and history in the current agent-policy records.
 
 ### Numbered Miscellaneous Bucket
 If an item is real but does not belong to an existing doc and does not cluster into a thematic spike, sweep it into a numbered `misc-#.md` bucket.
