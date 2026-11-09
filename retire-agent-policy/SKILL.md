@@ -12,7 +12,12 @@ Establish why the obligation is being withdrawn/replaced and what the human actu
 Prepare necessary dependent changes through [Edit Agent Policy](../edit-agent-policy/SKILL.md), replacement obligations through [Create Agent Policy](../create-agent-policy/SKILL.md), and their adoption through [Adopt Agent Policies](../adopt-agent-policies/SKILL.md). Keep the current operative set intact while those changes are only proposals.
 
 ## Apply the authorized retirement
-Recheck the exact retirement/dependent decision and current files. Record `retired`, actual human authority, substantive date and concise retirement rationale/history pointers under the selected project’s adopted PRESERVE-IDENTITY metadata contract, using the [technical representation notes](../review-agent-policies/references/policy-format.md). Retain the reserved ID and index record; preserve useful history without leaving a live override chain. Reconcile the index and validate the complete resulting set using the shared tool.
+Recheck the exact retirement/dependent decision and current files. Keep the retirement the way the selected project’s adopted PRESERVE-IDENTITY says to; do not add a retirement record that policy does not ask for.
+
+- **Where it retains retirement records:** record `retired`, actual human authority, substantive date and concise retirement rationale/history pointers under its metadata contract, using the [technical representation notes](../review-agent-policies/references/policy-format.md), and keep the record indexed.
+- **Where it keeps retired policies only in Git:** delete the policy file and its index row, and put the human decision, date and rationale in the retiring commit.
+
+Either way the ID stays reserved. Preserve useful history without leaving a live override chain. Reconcile the index and validate the complete resulting set using the shared tool.
 
 For a Git-backed change, hand Commit Work the affected mnemonic policy IDs and the reviewed decision rationale under PRESERVE-IDENTITY.
 
