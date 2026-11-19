@@ -8,7 +8,7 @@ Resolve the actual requested target using [target resolution](../README.md#resol
 ## Scope and local authority
 Capture something the user wants to remember without committing to explore, decide, or implement it now. Features, design, content, research, tooling, and other project subjects all qualify. The subject does not determine whether it is a possibility or deliberately parked; that is the note's current state.
 
-Read the current project's instructions and adopted workflow source first. Resolve its scratch location from local conventions or `workflow.toml`; default to `docs/scratch/`. Never infer the current project from a global skill's installation directory. Capture requires ordinary document access, not external services or a personal vault.
+Read the current project's instructions and adopted workflow source first. Resolve its scratch location from local conventions or `project-workflows.toml`; default to `docs/scratch/`. Never infer the current project from a global skill's installation directory. Capture requires ordinary document access, not external services or a personal vault.
 
 ## One visible note per subject
 For a new subject, use a descriptive filename such as `docs/scratch/alternate-navigation.md`. One sentence can be the entire body. Do not create a catch-all future-ideas or pinned-issues list, require a separate proposal, or add tasks just to make the note feel complete.

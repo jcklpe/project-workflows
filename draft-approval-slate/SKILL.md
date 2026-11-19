@@ -28,7 +28,7 @@ Present every proposed change with:
 - **Sequencing** when items depend on each other (e.g. new issues must be created before edits that link them), and a note on any item held for a second review.
 
 ## Present it in full, in the conversation
-- **The whole slate goes in the reply.** Show every item in full: the final copy, the current → proposed delta, exact paths or targets, and enough explanation to judge it. A summary of the intended effort is not a slate.
+- **The whole slate goes in the final reply that requests approval.** Commentary, progress updates and linked files do not satisfy this check. Before sending, verify that every approval label has its exact target, current → proposed change and full final wording in that same reply. Show every item in full: the final copy, the current → proposed delta, exact paths or targets, and enough explanation to judge it. A summary of the intended effort is not a slate.
 - **Never cite an item by its label unless the item is visible in the same reply.** "Approve D3?" is only answerable when D3 is on the screen.
 - **Do not write slates to files.** No intermediate slate documents and no "see the file for details." The approval record is the commit message, or the changed record itself.
 - **Keep a slate small.** It should be reviewable in about ten minutes. If the work is bigger, split it into successive slates and present the first one; do not let one slate span sessions.
