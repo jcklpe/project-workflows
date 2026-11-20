@@ -164,6 +164,26 @@ class UpdateTest(unittest.TestCase):
                 self.assertIn('Select a project-workflows.toml', self.helper('update', self.base, '--config', name, code=1)['error'])
                 (self.parent / name).unlink()
 
+    def test_staged_unicode_asset_is_preserved(self):
+        dest = 'docs/review-é.md'
+        self.write(self.parent, dest, TEMPLATE)
+        self.git(self.parent, 'add', dest)
+        before = (self.parent / CONFIG).read_bytes()
+        index = self.git(self.parent, 'ls-files', '--stage')
+        result = self.helper('record-assets', self.base, '--asset', f'{dest}={SOURCE}', '--apply', code=1)
+        self.assertIn('staged', result['error'])
+        self.assertEqual((self.parent / CONFIG).read_bytes(), before)
+        self.assertEqual(self.git(self.parent, 'ls-files', '--stage'), index)
+
+    def test_non_bmp_asset_round_trips_through_toml(self):
+        dest = 'docs/review-📝.md'
+        self.write(self.parent, dest, TEMPLATE)
+        self.helper('record-assets', self.base, '--asset', f'{dest}={SOURCE}', '--apply')
+        self.assertIn(dest, tomllib.loads((self.parent / CONFIG).read_text())['assets'])
+        target = self.incoming(SOURCE, TEMPLATE + 'New\n')
+        self.helper('update', target, '--apply')
+        self.assertEqual((self.parent / dest).read_text(), TEMPLATE + 'New\n')
+
     def test_old_policy_key_and_location_are_rejected(self):
         original = (self.parent / CONFIG).read_text()
         for changed in (original.replace('agent_policies', 'policies'), original.replace('docs/agent-policies', 'docs/policies')):

@@ -98,7 +98,7 @@ def check_source_layout(child, tree):
 
 def snapshot(parent, names):
     state = {}
-    staged = set(out(parent, "diff", "--cached", "--name-only").splitlines())
+    staged = {os.fsdecode(name) for name in git(parent, "diff", "--cached", "--name-only", "-z").stdout.split(b"\0") if name}
     for name in names:
         if name in staged:
             raise Stop(f"Selected parent path is staged: {name}")
@@ -186,8 +186,8 @@ def encode_baselines(parent, data, external):
     ends = [position for position, line in enumerate(lines) if line.strip() == ASSETS_END]
     block = ASSETS_START + "\n"
     for dest, entry in sorted(data["files"].items()):
-        block += f"[assets.{json.dumps(dest)}]\n"
-        block += f"source = {json.dumps(entry['source'])}\nrevision = {json.dumps(entry['revision'])}\n\n"
+        block += f"[assets.{json.dumps(dest, ensure_ascii=False)}]\n"
+        block += f"source = {json.dumps(entry['source'], ensure_ascii=False)}\nrevision = {json.dumps(entry['revision'])}\n\n"
     block += ASSETS_END + "\n"
     if starts or ends:
         if len(starts) != 1 or len(ends) != 1 or starts[0] >= ends[0]:
