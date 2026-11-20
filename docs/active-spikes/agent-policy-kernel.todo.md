@@ -165,3 +165,8 @@ The six old unprefixed kernel filenames are renamed, with metadata IDs preserved
 - `update-project-workflows/tests/test_update.py`
 
 The provider remains adopted; bundled candidates remain proposed. Type/prefix grouping confers no precedence. The spike stays active for real-use acceptance, and the Agent Hands pilot resumes only after this provider checkpoint.
+
+## Receiving pilot and rollout handoffs — 2026-11-02
+The Agent Hands receiving migration is locally committed as `9b210f96e6d2ccc5f0b6870a068f0160b138797f`, using provider `79dddf9742c282d184c65d5c5ef87a142900897f` through adaptation `0ed5ac87980ec9557302fa52e9f765a93a122ce9`. It exercised the five lifecycle skills on three kernel/eight operational policies, with exact sanitized legacy preservation and separate semantic/structural checks. This supplies actual migration/lifecycle-use evidence, not observed fresh-agent/client/service compliance. Earlier counts and in-progress pilot statements above are dated checkpoints, not current receiving status.
+
+The [rollout owner](agent-policy-rollout.md) and [handoff tasks](agent-policy-rollout.todo.md) now own remaining consumer preparation/coordination. No other consumer is migrated or adopted by preparing them. Ordinary-use/loading acceptance remains in this provider’s existing QA item and Agent Hands’ pilot; publication is still separate.
