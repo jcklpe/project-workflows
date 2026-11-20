@@ -14,3 +14,5 @@ Resolve the actual target using [target resolution](../README.md#resolve-the-tar
 Use the optional [helper](scripts/update.py) and [usage reference](references/updater.md) with an existing Python 3.11+ and Git; no dependency installation is required. `--reviewed` acknowledges specific copied-asset overlaps, not arbitrary conflicts. Partial failures are not retried blindly: inspect the actual child and parent state first.
 ## Other scopes
 Canonical collection maintenance and global-only use follow the [exceptional routes](references/exceptional-updates.md). Shared main changes and consumer adoption are separate work. Old consumer layouts require a deliberately scoped conversion to the current layout before this helper can be used; do not retain a fallback mode or silently switch branches to accommodate them.
+
+Use the [older-configuration conversion procedure](references/exceptional-updates.md#convert-an-older-consumer-configuration) when that migration is authorized. Preserve values, verified asset baselines and local source differences before changing the selected config or pin.

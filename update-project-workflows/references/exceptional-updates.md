@@ -29,6 +29,13 @@ Follow the branch-retirement checks above. Recovery is the default; an explicit 
 
 Global-only verification checks installed skill availability, target-local config/policy resolution and lack of stale active child references. It cannot claim a project-pinned workflow version or fresh-client behavior solely from filesystem links. Do not remove other projects' pinned adoptions as a side effect.
 
+## Convert an older consumer configuration
+This is an explicitly scoped migration, not a fallback in the current updater. Preserve the old pin, configuration, asset-baseline records, local notes and dirty/index state before changing files. Read the currently selected source and compare it with accepted shared source; an obsolete filename does not make its values disposable.
+
+Move shared project settings to the declared documentation folder's `project-workflows.toml`, preserving comments and values and adjusting `project.root` relative to that folder. Repair current AGENTS/README and procedure links together. Transfer only verified copied-asset source/revision pairs into the managed `[assets]` section; do not infer baselines from the current source. Keep private reference paths in the ignored sibling local file, and never copy credentials there. Changes to an adopted policy's location or routing follow its policy procedure; a config rename does not retire or replace it.
+
+Compare and preserve real child-source divergence before selecting unchanged shared source at a detached pin. Canonical maintenance stays on its designated shared branch. Keep recoverable original files until the converted configuration parses, destinations resolve, copied assets retain their content, and a repeat updater preview is a no-op. Commit the selected parent pin with its routing/configuration. Leave other consumers untouched unless their migration is authorized.
+
 ## Collection layout changes
 When moving skill directories, carry each complete folder and inspect supporting assets, client metadata, relative links, templates, installed links, installer scripts, current routing, and compatibility wrappers. Update the authorized consumer and its live links together; do not leave global discovery pointing at removed paths or run an entire system installer to change a small selected set of links. Preserve user-owned real files and unrelated link targets. Validate syntax and idempotent link behavior in an isolated fixture. Historical documents may retain old paths as history, but maintained navigation must resolve.
 

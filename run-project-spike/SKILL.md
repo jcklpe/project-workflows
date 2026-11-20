@@ -223,6 +223,8 @@ Do not create policies for every local implementation choice. Keep ordinary reas
 ## During A Spike
 Keep conceptual understanding in the conceptual doc and operational state in the to-do doc. Update item statuses as work moves. Preserve enough history to explain decisions, but move durable rules out of the spike when they become repo policy.
 
+Use [generated-file handling](../setup-project-workflows/references/generated-files.md) when tests or tools produce files. Record useful procedures and sanitized results with the work; keep disposable runs out of the checkout and preserve unresolved recovery state separately. `docs/scratch/` remains authored documentation.
+
 Do not let scratch notes silently become authority. Promote them deliberately.
 
 Repair direct dependencies when actual changes land: a moved file's inbound links, an index entry, or instructions invalidated by a changed command. Keep speculative alternatives in the spike until settled or implemented; do not repeatedly rewrite durable guidance to match each possibility discussed. Reserve the broader check of affected live guidance for closure. Neither pass grants authority to edit unrelated projects or external systems.
